@@ -1,0 +1,5 @@
+import os
+
+SALT_API_URL = os.getenv('SALT_API_URL')
+SALT_API_USERNAME = os.getenv('SALT_API_USERNAME')
+SALT_API_PASSWORD = os.getenv('SALT_API_PASSWORD')

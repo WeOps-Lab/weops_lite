@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "weops-lite"
+    volumes:
+      - postgres:/data/postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    command: bash /apps/startup.sh
+    build:
+      context: .
+    image: weops-lite
+    environment:
+      SECRET_KEY: "django-insecure-key"
+      DEBUG: "True"
+      DB_ENGINE: "django.db.backends.postgresql"
+      DB_HOST: "postgres"
+      DB_PORT: "5432"
+      DB_USER: "postgres"
+      DB_PASSWORD: "postgres"
+      DB_NAME: "weops-lite"
+      ENABLE_CELERY: "True"
+      CELERY_BROKER_URL: "sqla+postgresql://postgres:postgres@postgres:5432/weops-lite"
+      CELERY_RESULT_BACKEND: "db+postgresql://postgres:postgres@postgres:5432/weops-lite"
+      CELERY_BEAT_SCHEDULER: "django_celery_beat.schedulers:DatabaseScheduler"
+      DJANGO_SUPERUSER_USERNAME: "admin"
+      DJANGO_SUPERUSER_EMAIL: "admin@example.com"
+      DJANGO_SUPERUSER_PASSWORD: "password"
+#    networks:
+#      - django-stack
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+#  web:
+#    image: web
+#    ports:
+#      - 80:80
+#    networks:
+#      - django-stack
+#    depends_on:
+#      - backend
+
+
+volumes:
+  postgres:
+
+
+#networks:
+#  django-stack:
