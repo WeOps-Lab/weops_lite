@@ -1,0 +1,445 @@
+{
+  "allowRemoteResourceManagement": true,
+  "policyEnforcementMode": "ENFORCING",
+  "resources": [
+    {
+      "name": "SysUser_view",
+      "type": "user",
+      "ownerManagedAccess": false,
+      "displayName": "查询用户",
+      "attributes": {},
+      "_id": "9c4ca72d-5520-4cd8-87a1-ef896144749e",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysUser_create",
+      "type": "user",
+      "ownerManagedAccess": false,
+      "displayName": "创建用户",
+      "attributes": {},
+      "_id": "a456585f-7f53-40f2-867f-f439f5f1a0d4",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysUser_edit",
+      "type": "user",
+      "ownerManagedAccess": false,
+      "displayName": "编辑用户",
+      "attributes": {},
+      "_id": "e533d68a-9aee-4f66-a1f8-1068958a8c1f",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysUser_delete",
+      "type": "user",
+      "ownerManagedAccess": false,
+      "displayName": "删除用户",
+      "attributes": {},
+      "_id": "15f893a3-5c4a-417e-aab7-e5f74048f0cb",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysRole_view",
+      "type": "role",
+      "ownerManagedAccess": false,
+      "displayName": "查询角色",
+      "attributes": {},
+      "_id": "29fc8375-dd06-444e-813a-2d526007e033",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysRole_create",
+      "type": "role",
+      "ownerManagedAccess": false,
+      "displayName": "创建角色",
+      "attributes": {},
+      "_id": "d2b00162-a496-475a-905e-20e876d31677",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysRole_edit",
+      "type": "role",
+      "ownerManagedAccess": false,
+      "displayName": "编辑角色",
+      "attributes": {},
+      "_id": "5ac87404-ad5b-4617-bd1d-3a83f49d99ed",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysRole_delete",
+      "type": "role",
+      "ownerManagedAccess": false,
+      "displayName": "删除角色",
+      "attributes": {},
+      "_id": "eadc0b8d-f764-4cfe-ba42-399a680691bc",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysRole_users_manage",
+      "type": "role",
+      "ownerManagedAccess": false,
+      "displayName": "人员管理",
+      "attributes": {},
+      "_id": "c3e14578-f5f3-4d3e-bfc1-13f69bb21ee6",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysRole_permissions",
+      "type": "role",
+      "ownerManagedAccess": false,
+      "displayName": "设置权限",
+      "attributes": {},
+      "_id": "f6d17567-b473-44cd-9f08-97108830b20c",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysLog_view",
+      "type": "operation_log",
+      "ownerManagedAccess": false,
+      "displayName": "查询操作日志",
+      "attributes": {},
+      "_id": "34279e94-d533-42c6-8d23-a19cf63f3fb4",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysSetting_menus_view",
+      "type": "menu",
+      "ownerManagedAccess": false,
+      "displayName": "查询菜单",
+      "attributes": {},
+      "_id": "b1e251b4-5343-4f06-8924-45f8f189d4c8",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysSetting_menus_create",
+      "type": "menu",
+      "ownerManagedAccess": false,
+      "displayName": "创建菜单",
+      "attributes": {},
+      "_id": "13737959-bcac-4e2a-b14c-1116a3c982b6",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysSetting_menus_edit",
+      "type": "menu",
+      "ownerManagedAccess": false,
+      "displayName": "编辑菜单",
+      "attributes": {},
+      "_id": "5d57859c-e980-4626-9842-44b9000cdc70",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysSetting_menus_delete",
+      "type": "menu",
+      "ownerManagedAccess": false,
+      "displayName": "删除菜单",
+      "attributes": {},
+      "_id": "65cab6c3-4c88-42ac-999c-86095fe2b997",
+      "uris": [],
+      "icon_uri": ""
+    },
+    {
+      "name": "SysSetting_logo_change",
+      "type": "logo",
+      "ownerManagedAccess": false,
+      "displayName": "更换logo",
+      "attributes": {},
+      "_id": "2cfa50b0-1407-4ef3-8e4d-26f1dbc5c1ae",
+      "uris": [],
+      "icon_uri": ""
+    }
+  ],
+  "policies": [
+    {
+      "id": "048237d1-12a5-4be4-a5b6-a16ae33b1194",
+      "name": "sub",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/sub\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "3a67face-d00b-4398-b7ab-78465abfb6df",
+      "name": "normal",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/normal\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "2d1c2180-02d8-45f7-a575-12abe5d59b08",
+      "name": "admin",
+      "description": "",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/admin\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "2ad15551-13ff-46b6-b253-566136bd4239",
+      "name": "test1",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/test1\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "3cd79a25-43e0-46c5-934f-19feb18ccbfb",
+      "name": "test2",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/test2\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "126ceb47-18fb-48a7-9333-db5fb8df45fa",
+      "name": "test3",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/test3\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "f9e54f4f-a3cc-4d4f-a366-116dc76d355d",
+      "name": "sub1",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/sub1\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "19d55720-cf75-4157-801c-d155a44c9ca4",
+      "name": "test4",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"weops_lite/test4\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "8ecb9e5f-e692-46cc-b4ba-0053b59a8ecc",
+      "name": "SysUser_view",
+      "description": "查询用户",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysUser_view\"]",
+        "applyPolicies": "[\"test1\",\"normal\",\"sub\",\"admin\"]"
+      }
+    },
+    {
+      "id": "1bd397b1-9f02-420b-8ca9-1059076e3098",
+      "name": "SysLog_view",
+      "description": "查询日志操作",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysLog_view\"]",
+        "applyPolicies": "[\"test1\",\"normal\",\"sub\",\"admin\"]"
+      }
+    },
+    {
+      "id": "f068a3d3-01ac-4d7a-acea-bcad4bb86ef1",
+      "name": "SysRole_create",
+      "description": "创建角色",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysRole_create\"]",
+        "applyPolicies": "[\"sub\",\"admin\"]"
+      }
+    },
+    {
+      "id": "689f4b96-80d7-40f3-a5bf-13bbe50a967f",
+      "name": "SysRole_delete",
+      "description": "删除角色",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysRole_delete\"]",
+        "applyPolicies": "[\"sub\",\"admin\"]"
+      }
+    },
+    {
+      "id": "84150c01-cb03-4ba7-bb9e-82d0343c4878",
+      "name": "SysRole_edit",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysRole_edit\"]",
+        "applyPolicies": "[\"sub\",\"admin\"]"
+      }
+    },
+    {
+      "id": "2af25a1c-8818-4955-95ce-5447a568ecf3",
+      "name": "SysRole_permissions",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysRole_permissions\"]",
+        "applyPolicies": "[\"admin\"]"
+      }
+    },
+    {
+      "id": "85e3c6bb-8331-45c3-8e67-23a2ebcd9bf4",
+      "name": "SysRole_users_manage",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysRole_users_manage\"]",
+        "applyPolicies": "[\"admin\"]"
+      }
+    },
+    {
+      "id": "a5d9f235-c17d-4072-b415-67fb566818b0",
+      "name": "SysRole_view",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysRole_view\"]",
+        "applyPolicies": "[\"test1\",\"normal\",\"admin\"]"
+      }
+    },
+    {
+      "id": "9e4c8a2f-0989-48af-ae17-1e46fa64be90",
+      "name": "SysSetting_logo_change",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysSetting_logo_change\"]",
+        "applyPolicies": "[\"admin\"]"
+      }
+    },
+    {
+      "id": "fe80a47f-f957-4b1e-b38f-0a5165a0416e",
+      "name": "SysSetting_menus_create",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysSetting_menus_create\"]",
+        "applyPolicies": "[\"normal\",\"admin\"]"
+      }
+    },
+    {
+      "id": "335c4371-febd-4a62-a68c-ba888b3b9bd2",
+      "name": "SysSetting_menus_delete",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysSetting_menus_delete\"]",
+        "applyPolicies": "[\"normal\",\"sub\",\"admin\"]"
+      }
+    },
+    {
+      "id": "1da76ff0-3de9-4be4-858a-b9ef28a740fa",
+      "name": "SysSetting_menus_edit",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysSetting_menus_edit\"]",
+        "applyPolicies": "[\"normal\",\"admin\"]"
+      }
+    },
+    {
+      "id": "4928ce70-cc0c-4367-a15a-a09c242fe20e",
+      "name": "SysSetting_menus_view",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysSetting_menus_view\"]",
+        "applyPolicies": "[\"test1\",\"normal\",\"sub\",\"admin\"]"
+      }
+    },
+    {
+      "id": "325499d9-82fd-4897-a42c-ca3a4aa23ffd",
+      "name": "SysUser_create",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysUser_create\"]",
+        "applyPolicies": "[\"normal\",\"admin\"]"
+      }
+    },
+    {
+      "id": "de5875fc-bf0b-4723-a8f0-cc825cae7684",
+      "name": "SysUser_delete",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysUser_delete\"]",
+        "applyPolicies": "[\"admin\"]"
+      }
+    },
+    {
+      "id": "e8d440b2-7f9c-4a9a-87fa-a6580afce35f",
+      "name": "SysUser_edit",
+      "description": "",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "resources": "[\"SysUser_edit\"]",
+        "applyPolicies": "[\"admin\"]"
+      }
+    }
+  ],
+  "scopes": [],
+  "decisionStrategy": "UNANIMOUS"
+}
