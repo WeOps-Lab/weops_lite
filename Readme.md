@@ -34,7 +34,12 @@ cp ./.env.example .env
 | KEYCLOAK_REALM             |       |                                                 | KeyCloak Realm     |
 | KEYCLOAK_CLIENT_ID         |       |                                                 | KeyCloak客户端ID      |
 | KEYCLOAK_CLIENT_SECRET_KEY |       |                                                 | KeyCloak Client 秘钥 |
-| SUPERADMIN_PASSWORD        |       |                                                 | 超级管理员初始密码          |
 | SALT_API_URL               |       |                                                 | Salt API URL       |
 | SALT_API_USERNAME          |       |                                                 | SaltAPI 用户名        |
 | SALT_API_PASSWORD          |       |                                                 | SaltAPI 密码         |
+
+# 使用命令行创建用户
+```
+python ./manage.py create_keycloak_user --role_type admin --username admin --password xxxx --email admin@qq.com --lastname 管理员
+python ./manage.py create_keycloak_user --username admin --password xxxx --email admin@qq.com --lastname 管理员
+```
