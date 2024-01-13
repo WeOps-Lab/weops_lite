@@ -34,6 +34,7 @@ cp ./.env.example .env
 | KEYCLOAK_REALM             |       |                                                 | KeyCloak Realm     |
 | KEYCLOAK_CLIENT_ID         |       |                                                 | KeyCloak客户端ID      |
 | KEYCLOAK_CLIENT_SECRET_KEY |       |                                                 | KeyCloak Client 秘钥 |
+| SUPERADMIN_PASSWORD        |       |                                                 | 超级管理员初始密码          |
 | SALT_API_URL               |       |                                                 | Salt API URL       |
 | SALT_API_USERNAME          |       |                                                 | SaltAPI 用户名        |
 | SALT_API_PASSWORD          |       |                                                 | SaltAPI 密码         |
