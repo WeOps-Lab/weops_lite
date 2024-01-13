@@ -5,6 +5,7 @@ from django.core.management import BaseCommand
 from dotenv import load_dotenv
 from keycloak import KeycloakAdmin
 
+from apps.core.utils.keycloak_utils import KeyCloakUtils
 from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_ADMIN_USERNAME, KEYCLOAK_ADMIN_PASSWORD
 
 
@@ -16,8 +17,7 @@ class Command(BaseCommand):
         logger = logging.getLogger(__name__)
         logger.info(f'初始化KeyCloak Realm,KeyCloak URL:[{KEYCLOAK_URL}]')
 
-        keycloak_admin = KeycloakAdmin(server_url=KEYCLOAK_URL, username=KEYCLOAK_ADMIN_USERNAME,
-                                       password=KEYCLOAK_ADMIN_PASSWORD)
+        keycloak_admin = KeyCloakUtils.get_admin_client()
 
         realm_config_file_path = 'support-files/keycloak/realm-export-weops.json'
         with open(realm_config_file_path, 'r', encoding='utf8') as realm_config_file:

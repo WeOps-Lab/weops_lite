@@ -4,6 +4,7 @@ from django.core.management import BaseCommand, CommandError
 from dotenv import load_dotenv
 from keycloak import KeycloakAdmin
 
+from apps.core.utils.keycloak_utils import KeyCloakUtils
 from weops_lite.components.keycloak import KEYCLOAK_ADMIN_USERNAME, KEYCLOAK_URL, KEYCLOAK_ADMIN_PASSWORD, \
     KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID
 
@@ -40,9 +41,7 @@ class Command(BaseCommand):
 
         role_type = options.get('role_type')
 
-        keycloak_admin = KeycloakAdmin(server_url=KEYCLOAK_URL, username=KEYCLOAK_ADMIN_USERNAME,
-                                       password=KEYCLOAK_ADMIN_PASSWORD, realm_name=KEYCLOAK_REALM,
-                                       client_id="admin-cli", user_realm_name="master")
+        keycloak_admin = KeyCloakUtils.get_realm_client()
         clients = keycloak_admin.get_clients()
         client_id = None
         for client in clients:
