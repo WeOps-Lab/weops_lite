@@ -29,6 +29,7 @@ INSTALLED_APPS += [
     'django_filters',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'auditlog',
 ]
 
 # Celery
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'better_exceptions.integrations.django.BetterExceptionsMiddleware',
+    'auditlog.middleware.AuditlogMiddleware',
 ]
 
 ROOT_URLCONF = 'weops_lite.urls'
@@ -107,3 +109,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = "/media/"
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+AUDITLOG_INCLUDE_ALL_MODELS=True
