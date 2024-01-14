@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'better_exceptions.integrations.django.BetterExceptionsMiddleware',
-    'apps.core.auth.keycloak.middlewares.KeyCloakLoginRequiredMiddleware',
+    'apps.core.middlewares.keycloak_auth_middleware.KeyCloakAuthMiddleware',
     'auditlog.middleware.AuditlogMiddleware',
 ]
 
