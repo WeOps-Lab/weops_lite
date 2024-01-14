@@ -31,8 +31,6 @@ class KeyCloakAuthMiddleware(MiddlewareMixin):
             try:
                 token_info = client.introspect(token)
                 if token_info.get('active'):
-                    if 'admin' in token_info['resource_access']['weops_lite']['roles']:
-                        request.META['X-SUPERUSER'] = True
                     return None
                 else:
                     return HttpResponse("Token不合法", status=status.HTTP_401_UNAUTHORIZED)
