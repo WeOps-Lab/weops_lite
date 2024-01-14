@@ -12,6 +12,12 @@ pip install -r ./requirements/requirements-test.txt
 cp ./.env.example .env
 ```
 
+# 组件选型
+
+| 名称    | 项目地址                                     | 用途      |
+|-------|------------------------------------------|---------|
+| wrapt | https://github.com/GrahamDumpleton/wrapt | 通用装饰器代理 |
+
 # 环境变量
 
 | 变量                         | 默认值   | 示例                                              | 备注                 |
@@ -39,6 +45,7 @@ cp ./.env.example .env
 | SALT_API_PASSWORD          |       |                                                 | SaltAPI 密码         |
 
 # 使用命令行创建用户
+
 ```
 python ./manage.py create_keycloak_user --role_type admin --username admin --password xxxx --email admin@qq.com --lastname 管理员
 python ./manage.py create_keycloak_user --username admin --password xxxx --email admin@qq.com --lastname 管理员

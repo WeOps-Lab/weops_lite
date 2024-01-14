@@ -1,9 +1,10 @@
-from functools import wraps
+import wrapt
 
 
 def login_exempt(view_func):
-    def wrapped_view(*args, **kwargs):
-        return view_func(*args, **kwargs)
+    @wrapt.decorator
+    def wrapper(wrapped, instance, args, kwargs):
+        return wrapped(*args, **kwargs)
 
-    wrapped_view.login_exempt = True
-    return wraps(view_func)(wrapped_view)
+    wrapper.login_exempt = True
+    return wrapper
