@@ -56,6 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'better_exceptions.integrations.django.BetterExceptionsMiddleware',
+    'apps.core.auth.keycloak.middlewares.KeyCloakLoginRequiredMiddleware',
     'auditlog.middleware.AuditlogMiddleware',
 ]
 
@@ -110,4 +111,4 @@ MEDIA_URL = "/media/"
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-AUDITLOG_INCLUDE_ALL_MODELS=True
+AUDITLOG_INCLUDE_ALL_MODELS = True
