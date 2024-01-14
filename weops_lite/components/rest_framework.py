@@ -39,7 +39,13 @@ SIMPLE_JWT = {
 }
 
 SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {"basic": {"type": "basic"}},
+    "SECURITY_DEFINITIONS": {
+        "basic": {"type": "basic"},
+        'bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }},
     "APIS_SORTER": "alpha",
     "JSON_EDITOR": True,
     "OPERATIONS_SORTER": "alpha",
