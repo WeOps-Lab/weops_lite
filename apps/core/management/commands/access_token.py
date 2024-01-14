@@ -27,4 +27,6 @@ class Command(BaseCommand):
 
         client = KeyCloakUtils.get_openid_client()
         token = client.token(username, password)
-        logger.info(token['access_token'])
+        with open('token', mode='w', encoding='utf-8') as f:
+            f.writelines(token['access_token'])
+        logger.info('Token已写入token文件中')

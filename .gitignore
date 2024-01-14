@@ -7,3 +7,5 @@
 .vscode
 *.pyc
 .pytest_cache
+
+token
