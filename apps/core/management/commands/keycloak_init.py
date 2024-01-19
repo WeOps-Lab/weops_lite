@@ -3,10 +3,9 @@ import logging
 
 from django.core.management import BaseCommand
 from dotenv import load_dotenv
-from keycloak import KeycloakAdmin
 
 from apps.core.utils.keycloak_utils import KeyCloakUtils
-from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_ADMIN_USERNAME, KEYCLOAK_ADMIN_PASSWORD
+from weops_lite.components.keycloak import KEYCLOAK_URL
 
 
 class Command(BaseCommand):

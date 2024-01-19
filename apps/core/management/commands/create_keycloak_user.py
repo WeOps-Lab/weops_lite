@@ -2,11 +2,9 @@ import logging
 
 from django.core.management import BaseCommand, CommandError
 from dotenv import load_dotenv
-from keycloak import KeycloakAdmin
 
 from apps.core.utils.keycloak_utils import KeyCloakUtils
-from weops_lite.components.keycloak import KEYCLOAK_ADMIN_USERNAME, KEYCLOAK_URL, KEYCLOAK_ADMIN_PASSWORD, \
-    KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID
+from weops_lite.components.keycloak import KEYCLOAK_CLIENT_ID
 
 
 class Command(BaseCommand):
