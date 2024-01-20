@@ -14,7 +14,6 @@ from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, Su
 
 
 class KeycloakGroupViewSet(viewsets.ViewSet):
-
     realm_client = KeyCloakUtils.get_realm_client()
 
     @swagger_auto_schema(

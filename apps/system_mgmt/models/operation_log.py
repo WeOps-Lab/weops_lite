@@ -1,3 +1,4 @@
+from auditlog.registry import auditlog
 from django.db import models
 
 
@@ -33,3 +34,5 @@ class OperationLog(models.Model):
     app_module = models.CharField(max_length=20, default="", db_index=True)  # 模块
     obj_type = models.CharField(max_length=30, default="", db_index=True)  # 对象类型
 
+
+auditlog.register(OperationLog)

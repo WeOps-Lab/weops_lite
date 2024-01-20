@@ -7,7 +7,6 @@ from apps.system_mgmt.serializers.operation_log import OperationLogSer
 
 
 class OperationLogViewSet(ListModelMixin, GenericViewSet):
-
     queryset = OperationLog.objects.all()
     serializer_class = OperationLogSer
     ordering_fields = ["created_at"]

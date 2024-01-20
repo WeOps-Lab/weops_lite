@@ -14,9 +14,10 @@ cp ./.env.example .env
 
 # 组件选型
 
-| 名称    | 项目地址                                     | 用途      |
-|-------|------------------------------------------|---------|
-| wrapt | https://github.com/GrahamDumpleton/wrapt | 通用装饰器代理 |
+| 名称              | 项目地址                                        | 用途              |
+|-----------------|---------------------------------------------|-----------------|
+| wrapt           | https://github.com/GrahamDumpleton/wrapt    | 通用装饰器代理         |
+| django-auditlog | https://github.com/jazzband/django-auditlog | Django 自动审计日志模块 |
 
 # 环境变量
 

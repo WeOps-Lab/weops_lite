@@ -1,6 +1,9 @@
+from auditlog.registry import auditlog
 from django.db import models
 
-from apps.core.models.common_models import TimeInfo, MaintainerInfo, VtypeMixin
+from apps.core.models.maintainer_info import MaintainerInfo
+from apps.core.models.time_info import TimeInfo
+from apps.core.models.vtype_mixin import VtypeMixin
 
 
 class SysSetting(TimeInfo, MaintainerInfo, VtypeMixin):
@@ -22,3 +25,6 @@ class SysSetting(TimeInfo, MaintainerInfo, VtypeMixin):
 
     def get_ins_summary(self):
         return "{}[系统设置: {}]".format(self._meta.verbose_name, self.desc)
+
+
+auditlog.register(SysSetting)
