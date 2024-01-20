@@ -17,5 +17,5 @@ ADD ./manage.py ./manage.py
 ADD ./static ./static
 RUN python manage.py collectstatic --noinput
 
-ADD ./support-files/docker/server/startup.sh ./startup.sh
+ADD ./support-files/docker/startup.sh ./startup.sh
 RUN chmod +x ./startup.sh
