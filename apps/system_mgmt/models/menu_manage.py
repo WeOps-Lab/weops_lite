@@ -1,4 +1,3 @@
-from auditlog.registry import auditlog
 from django.db import models
 from django.db.models import JSONField
 
@@ -14,6 +13,3 @@ class MenuManage(TimeInfo, MaintainerInfo):
 
     class Meta:
         verbose_name = "菜单管理"
-
-
-auditlog.register(MenuManage)
