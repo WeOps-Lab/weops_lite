@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'better_exceptions.integrations.django.BetterExceptionsMiddleware',
     'apps.core.middlewares.app_exception_middleware.AppExceptionMiddleware',
     'apps.core.middlewares.keycloak_auth_middleware.KeyCloakAuthMiddleware',
-    'auditlog.middleware.AuditlogMiddleware',
+
 ]
 
 ROOT_URLCONF = 'weops_lite.urls'
@@ -112,4 +112,3 @@ MEDIA_URL = "/media/"
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-AUDITLOG_INCLUDE_ALL_MODELS = True

@@ -5,6 +5,7 @@ load_dotenv()
 
 include(
     'components/base.py',
+    'components/audit_log.py',
     'components/database.py',
     'components/rest_framework.py',
     'components/celery.py',
