@@ -8,12 +8,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.exceptions.base_app_exception import BaseAppException
-
-try:
-    from raven.contrib.django.raven_compat.models import sentry_exception_handler
-# 兼容未有安装sentry的情况
-except ImportError:
-    sentry_exception_handler = None
+from apps.core.utils.web_utils import WebUtils
 
 logger = logging.getLogger("apps")
 
@@ -36,10 +31,7 @@ class AppExceptionMiddleware(MiddlewareMixin):
                 % (traceback.format_exc(), exception.ERROR_CODE, exception.message, exception.args),
             )
 
-            response = JsonResponse(exception.response_data())
-
-            response.status_code = exception.STATUS_CODE
-            return response
+            return WebUtils.response_error(error_message=exception.message, status=exception.STATUS_CODE)
 
         # 用户未主动捕获的异常
         logger.error(
@@ -54,21 +46,7 @@ class AppExceptionMiddleware(MiddlewareMixin):
             )
         )
 
-        # 对于check开头函数进行遍历调用，如有满足条件的函数，则不屏蔽异常
-        check_funtions = self.get_check_functions()
-        for check_function in check_funtions:
-            if check_function():
-                return None
-
-        response = JsonResponse(
-            {"result": False, "code": "50000", "message": _(u"系统异常,请联系管理员处理"), "data": None})
-        response.status_code = 500
-
-        # notify sentry
-        if sentry_exception_handler is not None:
-            sentry_exception_handler(request=request)
-
-        return response
+        return WebUtils.response_error(error_message='系统异常,请联系管理员处理', status=exception.STATUS_CODE)
 
     def get_check_functions(self):
         """获取需要判断的函数列表"""
