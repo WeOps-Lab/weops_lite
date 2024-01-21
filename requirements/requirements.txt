@@ -4,7 +4,7 @@ python-dotenv==1.0.0
 daphne==4.0.0
 better_exceptions==0.3.3
 tqdm==4.66.1
-django-debug-toolbar==4.2.0
+
 django-comment-migrate==0.1.7
 joblib==1.3.2
 pandas==2.1.4
