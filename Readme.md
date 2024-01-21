@@ -15,6 +15,7 @@ cp ./.env.example .env
 # 目录结构
 
 ## 整体框架
+
 ```
 -- apps: Django APP
 -- requirement: 应用的依赖包定义
@@ -30,6 +31,7 @@ cp ./.env.example .env
 ```
 
 ## 应用
+
 ```
 -- decorators: 装饰器
 -- entities: 内部强类型对象交互的时候，类型定义在这
@@ -53,12 +55,14 @@ cp ./.env.example .env
 ```
 
 > 调用过程： views-->serializers-->services
+
 # 组件选型
 
 | 名称              | 项目地址                                        | 用途              |
 |-----------------|---------------------------------------------|-----------------|
 | wrapt           | https://github.com/GrahamDumpleton/wrapt    | 通用装饰器代理         |
 | django-auditlog | https://github.com/jazzband/django-auditlog | Django 自动审计日志模块 |
+| whitenoise      | https://github.com/evansd/whitenoise        | 静态文件Serving库    |
 
 # 环境变量
 

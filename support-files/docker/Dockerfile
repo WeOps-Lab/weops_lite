@@ -21,3 +21,4 @@ ADD ./support-files/docker/startup.sh ./startup.sh
 RUN chmod +x ./startup.sh
 
 RUN opentelemetry-bootstrap -a install
+RUN python manage.py collectstatic --noinput

@@ -112,3 +112,8 @@ MEDIA_URL = "/media/"
 
 INTERNAL_IPS = ('127.0.0.1',)
 
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}

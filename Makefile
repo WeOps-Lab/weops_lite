@@ -27,4 +27,6 @@ test:
 show_test_result:
 	allure serve ./allure-results
 
+collectstatic:
+    python manage.py collectstatic --noinput
 
