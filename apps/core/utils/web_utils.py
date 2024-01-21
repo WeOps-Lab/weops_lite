@@ -12,9 +12,9 @@ class WebUtils:
         }, status=status.HTTP_200_OK)
 
     @staticmethod
-    def response_error(response_data={}, error_message=''):
+    def response_error(response_data={}, error_message='', status=status.HTTP_400_BAD_REQUEST):
         return JsonResponse({
             'result': response_data,
             'success': False,
             'messages': error_message
-        }, status=status.HTTP_400_BAD_REQUEST)
+        }, status=status)

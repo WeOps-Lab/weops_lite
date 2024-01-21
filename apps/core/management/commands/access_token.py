@@ -3,30 +3,27 @@ import logging
 from django.core.management import BaseCommand, CommandError
 from dotenv import load_dotenv
 
-from apps.core.utils.keycloak_utils import KeyCloakUtils
+from apps.core.utils.keycloak_client import KeyCloakClient
 
 
 class Command(BaseCommand):
     help = '获取Access Token'
 
     def add_arguments(self, parser):
-        parser.add_argument("--username", type=str)
-        parser.add_argument("--password", type=str)
+        parser.add_argument("--username", type=str, required=True, help="用户名")
+        parser.add_argument("--password", type=str, required=True, help="密码")
 
     def handle(self, *args, **options):
         load_dotenv()
         logger = logging.getLogger(__name__)
 
-        if not options['username']:
-            raise CommandError("参数 'username' 是必填的")
-        username = options.get('username')
+        username = options['username']
+        password = options['password']
 
-        if not options['password']:
-            raise CommandError("参数 'password' 是必填的")
-        password = options.get('password')
-
-        client = KeyCloakUtils.get_openid_client()
-        token = client.token(username, password)
-        with open('token', mode='w', encoding='utf-8') as f:
-            f.writelines(token['access_token'])
-        logger.info('Token已写入token文件中')
+        entity = KeyCloakClient().get_token(username, password)
+        if entity.success:
+            with open('token', mode='w', encoding='utf-8') as f:
+                f.writelines(entity.token)
+            logger.info('Token已写入token文件中')
+        else:
+            logger.error(entity.error_message)

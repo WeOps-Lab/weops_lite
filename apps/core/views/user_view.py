@@ -6,15 +6,13 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from apps.core.serializers.user_auth_serializer import UserAuthSerializer
-from apps.core.services.core_user_service import CoreUserService
-from apps.core.utils.keycloak_utils import KeyCloakUtils
+from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.core.utils.web_utils import WebUtils
 
 
 class UserView(ViewSet):
     def __init__(self, *args, **kwargs):
         self.logger = logging.getLogger(__name__)
-        self.core_user_service = CoreUserService()
 
     @swagger_auto_schema(
         method="post",
@@ -26,8 +24,9 @@ class UserView(ViewSet):
         serialize = UserAuthSerializer(data=request.data)
         if serialize.is_valid():
             validated_data = serialize.validated_data
-            user_token_entity = self.core_user_service.get_user_access_token(validated_data['username'],
-                                                                             validated_data['password'])
+            keycloak_client = KeyCloakClient()
+            user_token_entity = keycloak_client.get_token(validated_data.get('username'),
+                                                          validated_data.get('password'))
             if user_token_entity.success:
                 return WebUtils.response_success({"token": user_token_entity.token})
             else:

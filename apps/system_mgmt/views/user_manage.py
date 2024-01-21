@@ -8,13 +8,13 @@ from rest_framework.response import Response
 
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.exceptions.param_validation_exception import ParamValidationException
-from apps.core.utils.keycloak_utils import KeyCloakUtils
+from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import NORMAL
 from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, SupplementApi
 
 
 class KeycloakGroupViewSet(viewsets.ViewSet):
-    realm_client = KeyCloakUtils.get_realm_client()
+    realm_client = KeyCloakClient().get_realm_client()
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -170,7 +170,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
 
 
 class KeycloakUserViewSet(viewsets.ViewSet):
-    realm_client = KeyCloakUtils.get_realm_client()
+    realm_client = KeyCloakClient().get_realm_client()
 
     @swagger_auto_schema(
         manual_parameters=[
@@ -318,7 +318,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
 
 
 class KeycloakRoleViewSet(viewsets.ViewSet):
-    realm_client = KeyCloakUtils.get_realm_client()
+    realm_client = KeyCloakClient().get_realm_client()
 
     @swagger_auto_schema(operation_description="获取所有角色")
     @uma_permission("SysRole_view")
