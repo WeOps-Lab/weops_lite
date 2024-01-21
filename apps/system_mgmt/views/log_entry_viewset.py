@@ -11,10 +11,10 @@ class LogEntryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LogEntrySerializer
     filterset_class = LogEntryFilter
 
-    @uma_permission('SysGroup_create')
+    @uma_permission('log_entry_retrieve')
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
 
-    @uma_permission('SysGroup_create')
+    @uma_permission('log_entry_list')
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)

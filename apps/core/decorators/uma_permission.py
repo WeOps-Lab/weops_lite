@@ -7,11 +7,15 @@ from rest_framework.response import Response
 from apps.core.constants import AUTH_TOKEN_HEADER_NAME
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.core.utils.web_utils import WebUtils
+from weops_lite.components.base import DEBUG
 
 
 def uma_permission(permission: str):
     @wrapt.decorator
     def wrapper(wrapped, instance, args, kwargs):
+        if DEBUG is True:
+            return wrapped(*args, **kwargs)
+
         token: str = args[0].META.get(AUTH_TOKEN_HEADER_NAME)
         if token is None:
             return WebUtils.response_error(error_message='用户Token缺失', status=status.HTTP_403_FORBIDDEN)

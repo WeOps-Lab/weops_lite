@@ -7,5 +7,5 @@ public_router = routers.DefaultRouter()
 public_router.register(r'user_view', UserView, basename='user_view')
 
 urlpatterns = [
-    path("api/public/", include(public_router.urls))
+    path("api/public/", include(public_router.urls)),
 ]

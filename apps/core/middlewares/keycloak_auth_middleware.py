@@ -6,6 +6,7 @@ from rest_framework import status
 
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.core.utils.web_utils import WebUtils
+from weops_lite.components.base import DEBUG
 
 
 class KeyCloakAuthMiddleware(MiddlewareMixin):
@@ -16,6 +17,10 @@ class KeyCloakAuthMiddleware(MiddlewareMixin):
         self.keyclock_client = KeyCloakClient()
 
     def process_view(self, request, view, args, kwargs):
+        # 开发模式，默认放行
+        if DEBUG is True:
+            return None
+
         # 只对/api的路径进行处理，其他路径默认放行
         if not request.path.startswith('/api') or request.path.startswith('/api/public/'):
             return None
