@@ -1,16 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community
-Edition) available.
-Copyright (C) 2017-2020 THL A29 Limited, a Tencent company. All rights reserved.
-Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-http://opensource.org/licenses/MIT
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
-specific language governing permissions and limitations under the License.
-"""
-
 import json
 import logging
 import traceback
@@ -20,7 +7,7 @@ from django.http import Http404, JsonResponse
 from django.utils.deprecation import MiddlewareMixin
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.exceptions.base import BlueException
+from apps.core.exceptions.base_app_exception import BaseAppException
 
 try:
     from raven.contrib.django.raven_compat.models import sentry_exception_handler
@@ -41,13 +28,13 @@ class AppExceptionMiddleware(MiddlewareMixin):
         self.request = request
 
         # 用户自我感知的异常抛出
-        if isinstance(exception, BlueException):
+        if isinstance(exception, BaseAppException):
             logger.log(
                 exception.LOG_LEVEL,
                 u"""捕获主动抛出异常, 具体异常堆栈->[%s] status_code->[%s] & """
                 u"""client_message->[%s] & args->[%s] """
                 % (traceback.format_exc(), exception.ERROR_CODE, exception.message, exception.args),
-                )
+            )
 
             response = JsonResponse(exception.response_data())
 
@@ -73,7 +60,8 @@ class AppExceptionMiddleware(MiddlewareMixin):
             if check_function():
                 return None
 
-        response = JsonResponse({"result": False, "code": "50000", "message": _(u"系统异常,请联系管理员处理"), "data": None})
+        response = JsonResponse(
+            {"result": False, "code": "50000", "message": _(u"系统异常,请联系管理员处理"), "data": None})
         response.status_code = 500
 
         # notify sentry

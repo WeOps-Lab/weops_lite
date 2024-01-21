@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.core.decorators.uma_permission import uma_permission
-from apps.core.exceptions.base import ParamValidationError
+from apps.core.exceptions.param_validation_exception import ParamValidationException
 from apps.core.utils.keycloak_utils import KeyCloakUtils
 from apps.system_mgmt.constants import NORMAL
 from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, SupplementApi
@@ -78,7 +78,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @uma_permission("SysGroup_delete")
     def delete_groups(self, request):
         if not request.data:
-            raise ParamValidationError
+            raise ParamValidationException
         for group_id in request.data:
             self.realm_client.delete_group(group_id)
         return Response()
@@ -108,7 +108,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @uma_permission("SysGroup_user")
     def assign_group_users(self, request, pk: str):
         if not request.data:
-            raise ParamValidationError
+            raise ParamValidationException
         for user_id in request.data:
             self.realm_client.group_user_add(user_id, pk)
         return Response({"id": pk})
@@ -124,7 +124,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @uma_permission("SysGroup_user")
     def unassigned_group_users(self, request, pk: str):
         if not request.data:
-            raise ParamValidationError
+            raise ParamValidationException
         for user_id in request.data:
             self.realm_client.group_user_remove(user_id, pk)
         return Response({"id": pk})
@@ -134,7 +134,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @uma_permission("SysGroup_role")
     def get_roles_in_group(self, request, pk: str):
         if not request.data:
-            raise ParamValidationError
+            raise ParamValidationException
         roles = self.realm_client.get_group_realm_roles(pk)
         return Response(roles)
 
@@ -149,7 +149,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @uma_permission("SysGroup_role")
     def assign_group_roles(self, request, pk: str):
         if not request.data:
-            raise ParamValidationError
+            raise ParamValidationException
         self.realm_client.assign_group_realm_roles(pk, request.data)
         return Response({"id": pk})
 
@@ -164,7 +164,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @uma_permission("SysGroup_role")
     def unassigned_group_roles(self, request, pk: str):
         if not request.data:
-            raise ParamValidationError
+            raise ParamValidationException
         self.realm_client.delete_group_realm_roles(pk, request.data)
         return Response({"id": pk})
 
