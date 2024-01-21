@@ -58,11 +58,41 @@ cp ./.env.example .env
 
 # 组件选型
 
-| 名称              | 项目地址                                        | 用途              |
-|-----------------|---------------------------------------------|-----------------|
-| wrapt           | https://github.com/GrahamDumpleton/wrapt    | 通用装饰器代理         |
-| django-auditlog | https://github.com/jazzband/django-auditlog | Django 自动审计日志模块 |
-| whitenoise      | https://github.com/evansd/whitenoise        | 静态文件Serving库    |
+| 名称                            | 项目地址                                                                                                  | 用途                     |
+|-------------------------------|-------------------------------------------------------------------------------------------------------|------------------------|
+| wrapt                         | https://github.com/GrahamDumpleton/wrapt                                                              | 通用装饰器代理                |
+| django-auditlog               | https://github.com/jazzband/django-auditlog                                                           | Django 自动审计日志模块        |
+| whitenoise                    | https://github.com/evansd/whitenoise                                                                  | 静态文件Serving库           |
+| redis                         | https://github.com/redis/redis-py                                                                     | redis驱动                |
+| pymysql                       | https://github.com/PyMySQL/PyMySQL                                                                    | MySQL驱动                |
+| psycopg2-binary               | https://github.com/psycopg/psycopg2                                                                   | Postgres驱动             |
+| Django                        | https://github.com/django/django                                                                      | Django Web框架           |
+| django-split-settings         | https://github.com/wemake-services/django-split-settings                                              | Django Settings 分离库    |
+| python-dotenv                 | https://github.com/theskumar/python-dotenv                                                            | 环境变量管理库                |
+| daphne                        | https://github.com/django/daphne                                                                      | ASGI Server            |
+| better_exceptions             | https://github.com/Qix-/better-exceptions                                                             | 异常信息打印库                |
+| tqdm                          | https://github.com/tqdm/tqdm                                                                          | 进度条打印库                 |
+| django-comment-migrate        | https://github.com/starryrbs/django-comment-migrate                                                   | Django Model注释迁移库      |
+| joblib                        | https://github.com/joblib/joblib                                                                      | 轻量级Pipeline库           |
+| pandas                        | https://github.com/pandas-dev/pandas                                                                  | 数据分析库                  |
+| pydantic                      | https://github.com/pydantic/pydantic                                                                  | Python强类型库             |
+| singleton-decorator           | https://github.com/Kemaweyan/singleton_decorator                                                      | 单例装饰器                  |
+| djangorestframework           | https://github.com/encode/django-rest-framework                                                       | Django Rest API库       |
+| django-filter                 | https://github.com/carltongibson/django-filter                                                        | DRF过滤工具类               |
+| djangorestframework_simplejwt | https://github.com/jazzband/djangorestframework-simplejwt                                             | DRF Jwt认证后端            |
+| django-cors-headers           | https://github.com/adamchainz/django-cors-headers                                                     | Django跨域工具             |
+| django-celery-beat            | https://github.com/celery/django-celery-beat                                                          | 定时任务                   |
+| flower                        | https://github.com/mher/flower                                                                        | Celery监控               |
+| django-celery-results         | https://github.com/celery/django-celery-results                                                       | Celery任务后端存储           |
+| sqlalchemy                    | https://github.com/sqlalchemy/sqlalchemy                                                              | 数据库访问工具类               |
+| requests                      | https://github.com/psf/requests                                                                       | HTTP请求工具类              |
+| python-keycloak               | https://github.com/marcospereirampj/python-keycloak                                                   | Keycloak客户端            |
+| pycryptodome                  | https://github.com/Legrandin/pycryptodome                                                             | 加密函数库                  |
+| pytest-django                 | https://github.com/pytest-dev/pytest-django                                                           | Pytest Django插件        |
+| django-debug-toolbar          | https://github.com/jazzband/django-debug-toolbar                                                      | Django Debug工具         |
+| drf-yasg                      | https://github.com/axnsan12/drf-yasg                                                                  | DRF Swagger库           |
+| opentelemetry-distro          | https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-distro         | OpenTelemetry Provider |
+| opentelemetry-exporter-otlp   | https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-otlp | OTLP协议导出器              |
 
 # 环境变量
 
