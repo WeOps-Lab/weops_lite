@@ -3,7 +3,7 @@ import os
 
 from django.conf import settings
 
-from apps.core.models.common_models import VtypeMixin
+from apps.core.models.vtype_mixin import VtypeMixin
 
 # 普通用户
 NORMAL = "normal"

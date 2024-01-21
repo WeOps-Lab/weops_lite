@@ -68,5 +68,5 @@ for app_config in apps.get_app_configs():
             urls_module = __import__(f'{app_name}.urls', fromlist=['urlpatterns'])
             urlpatterns.append(path('', include(urls_module)))
 
-    except ImportError:
+    except ImportError as e:
         pass

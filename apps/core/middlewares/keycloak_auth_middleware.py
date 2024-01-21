@@ -15,11 +15,7 @@ class KeyCloakAuthMiddleware(MiddlewareMixin):
 
     def process_view(self, request, view, args, kwargs):
         # 只对/api的路径进行处理，其他路径默认放行
-        if not request.path.startswith('/api'):
-            return None
-
-        # 查看视图是否有 login_exempt的豁免标记
-        if getattr(view, "login_exempt", False):
+        if not request.path.startswith('/api') or request.path.startswith('/api/public/'):
             return None
 
         token = request.META.get('HTTP_AUTHORIZATION')
