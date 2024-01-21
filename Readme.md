@@ -52,6 +52,7 @@ cp ./.env.example .env
 -- urls.py: DRF路由定义，会被应用自动加载
 ```
 
+> 调用过程： views-->serializers-->services
 # 组件选型
 
 | 名称              | 项目地址                                        | 用途              |
