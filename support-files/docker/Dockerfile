@@ -1,8 +1,14 @@
 FROM python:3.10
 WORKDIR /apps
 
+RUN apt-get update -y
+RUN apt-get install -y supervisor
+
 ADD ./requirements ./requirements
 # 使用腾讯云镜像源
+ADD ./support-files/docker/supervisor/app.conf  /etc/supervisor/conf.d/app.conf
+ADD ./support-files/docker/supervisor/celery.conf  /etc/supervisor/conf.d/celery.conf
+ADD ./support-files/docker/supervisor/beat.conf  /etc/supervisor/conf.d/beat.conf
 
 RUN pip install -r ./requirements/requirements.txt
 RUN pip install -r ./requirements/requirements-dev.txt
@@ -19,8 +25,7 @@ ADD ./manage.py ./manage.py
 ADD ./static ./static
 RUN python manage.py collectstatic --noinput
 
-ADD ./support-files/docker/startup.sh ./startup.sh
-RUN chmod +x ./startup.sh
-
 RUN opentelemetry-bootstrap -a install
 RUN python manage.py collectstatic --noinput
+
+CMD [ "supervisord","-n" ]
