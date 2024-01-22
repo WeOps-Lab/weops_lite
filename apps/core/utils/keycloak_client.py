@@ -1,5 +1,6 @@
 import json
 import logging
+import traceback
 
 from keycloak import KeycloakAdmin, KeycloakOpenID
 from singleton_decorator import singleton
@@ -12,12 +13,12 @@ from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_ADMIN_PASSWORD
 @singleton
 class KeyCloakClient:
     def __init__(self):
-        self.admin_client: KeycloakAdmin = KeycloakAdmin(server_url=KEYCLOAK_URL, username=KEYCLOAK_ADMIN_USERNAME,
-                                                         password=KEYCLOAK_ADMIN_PASSWORD)
-        self.realm_client: KeycloakAdmin = KeycloakAdmin(server_url=KEYCLOAK_URL, username=KEYCLOAK_ADMIN_USERNAME,
-                                                         password=KEYCLOAK_ADMIN_PASSWORD, realm_name=KEYCLOAK_REALM,
-                                                         client_id="admin-cli", user_realm_name="master")
-        self.openid_client: KeycloakOpenID = KeycloakOpenID(
+        self.admin_client = KeycloakAdmin(server_url=KEYCLOAK_URL, username=KEYCLOAK_ADMIN_USERNAME,
+                                          password=KEYCLOAK_ADMIN_PASSWORD)
+        self.realm_client = KeycloakAdmin(server_url=KEYCLOAK_URL, username=KEYCLOAK_ADMIN_USERNAME,
+                                          password=KEYCLOAK_ADMIN_PASSWORD, realm_name=KEYCLOAK_REALM,
+                                          client_id="admin-cli", user_realm_name="master")
+        self.openid_client = KeycloakOpenID(
             server_url=KEYCLOAK_URL,
             client_id=KEYCLOAK_CLIENT_ID,
             realm_name=KEYCLOAK_REALM,
@@ -58,7 +59,8 @@ class KeyCloakClient:
 
     def create_user(self, username, password, email, lastname, role_name) -> bool:
         try:
-            role = self.realm_client.get_client_role(KEYCLOAK_CLIENT_ID, role_name)
+            client_id = self.realm_client.get_client_id(KEYCLOAK_CLIENT_ID)
+            role = self.realm_client.get_client_role(client_id, role_name)
             user = {
                 'username': username,
                 'credentials': [{"value": password, "type": 'password', 'temporary': False}],
@@ -67,10 +69,10 @@ class KeyCloakClient:
                 'enabled': True
             }
             user_id = self.realm_client.create_user(user)
-            self.realm_client.assign_client_role(user_id, KEYCLOAK_CLIENT_ID, role)
+            self.realm_client.assign_client_role(user_id, client_id, role)
             return True
         except Exception as e:
-            self.logger.error(e)
+            traceback.print_exception(e)
             return False
 
     def import_realm_from_file(self, realm_config_path: str) -> bool:
