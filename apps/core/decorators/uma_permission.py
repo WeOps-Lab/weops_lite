@@ -1,8 +1,5 @@
-import logging
-
 import wrapt
 from rest_framework import status
-from rest_framework.response import Response
 
 from apps.core.constants import AUTH_TOKEN_HEADER_NAME
 from apps.core.utils.keycloak_client import KeyCloakClient

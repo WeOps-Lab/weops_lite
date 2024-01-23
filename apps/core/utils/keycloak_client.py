@@ -35,6 +35,12 @@ class KeyCloakClient:
         else:
             return False
 
+    def get_userinfo(self, token: str):
+        return self.openid_client.userinfo(token)
+
+    def get_permissions(self, token: str):
+        return self.openid_client.get_permissions(token)
+
     def is_super_admin(self, token: str) -> bool:
         token_info = self.openid_client.introspect(token)
         if 'admin' in token_info['resource_access'][KEYCLOAK_CLIENT_ID]['roles']:
