@@ -23,6 +23,7 @@ ADD ./weops_lite ./weops_lite
 ADD ./apps ./apps
 ADD ./manage.py ./manage.py
 ADD ./static ./static
+ADD ./templates ./templates
 RUN python manage.py collectstatic --noinput
 
 RUN opentelemetry-bootstrap -a install
