@@ -17,12 +17,13 @@ import traceback
 
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenBlacklistView
 from django.apps import apps
-
-from apps.core import views
+from django.contrib.staticfiles.urls import static
 from apps.core.views.index_view import index
+from weops_lite import settings
 from weops_lite.components.base import DEBUG
 
 urlpatterns = [

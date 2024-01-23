@@ -10,4 +10,5 @@
 
 token
 static/dist
-templates/index.html
+static/static
+templates/index.prod.html
