@@ -9,3 +9,5 @@
 .pytest_cache
 
 token
+static/dist
+templates/index.html

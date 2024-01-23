@@ -20,6 +20,9 @@ from django.urls import path, include
 from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenBlacklistView
 from django.apps import apps
+
+from apps.core import views
+from apps.core.views.index_view import index
 from weops_lite.components.base import DEBUG
 
 urlpatterns = [
@@ -72,3 +75,7 @@ for app_config in apps.get_app_configs():
 
     except ImportError as e:
         traceback.print_exc()
+
+urlpatterns += [
+    path(r"", index),
+]

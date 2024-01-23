@@ -45,8 +45,9 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,7 +55,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'better_exceptions.integrations.django.BetterExceptionsMiddleware',
     'apps.core.middlewares.app_exception_middleware.AppExceptionMiddleware',
     'apps.core.middlewares.keycloak_auth_middleware.KeyCloakAuthMiddleware',
@@ -112,6 +112,7 @@ MEDIA_URL = "/media/"
 
 INTERNAL_IPS = ('127.0.0.1',)
 
+WHITENOISE_ROOT = os.path.join(STATIC_ROOT)
 STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
