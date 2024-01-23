@@ -30,3 +30,5 @@ show_test_result:
 collectstatic:
     python manage.py collectstatic --noinput
 
+keycloak_init:
+	python ./manage.py keycloak_init

@@ -19,7 +19,7 @@ class Command(BaseCommand):
 
         client = KeyCloakClient()
 
-        realm_config_file_path = 'support-files/keycloak/realm-export-weops.json'
+        realm_config_file_path = 'support-files/keycloak/realm-export-v1.json'
         result = client.import_realm_from_file(realm_config_file_path)
         if result is True:
             logger.info(f'初始化KeyCloak Realm 完成')
