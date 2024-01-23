@@ -26,6 +26,5 @@ ADD ./static ./static
 RUN python manage.py collectstatic --noinput
 
 RUN opentelemetry-bootstrap -a install
-RUN python manage.py collectstatic --noinput
 
 CMD [ "supervisord","-n" ]
