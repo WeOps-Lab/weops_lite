@@ -1,14 +1,15 @@
 import logging
 import os
 import requests
+from dotenv import load_dotenv
+
 from apps.core.entities.user_token_entit import UserTokenEntity
 from apps.core.utils.keycloak_client import KeyCloakClient
-from dotenv import load_dotenv
 
 
 class MockRequestClient:
     def __init__(self):
-
+        load_dotenv()
         self.logger = logging.getLogger(__name__)
         self.client = KeyCloakClient()
         self.keycloak_test_admin = os.getenv('KEYCLOAK_TEST_ADMIN')

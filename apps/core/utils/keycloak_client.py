@@ -2,9 +2,9 @@ import json
 import logging
 import traceback
 
+from dotenv import load_dotenv
 from keycloak import KeycloakAdmin, KeycloakOpenID
 from singleton_decorator import singleton
-
 from apps.core.entities.user_token_entit import UserTokenEntity
 from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_ADMIN_PASSWORD, KEYCLOAK_ADMIN_USERNAME, \
     KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID, KEYCLOAK_CLIENT_SECRET_KEY

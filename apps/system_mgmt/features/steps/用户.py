@@ -3,8 +3,6 @@ from dotenv import load_dotenv
 
 from apps.core.features.utils.mock_request_client import MockRequestClient
 
-load_dotenv()
-
 
 @when('用户点击获取自己的用户信息')
 def 用户点击获取自己的用户信息(context):
