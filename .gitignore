@@ -9,3 +9,6 @@
 .pytest_cache
 
 token
+static/dist
+static/static
+templates/index.prod.html
