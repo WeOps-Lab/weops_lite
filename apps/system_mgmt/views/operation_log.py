@@ -1,6 +1,8 @@
 from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import GenericViewSet
 
+from apps.core.decorators.uma_permission import uma_permission
+from apps.core.utils.drf_utils import CustomPageNumberPagination
 from apps.system_mgmt.filters.operation_log import OperationLogFilter
 from apps.system_mgmt.models.operation_log import OperationLog
 from apps.system_mgmt.serializers.operation_log import OperationLogSer
@@ -12,3 +14,8 @@ class OperationLogViewSet(ListModelMixin, GenericViewSet):
     ordering_fields = ["created_at"]
     ordering = ["-created_at"]
     filter_class = OperationLogFilter
+    pagination_class = CustomPageNumberPagination
+
+    @uma_permission("OperationLog_list")
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)

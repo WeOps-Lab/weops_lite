@@ -8,7 +8,7 @@ def get_first_and_max(params):
     """格式化page参数, 获取first与max"""
     page, page_size = int(params.get('page', 1)), int(params.get('page_size', 20))
     _first = (page - 1) * page_size
-    _max = page * page_size + 1
+    _max = page_size
     return _first, _max
 
 

@@ -1,9 +1,12 @@
 from django.db import transaction
+from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from apps.core.decorators.uma_permission import uma_permission
+from apps.core.utils.drf_utils import CustomPageNumberPagination
+from apps.core.utils.web_utils import WebUtils
 from apps.system_mgmt.filters.menu_manage import MenuManageFilter
 from apps.system_mgmt.models import MenuManage
 from apps.system_mgmt.models.operation_log import OperationLog
@@ -20,29 +23,20 @@ class MenuManageModelViewSet(ModelViewSet):
     ordering = ["created_at"]
     ordering_fields = ["created_at"]
     filter_class = MenuManageFilter
+    pagination_class = CustomPageNumberPagination
 
-    def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        if instance.default:
-            return Response(data={"success": False, "detail": "默认菜单不允许修改！"}, status=500)
-
-        serializer = self.get_serializer(instance, data=request.data, partial=False)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        OperationLog.objects.create(
-            operator=request.user.get('username', None),
-            operate_type=OperationLog.MODIFY,
-            operate_obj=instance.menu_name,
-            operate_summary="自定义菜单管理修改自定义菜单:[{}]".format(instance.menu_name),
-            current_ip=getattr(request, "current_ip", "127.0.0.1"),
-            app_module="系统管理",
-            obj_type="自定义菜单管理",
-        )
-        return Response(serializer.data)
-
+    @swagger_auto_schema(operation_id="menu_list", operation_description="菜单列表")
+    @uma_permission("menu_list")
     def list(self, request, *args, **kwargs):
         return super(MenuManageModelViewSet, self).list(request, *args, **kwargs)
 
+    @swagger_auto_schema(operation_id="menu_retrieve", operation_description="查询某个菜单")
+    @uma_permission("menu_retrieve")
+    def retrieve(self, request, *args, **kwargs):
+        return super(MenuManageModelViewSet, self).retrieve(request, *args, **kwargs)
+
+    @swagger_auto_schema(operation_id="menu_create", operation_description="菜单创建")
+    @uma_permission("menu_create")
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -57,16 +51,60 @@ class MenuManageModelViewSet(ModelViewSet):
             app_module="系统管理",
             obj_type="自定义菜单管理",
         )
-        return Response(serializer.data)
+        return WebUtils.response_success(serializer.data)
 
+    @swagger_auto_schema(operation_id="menu_update", operation_description="菜单更新")
+    @uma_permission("menu_update")
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.default:
+            return WebUtils.response_error(error_message="默认菜单不允许修改！", status=500)
+
+        serializer = self.get_serializer(instance, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        OperationLog.objects.create(
+            operator=request.user.get('username', None),
+            operate_type=OperationLog.MODIFY,
+            operate_obj=instance.menu_name,
+            operate_summary="自定义菜单管理修改自定义菜单:[{}]".format(instance.menu_name),
+            current_ip=getattr(request, "current_ip", "127.0.0.1"),
+            app_module="系统管理",
+            obj_type="自定义菜单管理",
+        )
+        return WebUtils.response_success(serializer.data)
+
+    @swagger_auto_schema(operation_id="menu_partial_update", operation_description="菜单更新（部分属性）")
+    @uma_permission("menu_partial_update")
+    def partial_update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.default:
+            return WebUtils.response_error(error_message="默认菜单不允许修改！", status=500)
+
+        serializer = self.get_serializer(instance, data=request.data, partial=False)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        OperationLog.objects.create(
+            operator=request.user.get('username', None),
+            operate_type=OperationLog.MODIFY,
+            operate_obj=instance.menu_name,
+            operate_summary="自定义菜单管理修改自定义菜单:[{}]".format(instance.menu_name),
+            current_ip=getattr(request, "current_ip", "127.0.0.1"),
+            app_module="系统管理",
+            obj_type="自定义菜单管理",
+        )
+        return WebUtils.response_success(serializer.data)
+
+    @swagger_auto_schema(operation_id="menu_delete", operation_description="菜单删除")
+    @uma_permission("menu_delete")
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
 
         if instance.use:
-            return Response(data={"success": False, "detail": "已启用的菜单不允许删除！"}, status=500)
+            return WebUtils.response_error(error_message="已启用的菜单不允许删除！", status=500)
 
         if instance.default:
-            return Response(data={"success": False, "detail": "默认菜单不允许删除！"}, status=500)
+            return WebUtils.response_error(error_message="默认菜单不允许删除！", status=500)
 
         instance.delete()
         OperationLog.objects.create(
@@ -78,8 +116,10 @@ class MenuManageModelViewSet(ModelViewSet):
             app_module="系统管理",
             obj_type="自定义菜单管理",
         )
-        return Response(data={"success": True})
+        return WebUtils.response_success()
 
+    @swagger_auto_schema(operation_id="menu_use", operation_description="菜单启用")
+    @uma_permission("menu_use")
     @transaction.atomic
     @action(methods=["PATCH"], detail=True)
     def use_menu(self, request, *args, **kwargs):
@@ -100,9 +140,11 @@ class MenuManageModelViewSet(ModelViewSet):
             app_module="系统管理",
             obj_type="自定义菜单管理",
         )
-        return Response(data={"success": True})
+        return WebUtils.response_success()
 
+    @swagger_auto_schema(operation_id="get_menu_use", operation_description="查询启用的菜单")
+    @uma_permission("get_menu_use")
     @action(methods=["GET"], detail=False)
     def get_use_menu(self, request, *args, **kwargs):
         instance = self.queryset.get(use=True)
-        return Response(instance.menu)
+        return WebUtils.response_success(instance.menu)
