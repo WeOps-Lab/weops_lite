@@ -93,32 +93,36 @@ cp ./.env.example .env
 | drf-yasg                      | https://github.com/axnsan12/drf-yasg                                                                  | DRF Swagger库           |
 | opentelemetry-distro          | https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-distro         | OpenTelemetry Provider |
 | opentelemetry-exporter-otlp   | https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-otlp | OTLP协议导出器              |
+| behave                        | https://github.com/behave/behave                                                                      | BDD测试库                 |
 
 # 环境变量
 
-| 变量                         | 默认值   | 示例                                              | 备注                 |
-|----------------------------|-------|-------------------------------------------------|--------------------|
-| SECRET_KEY                 |       | weops-lite                                      | 密钥，用于加密和保护敏感信息     |
-| DEBUG                      | False | True                                            | 是否开启调试模式           |
-| DB_ENGINE                  |       | django.db.backends.sqlite3                      | 数据库引擎类型            |
-| DB_NAME                    |       | mydatabase                                      | 数据库名称              |
-| DB_USER                    |       | myuser                                          | 数据库用户名             |
-| DB_PASSWORD                |       | mypassword                                      | 数据库密码              |
-| DB_HOST                    |       | localhost                                       | 数据库主机              |
-| DB_PORT                    |       | 5432                                            | 数据库端口              |
-| ENABLE_CELERY              | False | False                                           | 是否启用Celery任务队列     |
-| CELERY_BROKER_URL          |       | redis://localhost:6379                          | Celery任务队列的代理URL   |
-| CELERY_RESULT_BACKEND      |       | redis://localhost:6379                          | Celery任务结果的后端存储URL |
-| CELERY_BEAT_SCHEDULER      |       | django_celery_beat.schedulers:DatabaseScheduler | Celery的定时任务调度器     |
-| KEYCLOAK_URL               |       |                                                 | KeyCloak地址         |
-| KEYCLOAK_ADMIN_USERNAME    |       |                                                 | KeyCloak管理员用户名     |
-| KEYCLOAK_ADMIN_PASSWORD    |       |                                                 | KeyCloak管理员密码      |
-| KEYCLOAK_REALM             |       |                                                 | KeyCloak Realm     |
-| KEYCLOAK_CLIENT_ID         |       |                                                 | KeyCloak客户端ID      |
-| KEYCLOAK_CLIENT_SECRET_KEY |       |                                                 | KeyCloak Client 秘钥 |
-| SALT_API_URL               |       |                                                 | Salt API URL       |
-| SALT_API_USERNAME          |       |                                                 | SaltAPI 用户名        |
-| SALT_API_PASSWORD          |       |                                                 | SaltAPI 密码         |
+| 变量                           | 默认值   | 示例                                              | 备注                 |
+|------------------------------|-------|-------------------------------------------------|--------------------|
+| SECRET_KEY                   |       | weops-lite                                      | 密钥，用于加密和保护敏感信息     |
+| DEBUG                        | False | True                                            | 是否开启调试模式           |
+| DB_ENGINE                    |       | django.db.backends.sqlite3                      | 数据库引擎类型            |
+| DB_NAME                      |       | mydatabase                                      | 数据库名称              |
+| DB_USER                      |       | myuser                                          | 数据库用户名             |
+| DB_PASSWORD                  |       | mypassword                                      | 数据库密码              |
+| DB_HOST                      |       | localhost                                       | 数据库主机              |
+| DB_PORT                      |       | 5432                                            | 数据库端口              |
+| ENABLE_CELERY                | False | False                                           | 是否启用Celery任务队列     |
+| CELERY_BROKER_URL            |       | redis://localhost:6379                          | Celery任务队列的代理URL   |
+| CELERY_RESULT_BACKEND        |       | redis://localhost:6379                          | Celery任务结果的后端存储URL |
+| CELERY_BEAT_SCHEDULER        |       | django_celery_beat.schedulers:DatabaseScheduler | Celery的定时任务调度器     |
+| KEYCLOAK_URL                 |       |                                                 | KeyCloak地址         |
+| KEYCLOAK_ADMIN_USERNAME      |       |                                                 | KeyCloak管理员用户名     |
+| KEYCLOAK_ADMIN_PASSWORD      |       |                                                 | KeyCloak管理员密码      |
+| KEYCLOAK_REALM               |       |                                                 | KeyCloak Realm     |
+| KEYCLOAK_CLIENT_ID           |       |                                                 | KeyCloak客户端ID      |
+| KEYCLOAK_CLIENT_SECRET_KEY   |       |                                                 | KeyCloak Client 秘钥 |
+| SALT_API_URL                 |       |                                                 | Salt API URL       |
+| SALT_API_USERNAME            |       |                                                 | SaltAPI 用户名        |
+| SALT_API_PASSWORD            |       |                                                 | SaltAPI 密码         |
+| TEST_BASE_URL                |       |                                                 | BDD测试使用的BaseURL    |
+| KEYCLOAK_TEST_ADMIN          |       |                                                 | 测试用的KeyCloak管理员账号  |
+| KEYCLOAK_TEST_ADMIN_PASSWORD |       |                                                 | 测试用的KeyCloak管理员密码  |
 
 # 使用命令行创建用户
 
