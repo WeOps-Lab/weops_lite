@@ -178,8 +178,32 @@ class UserManage(object):
                 policy_id = policy["id"]
                 break
 
-        # 判断权限是否需要更新
         permission_name_set = set(request.data)
+
+        # 判断是否需要初始化权限，若需要就进行资源与权限的初始化
+        need_init_permissions = permission_name_set - {i["name"] for i in all_permissions}
+        for permission_name in need_init_permissions:
+            resource_info = {
+                "name": permission_name,
+                "displayName": "",
+                "type": "",
+                "icon_uri": "",
+                "scopes": [],
+                "ownerManagedAccess": False,
+                "attributes": {}
+            }
+            resource_resp = self.keycloak_client.realm_client.create_client_authz_resource(client_id, resource_info, True)
+            permission_info = {
+                "resources": [resource_resp["_id"]],
+                "policies": [],
+                "name": permission_name,
+                "description": "",
+                "decisionStrategy": "UNANIMOUS",
+                "resourceType": ""
+            }
+            self.keycloak_client.realm_client.create_client_authz_resource_based_permission(client_id, permission_info, True)
+
+        # 判断权限是否需要更新
         supplement_api = SupplementApi(self.keycloak_client.realm_client.connection)
         for permission_info in all_permissions:
 
