@@ -64,7 +64,6 @@ cp ./.env.example .env
 | django-auditlog               | https://github.com/jazzband/django-auditlog                                                           | Django 自动审计日志模块        |
 | whitenoise                    | https://github.com/evansd/whitenoise                                                                  | 静态文件Serving库           |
 | redis                         | https://github.com/redis/redis-py                                                                     | redis驱动                |
-| pymysql                       | https://github.com/PyMySQL/PyMySQL                                                                    | MySQL驱动                |
 | psycopg2-binary               | https://github.com/psycopg/psycopg2                                                                   | Postgres驱动             |
 | Django                        | https://github.com/django/django                                                                      | Django Web框架           |
 | django-split-settings         | https://github.com/wemake-services/django-split-settings                                              | Django Settings 分离库    |
@@ -101,7 +100,6 @@ cp ./.env.example .env
 |------------------------------|-------|-------------------------------------------------|--------------------|
 | SECRET_KEY                   |       | weops-lite                                      | 密钥，用于加密和保护敏感信息     |
 | DEBUG                        | False | True                                            | 是否开启调试模式           |
-| DB_ENGINE                    |       | django.db.backends.sqlite3                      | 数据库引擎类型            |
 | DB_NAME                      |       | mydatabase                                      | 数据库名称              |
 | DB_USER                      |       | myuser                                          | 数据库用户名             |
 | DB_PASSWORD                  |       | mypassword                                      | 数据库密码              |

@@ -28,9 +28,9 @@ python-keycloak==3.7.0
 pycryptodome==3.20.0
 
 redis==5.0.1
-pymysql==1.1.0
-psycopg2-binary==2.9.7
 
 whitenoise==6.5.0
 wrapt==1.16.0
 django-auditlog==2.3.0
+
+psycopg2-binary==2.9.9
