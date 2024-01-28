@@ -12,6 +12,7 @@ class SysSetting(TimeInfo, MaintainerInfo, VtypeMixin):
 
     class Meta:
         verbose_name = "系统设置"
+        verbose_name_plural = verbose_name
 
     @property
     def real_value(self):
