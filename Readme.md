@@ -122,6 +122,7 @@ cp ./.env.example .env
 | TEST_BASE_URL                |       |                                                 | BDD测试使用的BaseURL    |
 | KEYCLOAK_TEST_ADMIN          |       |                                                 | 测试用的KeyCloak管理员账号  |
 | KEYCLOAK_TEST_ADMIN_PASSWORD |       |                                                 | 测试用的KeyCloak管理员密码  |
+| REDIS_CACHE_URL              |       |                                                 | Django Redis缓存URL  |
 
 # 使用命令行创建用户
 
