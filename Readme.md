@@ -93,6 +93,7 @@ cp ./.env.example .env
 | opentelemetry-distro          | https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-distro         | OpenTelemetry Provider |
 | opentelemetry-exporter-otlp   | https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-otlp | OTLP协议导出器              |
 | behave                        | https://github.com/behave/behave                                                                      | BDD测试库                 |
+| django-import-export          | https://github.com/django-import-export/django-import-export                                          | Django 导入导出库           |
 
 # 环境变量
 

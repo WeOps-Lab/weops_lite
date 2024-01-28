@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_comment_migrate',
     'debug_toolbar',
+    'import_export',
 ]
 
 # Web组件

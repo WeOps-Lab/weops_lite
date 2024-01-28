@@ -34,3 +34,5 @@ wrapt==1.16.0
 django-auditlog==2.3.0
 
 psycopg2-binary==2.9.9
+
+django-import-export==3.3.6
