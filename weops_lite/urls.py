@@ -16,7 +16,7 @@ Including another URLconf
 import traceback
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.views.generic import RedirectView
 from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenBlacklistView
@@ -78,5 +78,5 @@ for app_config in apps.get_app_configs():
         traceback.print_exc()
 
 urlpatterns += [
-    path(r"", index),
+    re_path(r".*", index),
 ]
