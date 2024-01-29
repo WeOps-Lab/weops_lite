@@ -69,14 +69,22 @@ class UserManage(object):
         """将一些角色添加到组"""
         if not request.data:
             raise ParamValidationException
-        self.keycloak_client.realm_client.assign_group_realm_roles(group_id, request.data)
+
+        roles = self.keycloak_client.realm_client.get_realm_roles()
+        role_list = [i for i in roles if i["id"] in request.data]
+
+        self.keycloak_client.realm_client.assign_group_realm_roles(group_id, role_list)
         return {"id": group_id}
 
     def group_remove_roles(self, request, group_id):
         """将一些角色从组中移除"""
         if not request.data:
             raise ParamValidationException
-        self.keycloak_client.realm_client.delete_group_realm_roles(group_id, request.data)
+
+        roles = self.keycloak_client.realm_client.get_realm_roles()
+        role_list = [i for i in roles if i["id"] in request.data]
+
+        self.keycloak_client.realm_client.delete_group_realm_roles(group_id, role_list)
         return {"id": group_id}
 
     def user_list(self, request):
@@ -149,12 +157,26 @@ class UserManage(object):
             return []
         permissions = SupplementApi(
             self.keycloak_client.realm_client.connection).get_permission_by_policy_id(client_id, policy_id)
-        return permissions
+        return [i["name"] for i in permissions]
 
     def role_create(self, request):
-        """创建角色"""
-        result = self.keycloak_client.realm_client.create_realm_role(request.data)
-        return result
+        """创建角色，先创建角色再创建角色对应的策略"""
+        role_name = self.keycloak_client.realm_client.create_realm_role(request.data, True)
+        role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
+        client_id = get_client_id(self.keycloak_client.realm_client)
+        policy_data = {
+            "type": "role",
+            "logic": "POSITIVE",
+            "decisionStrategy": "UNANIMOUS",
+            "name": role_name,
+            "roles": [
+                {
+                    "id": role_info["id"]
+                }
+            ]
+        }
+        self.keycloak_client.realm_client.create_client_authz_role_based_policy(client_id, policy_data, True)
+        return role_info
 
     def role_delete(self, role_name):
         """删除角色"""

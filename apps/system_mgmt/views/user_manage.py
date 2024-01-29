@@ -141,6 +141,9 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         operation_id="group_add_roles",
         operation_description="将一系列角色添加到组",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="用户组ID", type=openapi.TYPE_STRING)
+        ],
         request_body=openapi.Schema(
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="角色ID")
@@ -155,6 +158,9 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         operation_id="group_remove_roles",
         operation_description="将一系列角色从组移除",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="用户组ID", type=openapi.TYPE_STRING)
+        ],
         request_body=openapi.Schema(
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="角色ID")
@@ -399,7 +405,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["put"], url_path="assign/(?P<user_id>[^/.]+)")
     @uma_permission("role_add_user")
     def assign_role(self, request, pk: str, user_id: str):
-        UserManage().role_set_permissions(pk, user_id)
+        UserManage().role_add_user(pk, user_id)
         return WebUtils.response_success()
 
     @swagger_auto_schema(
