@@ -75,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'weops_lite.context_processors.web_env.custom_settings',  # 添加你的自定义上下文处理器
             ],
         },
     },
