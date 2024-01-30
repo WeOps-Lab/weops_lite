@@ -92,6 +92,21 @@ class UserManage(object):
         _first, _max = get_first_and_max(request.query_params)
         users = self.keycloak_client.realm_client.get_users(
             dict(first=_first, max=_max, search=request.query_params.get("search")))
+        for user_info in users:
+
+            # 用户补充角色信息
+            try:
+                roles = self.keycloak_client.realm_client.get_realm_roles_of_user(user_info["id"])
+            except:
+                roles = []
+
+            # 用户补充用户组信息
+            try:
+                groups = self.keycloak_client.realm_client.get_user_groups(user_info["id"])
+            except:
+                groups = []
+
+            user_info.update(roles=roles, groups=groups)
         return {"count": len(users), "users": users}
 
     def user_list_by_role(self, request, role_name):
