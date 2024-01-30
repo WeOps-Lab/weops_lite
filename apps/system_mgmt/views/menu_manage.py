@@ -22,7 +22,7 @@ class MenuManageModelViewSet(ModelViewSet):
     serializer_class = MenuManageModelSerializer
     ordering = ["created_at"]
     ordering_fields = ["created_at"]
-    filter_class = MenuManageFilter
+    filterset_class = MenuManageFilter
     pagination_class = CustomPageNumberPagination
 
     @swagger_auto_schema(operation_id="menu_list", operation_description="菜单列表")

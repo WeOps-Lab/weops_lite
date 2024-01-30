@@ -14,7 +14,7 @@ class OperationLogViewSet(ListModelMixin, GenericViewSet):
     serializer_class = OperationLogSer
     ordering_fields = ["created_at"]
     ordering = ["-created_at"]
-    filter_class = OperationLogFilter
+    filterset_class = OperationLogFilter
     pagination_class = CustomPageNumberPagination
 
     @uma_permission("operation_log_list")
