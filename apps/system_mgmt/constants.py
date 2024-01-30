@@ -19,3 +19,13 @@ with open(DEFAULT_LOGO_PATH, "rb") as logo_file:
         "vtype": VtypeMixin.STRING,
         "desc": "系统默认Logo",
     }
+
+# 菜单管理默认菜单
+MENU_DATA = {
+    "menu_name": "默认菜单",
+    "default": True,
+    "use": True,
+    "menu": list,
+    "created_by": "admin",
+    "updated_by": "admin",
+}

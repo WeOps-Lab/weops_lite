@@ -3,9 +3,8 @@ import logging
 import traceback
 
 from django.conf import settings
-from django.http import Http404, JsonResponse
+from django.http import Http404
 from django.utils.deprecation import MiddlewareMixin
-from django.utils.translation import gettext_lazy as _
 
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.web_utils import WebUtils

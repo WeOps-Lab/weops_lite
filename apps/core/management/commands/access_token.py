@@ -1,6 +1,6 @@
 import logging
 
-from django.core.management import BaseCommand, CommandError
+from django.core.management import BaseCommand
 from dotenv import load_dotenv
 
 from apps.core.utils.keycloak_client import KeyCloakClient
