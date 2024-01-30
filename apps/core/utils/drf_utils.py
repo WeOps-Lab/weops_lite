@@ -1,7 +1,5 @@
-from collections import OrderedDict
-
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.response import Response
+from apps.core.utils.web_utils import WebUtils
 
 
 class CustomPageNumberPagination(PageNumberPagination):
@@ -17,10 +15,4 @@ class CustomPageNumberPagination(PageNumberPagination):
 
     def get_paginated_response(self, data):
         # 统一response格式
-        return Response(OrderedDict([
-            ('count', self.page.paginator.count),
-            ('next', self.get_next_link()),
-            ('previous', self.get_previous_link()),
-            ('result', True),
-            ('data', data),
-        ]))
+        return WebUtils.response_success(dict(count=self.page.paginator.count, data=data))
