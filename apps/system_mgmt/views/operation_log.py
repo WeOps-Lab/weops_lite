@@ -19,5 +19,4 @@ class OperationLogViewSet(ListModelMixin, GenericViewSet):
 
     @uma_permission("operation_log_list")
     def list(self, request, *args, **kwargs):
-        results = super().list(request, *args, **kwargs)
-        return WebUtils.response_success(results.data)
+        return super().list(request, *args, **kwargs)
