@@ -5,8 +5,11 @@ from django.conf import settings
 
 from apps.core.models.vtype_mixin import VtypeMixin
 
-# 普通用户
+# 普通用户角色
 NORMAL = "normal"
+
+# 超管用户角色
+ADMIN = "admin"
 
 # 默认logo
 DEFAULT_LOGO_PATH = os.path.join(settings.BASE_DIR, "static/img/default-logo.png")
@@ -29,3 +32,6 @@ MENU_DATA = {
     "created_by": "admin",
     "updated_by": "admin",
 }
+
+# keycloak默认角色（查询角色列表要过滤掉默认角色）
+BUILT_IN_ROLES = {f"default-roles-{os.getenv('KEYCLOAK_REALM')}", "uma_authorization", "offline_access"}

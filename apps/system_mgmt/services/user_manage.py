@@ -1,7 +1,8 @@
 from apps.core.exceptions.param_validation_exception import ParamValidationException
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import NORMAL
-from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, SupplementApi
+from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, SupplementApi, get_realm_roles, \
+    get_realm_roles_of_user
 
 
 class UserManage(object):
@@ -70,7 +71,7 @@ class UserManage(object):
         if not request.data:
             raise ParamValidationException
 
-        roles = self.keycloak_client.realm_client.get_realm_roles()
+        roles = get_realm_roles(self.keycloak_client.realm_client)
         role_list = [i for i in roles if i["id"] in request.data]
 
         self.keycloak_client.realm_client.assign_group_realm_roles(group_id, role_list)
@@ -81,7 +82,7 @@ class UserManage(object):
         if not request.data:
             raise ParamValidationException
 
-        roles = self.keycloak_client.realm_client.get_realm_roles()
+        roles = get_realm_roles(self.keycloak_client.realm_client)
         role_list = [i for i in roles if i["id"] in request.data]
 
         self.keycloak_client.realm_client.delete_group_realm_roles(group_id, role_list)
@@ -96,7 +97,7 @@ class UserManage(object):
 
             # 用户补充角色信息
             try:
-                roles = self.keycloak_client.realm_client.get_realm_roles_of_user(user_info["id"])
+                roles = get_realm_roles_of_user(self.keycloak_client.realm_client, user_info["id"])
             except:
                 roles = []
 
@@ -156,7 +157,7 @@ class UserManage(object):
 
     def role_list(self):
         """角色列表"""
-        result = self.keycloak_client.realm_client.get_realm_roles()
+        result = get_realm_roles(self.keycloak_client.realm_client)
         return result
 
     def role_permissions(self, role_name):
