@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.drf_utils import CustomPageNumberPagination
 from apps.core.utils.web_utils import WebUtils
-from apps.system_mgmt.filters.menu_manage import MenuManageFilter
+from apps.system_mgmt.constants import APP_MODULE, MENU
 from apps.system_mgmt.models import MenuManage
 from apps.system_mgmt.models.operation_log import OperationLog
 from apps.system_mgmt.serializers.menu_manage import MenuManageModelSerializer
@@ -22,18 +22,20 @@ class MenuManageModelViewSet(ModelViewSet):
     serializer_class = MenuManageModelSerializer
     ordering = ["created_at"]
     ordering_fields = ["created_at"]
-    filterset_class = MenuManageFilter
     pagination_class = CustomPageNumberPagination
+    search_fields = ['menu_name']
 
     @swagger_auto_schema(operation_id="menu_list", operation_description="菜单列表")
     @uma_permission("menu_list")
     def list(self, request, *args, **kwargs):
-        return super(MenuManageModelViewSet, self).list(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
     @swagger_auto_schema(operation_id="menu_retrieve", operation_description="查询某个菜单")
     @uma_permission("menu_retrieve")
     def retrieve(self, request, *args, **kwargs):
-        return super(MenuManageModelViewSet, self).retrieve(request, *args, **kwargs)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return WebUtils.response_success(serializer.data)
 
     @swagger_auto_schema(operation_id="menu_create", operation_description="菜单创建")
     @uma_permission("menu_create")
@@ -43,13 +45,12 @@ class MenuManageModelViewSet(ModelViewSet):
         self.perform_create(serializer)
         instance = serializer.instance
         OperationLog.objects.create(
-            operator=request.user.get('username', None),
+            operator=request.userinfo.get("username"),
             operate_type=OperationLog.ADD,
             operate_obj=instance.menu_name,
             operate_summary="自定义菜单管理新增自定义菜单:[{}]".format(instance.menu_name),
-            current_ip=getattr(request, "current_ip", "127.0.0.1"),
-            app_module="系统管理",
-            obj_type="自定义菜单管理",
+            app_module=APP_MODULE,
+            obj_type=MENU,
         )
         return WebUtils.response_success(serializer.data)
 
@@ -64,13 +65,12 @@ class MenuManageModelViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         OperationLog.objects.create(
-            operator=request.user.get('username', None),
+            operator=request.userinfo.get("username"),
             operate_type=OperationLog.MODIFY,
             operate_obj=instance.menu_name,
             operate_summary="自定义菜单管理修改自定义菜单:[{}]".format(instance.menu_name),
-            current_ip=getattr(request, "current_ip", "127.0.0.1"),
-            app_module="系统管理",
-            obj_type="自定义菜单管理",
+            app_module=APP_MODULE,
+            obj_type=MENU,
         )
         return WebUtils.response_success(serializer.data)
 
@@ -85,13 +85,12 @@ class MenuManageModelViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         OperationLog.objects.create(
-            operator=request.user.get('username', None),
+            operator=request.userinfo.get("username"),
             operate_type=OperationLog.MODIFY,
             operate_obj=instance.menu_name,
             operate_summary="自定义菜单管理修改自定义菜单:[{}]".format(instance.menu_name),
-            current_ip=getattr(request, "current_ip", "127.0.0.1"),
-            app_module="系统管理",
-            obj_type="自定义菜单管理",
+            app_module=APP_MODULE,
+            obj_type=MENU,
         )
         return WebUtils.response_success(serializer.data)
 
@@ -108,13 +107,12 @@ class MenuManageModelViewSet(ModelViewSet):
 
         instance.delete()
         OperationLog.objects.create(
-            operator=request.user.get('username', None),
+            operator=request.userinfo.get("username"),
             operate_type=OperationLog.DELETE,
             operate_obj=instance.menu_name,
             operate_summary="自定义菜单管理删除自定义菜单:[{}]".format(instance.menu_name),
-            current_ip=getattr(request, "current_ip", "127.0.0.1"),
-            app_module="系统管理",
-            obj_type="自定义菜单管理",
+            app_module=APP_MODULE,
+            obj_type=MENU,
         )
         return WebUtils.response_success()
 
@@ -132,13 +130,12 @@ class MenuManageModelViewSet(ModelViewSet):
         instance.use = True
         instance.save()
         OperationLog.objects.create(
-            operator=request.user.get('username', None),
+            operator=request.userinfo.get("username"),
             operate_type=OperationLog.MODIFY,
             operate_obj=instance.menu_name,
             operate_summary="自定义菜单管理启用自定义菜单:[{}]".format(instance.menu_name),
-            current_ip=getattr(request, "current_ip", "127.0.0.1"),
-            app_module="系统管理",
-            obj_type="自定义菜单管理",
+            app_module=APP_MODULE,
+            obj_type=MENU,
         )
         return WebUtils.response_success()
 

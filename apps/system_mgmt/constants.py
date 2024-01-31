@@ -35,3 +35,13 @@ MENU_DATA = {
 
 # keycloak默认角色（查询角色列表要过滤掉默认角色）
 BUILT_IN_ROLES = {f"default-roles-{os.getenv('KEYCLOAK_REALM')}", "uma_authorization", "offline_access"}
+
+# 模块
+APP_MODULE = "系统管理"
+
+# 本模块下的操作对象类型
+USER = "用户"
+ROLE = "角色"
+GROUP = "用户组织"
+MENU = "自定义菜单"
+LOGO = "LOGO"

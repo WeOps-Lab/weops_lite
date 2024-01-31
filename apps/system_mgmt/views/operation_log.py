@@ -3,7 +3,6 @@ from rest_framework.viewsets import GenericViewSet
 
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.drf_utils import CustomPageNumberPagination
-from apps.core.utils.web_utils import WebUtils
 from apps.system_mgmt.filters.operation_log import OperationLogFilter
 from apps.system_mgmt.models.operation_log import OperationLog
 from apps.system_mgmt.serializers.operation_log import OperationLogSer

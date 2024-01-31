@@ -1,3 +1,5 @@
+import json
+
 from keycloak import urls_patterns, KeycloakGetError
 from keycloak.exceptions import raise_error_from_response
 
@@ -58,7 +60,7 @@ class SupplementApi(object):
             "id": client_id,
             "permission_id": permission_id
         }
-        data_raw = self.connection.raw_put(url.format(**params_path), data=permission)
+        data_raw = self.connection.raw_put(url.format(**params_path), json.dumps(permission))
         return raise_error_from_response(data_raw, KeycloakGetError)
 
     def get_policies_by_permission_id(self, client_id, permission_id):

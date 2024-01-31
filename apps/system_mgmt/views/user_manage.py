@@ -99,7 +99,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
 
     @swagger_auto_schema(
         operation_id="group_add_users",
-        operation_description="将一系列用户添加到组",
+        operation_description="将一些用户添加到用户组织下",
         request_body=openapi.Schema(
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="用户ID")
@@ -221,13 +221,13 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
-        operation_id="user_create",
+        operation_id="user_delete",
         operation_description="删除用户",
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="用户id", type=openapi.TYPE_STRING)
         ],
     )
-    @uma_permission("user_create")
+    @uma_permission("user_delete")
     def destroy(self, request, pk: str):
         data = UserManage().user_delete(pk)
         return WebUtils.response_success(data)
@@ -466,5 +466,5 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="groups/(?P<role_name>.+?)")
     @uma_permission("role_groups")
     def get_groups_by_role(self, request, role_name: str):
-        data = UserManage().role_remove_groups(request, role_name)
+        data = UserManage().role_groups(request, role_name)
         return WebUtils.response_success(data)

@@ -7,9 +7,11 @@ class OperationLog(models.Model):
         verbose_name_plural = verbose_name
 
     ADD = "add"
+    INCREASE = "increase"
     MODIFY = "modify"
     EXEC = "exec"
     DELETE = "delete"
+    REMOVE = "remove"
     DOWNLOAD = "download"
     UPLOAD = "upload"
     LOGIN = "login"
@@ -17,9 +19,11 @@ class OperationLog(models.Model):
     EXPORT = "export"
     OPERATE_TYPE_CHOICES = (
         (ADD, "新增"),
+        (INCREASE, "添加"),
         (MODIFY, "修改"),
         (EXEC, "执行"),
         (DELETE, "删除"),
+        (REMOVE, "移除"),
         (DOWNLOAD, "下载"),
         (UPLOAD, "上传"),
         (LOGIN, "登陆"),

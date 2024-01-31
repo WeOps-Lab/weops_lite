@@ -1,6 +1,7 @@
 from apps.core.exceptions.param_validation_exception import ParamValidationException
 from apps.core.utils.keycloak_client import KeyCloakClient
-from apps.system_mgmt.constants import NORMAL
+from apps.system_mgmt.constants import NORMAL, APP_MODULE, GROUP
+from apps.system_mgmt.models import OperationLog
 from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, SupplementApi, get_realm_roles, \
     get_realm_roles_of_user
 
@@ -25,19 +26,53 @@ class UserManage(object):
         """创建用户组"""
         group_id = self.keycloak_client.realm_client.create_group(
             dict(name=request.data["group_name"]), request.data.get("parent_group_id", None))
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.ADD,
+            operate_obj=request.data["group_name"],
+            operate_summary="创建用户组织!",
+            app_module=APP_MODULE,
+            obj_type=GROUP,
+        )
         return {"id": group_id}
 
     def group_update(self, request, group_id):
         """更新用户组"""
+        group = UserManage().group_retrieve(group_id)
         self.keycloak_client.realm_client.update_group(group_id, dict(name=request.data["group_name"]))
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.MODIFY,
+            operate_obj=group["name"],
+            operate_summary="修改用户组织名称为:[{}]".format(request.data["group_name"]),
+            app_module=APP_MODULE,
+            obj_type=GROUP,
+        )
         return {"id": group_id}
 
     def group_delete(self, request):
         """删除用户组"""
         if not request.data:
             raise ParamValidationException
+
+        groups = []
         for group_id in request.data:
+            group = UserManage().group_retrieve(group_id)
+            groups.append(group["name"])
+
             self.keycloak_client.realm_client.delete_group(group_id)
+
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.DELETE,
+                operate_obj=group_name,
+                operate_summary="删除用户组织!",
+                app_module=APP_MODULE,
+                obj_type=GROUP,
+            ) for group_name in groups
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
 
     def group_users(self, request, group_id):
         """获取用户组下用户"""
@@ -49,16 +84,52 @@ class UserManage(object):
         """将一些用户添加到组"""
         if not request.data:
             raise ParamValidationException
+
+        group = UserManage().group_retrieve(group_id)
+        users = []
         for user_id in request.data:
             self.keycloak_client.realm_client.group_user_add(user_id, group_id)
+            user = self.keycloak_client.realm_client.get_user(user_id)
+            users.append(user["name"])
+
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.INCREASE,
+                operate_obj=user_name,
+                operate_summary=f"将用户[{user_name}]加到用户组织[{group['name']}]下",
+                app_module=APP_MODULE,
+                obj_type=GROUP,
+            ) for user_name in users
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
+
         return {"id": group_id}
 
     def group_remove_users(self, request, group_id):
         """将一些用户从组中移除"""
         if not request.data:
             raise ParamValidationException
+
+        group = UserManage().group_retrieve(group_id)
+        users = []
         for user_id in request.data:
             self.keycloak_client.realm_client.group_user_remove(user_id, group_id)
+            user = self.keycloak_client.realm_client.get_user(user_id)
+            users.append(user["name"])
+
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.REMOVE,
+                operate_obj=user_name,
+                operate_summary=f"将用户[{user_name}]从用户组织[{group['name']}]移除",
+                app_module=APP_MODULE,
+                obj_type=GROUP,
+            ) for user_name in users
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
+
         return {"id": group_id}
 
     def group_roles(self, group_id):
@@ -207,7 +278,6 @@ class UserManage(object):
         """设置角色权限"""
         client_id = get_client_id(self.keycloak_client.realm_client)
         all_permissions = self.keycloak_client.realm_client.get_client_authz_permissions(client_id)
-
         # 获取角色映射的policy_id（角色与policy一对一映射）
         policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)
         policy_id = ""
@@ -221,7 +291,7 @@ class UserManage(object):
         # 判断是否需要初始化权限，若需要就进行资源与权限的初始化
         need_init_permissions = permission_name_set - {i["name"] for i in all_permissions}
         for permission_name in need_init_permissions:
-            resource_info = {
+            resource = {
                 "name": permission_name,
                 "displayName": "",
                 "type": "",
@@ -230,8 +300,8 @@ class UserManage(object):
                 "ownerManagedAccess": False,
                 "attributes": {}
             }
-            resource_resp = self.keycloak_client.realm_client.create_client_authz_resource(client_id, resource_info, True)
-            permission_info = {
+            resource_resp = self.keycloak_client.realm_client.create_client_authz_resource(client_id, resource, True)
+            permission = {
                 "resources": [resource_resp["_id"]],
                 "policies": [],
                 "name": permission_name,
@@ -239,7 +309,7 @@ class UserManage(object):
                 "decisionStrategy": "UNANIMOUS",
                 "resourceType": ""
             }
-            self.keycloak_client.realm_client.create_client_authz_resource_based_permission(client_id, permission_info, True)
+            self.keycloak_client.realm_client.create_client_authz_resource_based_permission(client_id, permission, True)
 
         # 判断权限是否需要更新
         supplement_api = SupplementApi(self.keycloak_client.realm_client.connection)

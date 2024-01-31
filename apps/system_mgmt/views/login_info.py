@@ -12,7 +12,6 @@ class LoginInfoView(views.APIView):
         operation_id="login_info",
         operation_description="用户登录之后，获取基本信息"
     )
-    @uma_permission('login_info')
     def get(self, request):
         data = LoginInfo().get_user_login_info(request)
         return WebUtils.response_success(data)

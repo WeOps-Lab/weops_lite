@@ -28,12 +28,12 @@ class KeyCloakClient:
     def get_realm_client(self):
         return self.realm_client
 
-    def token_is_valid(self, token) -> bool:
+    def token_is_valid(self, token) -> (bool, dict):
         token_info = self.openid_client.introspect(token)
         if token_info.get('active'):
-            return True
+            return True, token_info
         else:
-            return False
+            return False, {}
 
     def get_userinfo(self, token: str):
         return self.openid_client.userinfo(token)

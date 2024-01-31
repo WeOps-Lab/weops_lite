@@ -26,7 +26,6 @@ class LogoViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
         operation_id="logo",
         operation_description="获取logo",
     )
-    @uma_permission('logo')
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
@@ -52,13 +51,11 @@ class LogoViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
         serializer = self.get_serializer(instance, data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-        current_ip = getattr(request, "current_ip", "127.0.0.1")
         OperationLog.objects.create(
-            operator=request.user.get('username', None),
+            operator=request.userinfo.get("username"),
             operate_type=OperationLog.MODIFY,
             operate_obj="Logo设置",
             operate_summary="修改Logo为:[{}]".format(file_obj.name if file_obj else ""),
-            current_ip=current_ip,
             app_module="系统管理",
             obj_type="系统设置",
         )
@@ -74,13 +71,11 @@ class LogoViewSet(RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
         instance.value = SYSTEM_LOGO_INFO["value"]
         instance.save()
         serializer = self.get_serializer(instance)
-        current_ip = getattr(request, "current_ip", "127.0.0.1")
         OperationLog.objects.create(
-            operator=request.user.get('username', None),
+            operator=request.userinfo.get("username"),
             operate_type=OperationLog.MODIFY,
             operate_obj="Logo设置",
             operate_summary="logo恢复默认",
-            current_ip=current_ip,
             app_module="系统管理",
             obj_type="系统设置",
         )
