@@ -32,3 +32,6 @@ collectstatic:
 
 keycloak_init:
 	python ./manage.py keycloak_init
+
+bdd_test:
+	behave ./apps/system_mgmt/features
