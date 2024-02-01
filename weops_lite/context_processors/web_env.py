@@ -16,5 +16,6 @@ def custom_settings(request):
     context = {
         "KEYCLOAK_URL": os.getenv("KEYCLOAK_URL"),
         "KEYCLOAK_REALM": os.getenv("KEYCLOAK_REALM"),
+        "KEYCLOAK_UI_CLIENT_ID": os.getenv("KEYCLOAK_UI_CLIENT_ID"),
     }
     return context
