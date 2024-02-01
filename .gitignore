@@ -9,6 +9,5 @@
 .pytest_cache
 
 token
-static/dist
-static/static
+assets/static
 templates/index.prod.html

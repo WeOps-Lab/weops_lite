@@ -12,7 +12,7 @@ NORMAL = "normal"
 ADMIN = "admin"
 
 # 默认logo
-DEFAULT_LOGO_PATH = os.path.join(settings.BASE_DIR, "static/img/default-logo.png")
+DEFAULT_LOGO_PATH = os.path.join(settings.BASE_DIR, "assets/img/default-logo.png")
 
 # 系统设置表中提前置入的设置项
 with open(DEFAULT_LOGO_PATH, "rb") as logo_file:
