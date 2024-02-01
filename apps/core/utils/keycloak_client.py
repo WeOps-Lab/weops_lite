@@ -38,8 +38,9 @@ class KeyCloakClient:
     def get_userinfo(self, token: str):
         return self.openid_client.userinfo(token)
 
-    def get_permissions(self, token: str):
-        return self.openid_client.get_permissions(token)
+    def get_roles(self, token: str) -> list:
+        token_info = self.openid_client.introspect(token)
+        return token_info['realm_access']['roles']
 
     def is_super_admin(self, token: str) -> bool:
         token_info = self.openid_client.introspect(token)
