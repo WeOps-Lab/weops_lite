@@ -1,6 +1,6 @@
 from apps.core.exceptions.param_validation_exception import ParamValidationException
 from apps.core.utils.keycloak_client import KeyCloakClient
-from apps.system_mgmt.constants import NORMAL, APP_MODULE, GROUP
+from apps.system_mgmt.constants import NORMAL, APP_MODULE, GROUP, USER, ROLE
 from apps.system_mgmt.models import OperationLog
 from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, SupplementApi, get_realm_roles, \
     get_realm_roles_of_user
@@ -25,7 +25,7 @@ class UserManage(object):
     def group_create(self, request):
         """创建用户组"""
         group_id = self.keycloak_client.realm_client.create_group(
-            dict(name=request.data["group_name"]), request.data.get("parent_group_id", None))
+            dict(name=request.data["group_name"]), request.data.get("parent_group_id") or None)
         OperationLog.objects.create(
             operator=request.userinfo.get("username"),
             operate_type=OperationLog.ADD,
@@ -90,13 +90,13 @@ class UserManage(object):
         for user_id in request.data:
             self.keycloak_client.realm_client.group_user_add(user_id, group_id)
             user = self.keycloak_client.realm_client.get_user(user_id)
-            users.append(user["name"])
+            users.append(user["username"])
 
         objs = [
             OperationLog(
                 operator=request.userinfo.get("username"),
                 operate_type=OperationLog.INCREASE,
-                operate_obj=user_name,
+                operate_obj=group['name'],
                 operate_summary=f"将用户[{user_name}]加到用户组织[{group['name']}]下",
                 app_module=APP_MODULE,
                 obj_type=GROUP,
@@ -116,13 +116,13 @@ class UserManage(object):
         for user_id in request.data:
             self.keycloak_client.realm_client.group_user_remove(user_id, group_id)
             user = self.keycloak_client.realm_client.get_user(user_id)
-            users.append(user["name"])
+            users.append(user["username"])
 
         objs = [
             OperationLog(
                 operator=request.userinfo.get("username"),
                 operate_type=OperationLog.REMOVE,
-                operate_obj=user_name,
+                operate_obj=group['name'],
                 operate_summary=f"将用户[{user_name}]从用户组织[{group['name']}]移除",
                 app_module=APP_MODULE,
                 obj_type=GROUP,
@@ -146,6 +146,20 @@ class UserManage(object):
         role_list = [i for i in roles if i["id"] in request.data]
 
         self.keycloak_client.realm_client.assign_group_realm_roles(group_id, role_list)
+
+        group = UserManage().group_retrieve(group_id)
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.INCREASE,
+                operate_obj=group['name'],
+                operate_summary=f"将角色[{role_info['name']}]加到用户组织[{group['name']}]下",
+                app_module=APP_MODULE,
+                obj_type=GROUP,
+            ) for role_info in role_list
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
+
         return {"id": group_id}
 
     def group_remove_roles(self, request, group_id):
@@ -157,6 +171,20 @@ class UserManage(object):
         role_list = [i for i in roles if i["id"] in request.data]
 
         self.keycloak_client.realm_client.delete_group_realm_roles(group_id, role_list)
+
+        group = UserManage().group_retrieve(group_id)
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.REMOVE,
+                operate_obj=group['name'],
+                operate_summary=f"将角色[{role_info['name']}]从用户组织[{group['name']}]移除",
+                app_module=APP_MODULE,
+                obj_type=GROUP,
+            ) for role_info in role_list
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
+
         return {"id": group_id}
 
     def user_list(self, request):
@@ -199,32 +227,109 @@ class UserManage(object):
         normal_role = self.keycloak_client.realm_client.get_realm_role(NORMAL)
         user_id = self.keycloak_client.realm_client.create_user(user_info)
         self.keycloak_client.realm_client.assign_realm_roles(user_id, normal_role)
+
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.ADD,
+            operate_obj=user_info["username"],
+            operate_summary="创建用户！",
+            app_module=APP_MODULE,
+            obj_type=USER,
+        )
         return {"id": user_id}
 
-    def user_delete(self, user_id):
+    def user_delete(self, request, user_id):
         """删除用户"""
+        user_info = self.keycloak_client.realm_client.get_user(user_id)
+
         self.keycloak_client.realm_client.delete_user(user_id)
+
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.DELETE,
+            operate_obj=user_info["username"],
+            operate_summary="删除用户！",
+            app_module=APP_MODULE,
+            obj_type=USER,
+        )
         return {"id": user_id}
 
     def user_update(self, request, user_id):
         """更新用户"""
+        user_info = self.keycloak_client.realm_client.get_user(user_id)
+
         self.keycloak_client.realm_client.update_user(user_id, request.data)
+
+        mes = []
+        for key, value in request.data.items():
+            mes.append(f"{key}: {user_info[key]}->{value}")
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.MODIFY,
+            operate_obj=user_info["username"],
+            operate_summary=f"修改用户信息！[{str(mes)}]",
+            app_module=APP_MODULE,
+            obj_type=USER,
+        )
         return {"id": user_id}
 
     def user_reset_password(self, request, user_id):
         """重置用户密码"""
         self.keycloak_client.realm_client.set_user_password(user_id, request.data["password"], False)
+
+        user_info = self.keycloak_client.realm_client.get_user(user_id)
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.MODIFY,
+            operate_obj=user_info["username"],
+            operate_summary=f"重置用户密码！",
+            app_module=APP_MODULE,
+            obj_type=USER,
+        )
         return {"id": user_id}
 
     def user_add_groups(self, request, user_id):
         """为用户添加一些组"""
+        groups = []
         for group_id in request.data:
             self.keycloak_client.realm_client.group_user_add(user_id, group_id)
+            group = self.keycloak_client.realm_client.get_group(group_id)
+            groups.append(group["name"])
+
+        user_info = self.keycloak_client.realm_client.get_user(user_id)
+
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.INCREASE,
+                operate_obj=user_info['username'],
+                operate_summary=f"将用户[{user_info['username']}]加到用户组织[{group_name}]下",
+                app_module=APP_MODULE,
+                obj_type=GROUP,
+            ) for group_name in groups
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
 
     def user_remove_groups(self, request, user_id):
         """将用户从一些组中移除"""
+        groups = []
         for group_id in request.data:
             self.keycloak_client.realm_client.group_user_remove(user_id, group_id)
+            group = self.keycloak_client.realm_client.get_group(group_id)
+            groups.append(group["name"])
+        user_info = self.keycloak_client.realm_client.get_user(user_id)
+
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.REMOVE,
+                operate_obj=user_info['username'],
+                operate_summary=f"将用户[{user_info['username']}]从用户组织[{group_name}]移除",
+                app_module=APP_MODULE,
+                obj_type=GROUP,
+            ) for group_name in groups
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
 
     def role_list(self):
         """角色列表"""
@@ -263,16 +368,52 @@ class UserManage(object):
             ]
         }
         self.keycloak_client.realm_client.create_client_authz_role_based_policy(client_id, policy_data, True)
+
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.ADD,
+            operate_obj=role_name,
+            operate_summary=f"创建角色！",
+            app_module=APP_MODULE,
+            obj_type=ROLE,
+        )
+
         return role_info
 
-    def role_delete(self, role_name):
+    def role_delete(self, request, role_name):
         """删除角色"""
+        role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
+
         result = self.keycloak_client.realm_client.delete_realm_role(role_name)
+
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.DELETE,
+            operate_obj=role_info["name"],
+            operate_summary=f"删除角色！",
+            app_module=APP_MODULE,
+            obj_type=ROLE,
+        )
         return result
 
     def role_update(self, request, role_name):
         """修改角色信息"""
+        role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
+
         self.keycloak_client.realm_client.update_realm_role(role_name, request.data)
+
+        mes = []
+        for key, value in request.data.items():
+            mes.append(f"{key}: {role_info[key]}->{value}")
+
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.MODIFY,
+            operate_obj=role_info["name"],
+            operate_summary=f"修改角色信息！[{str(mes)}]",
+            app_module=APP_MODULE,
+            obj_type=ROLE,
+        )
 
     def role_set_permissions(self, request, role_name):
         """设置角色权限"""
@@ -334,27 +475,89 @@ class UserManage(object):
             permission_info.update(policies=permission_policy_ids)
             supplement_api.update_permission(client_id, permission_info["id"], permission_info)
 
-    def role_add_user(self, role_id, user_id):
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.MODIFY,
+            operate_obj=role_name,
+            operate_summary=f"修改角色权限！",
+            app_module=APP_MODULE,
+            obj_type=ROLE,
+        )
+
+    def role_add_user(self, request, role_id, user_id):
         """为某个用户设置一个角色"""
         role = self.keycloak_client.realm_client.get_realm_role_by_id(role_id)
         self.keycloak_client.realm_client.assign_realm_roles(user_id, role)
 
-    def role_remove_user(self, role_id, user_id):
+        user_info = self.keycloak_client.realm_client.get_user(user_id)
+
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.INCREASE,
+            operate_obj=role["name"],
+            operate_summary=f"对用户{user_info['username']}添加角色{role['name']}！",
+            app_module=APP_MODULE,
+            obj_type=ROLE,
+        )
+
+    def role_remove_user(self, request, role_id, user_id):
         """移除角色下的某个用户"""
         role = self.keycloak_client.realm_client.get_realm_role_by_id(role_id)
         self.keycloak_client.realm_client.delete_realm_roles_of_user(user_id, role)
 
+        user_info = self.keycloak_client.realm_client.get_user(user_id)
+
+        OperationLog.objects.create(
+            operator=request.userinfo.get("username"),
+            operate_type=OperationLog.REMOVE,
+            operate_obj=role["name"],
+            operate_summary=f"将用户{user_info['username']}的角色{role['name']}移除！",
+            app_module=APP_MODULE,
+            obj_type=ROLE,
+        )
+
     def role_add_groups(self, request, role_id):
         """为一些组添加某个角色"""
         role = self.keycloak_client.realm_client.get_realm_role_by_id(role_id)
+        groups = []
         for group_id in request.data:
             self.keycloak_client.realm_client.assign_group_realm_roles(group_id, role)
+            group = self.keycloak_client.realm_client.get_group(group_id)
+            groups.append(group["name"])
+
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.INCREASE,
+                operate_obj=role['name'],
+                operate_summary=f"将角色[{role['name']}]加到用户组织[{group_name}]下",
+                app_module=APP_MODULE,
+                obj_type=ROLE,
+            ) for group_name in groups
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
 
     def role_remove_groups(self, request, role_id):
         """将一些组移除某个角色"""
         role = self.keycloak_client.realm_client.get_realm_role_by_id(role_id)
+        groups = []
+
         for group_id in request.data:
             self.keycloak_client.realm_client.delete_group_realm_roles(group_id, role)
+            group = self.keycloak_client.realm_client.get_group(group_id)
+            groups.append(group["name"])
+
+        objs = [
+            OperationLog(
+                operator=request.userinfo.get("username"),
+                operate_type=OperationLog.REMOVE,
+                operate_obj=role['name'],
+                operate_summary=f"将角色[{role['name']}]从用户组织[{group_name}]移除",
+                app_module=APP_MODULE,
+                obj_type=ROLE,
+            ) for group_name in groups
+        ]
+        OperationLog.objects.bulk_create(objs, batch_size=100)
 
     def role_groups(self, request, role_name):
         """获取角色关联的组"""

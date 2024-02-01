@@ -229,7 +229,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
     )
     @uma_permission("user_delete")
     def destroy(self, request, pk: str):
-        data = UserManage().user_delete(pk)
+        data = UserManage().user_delete(request, pk)
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -355,7 +355,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     )
     @uma_permission("role_delete")
     def destroy(self, request, pk: str):
-        data = UserManage().role_delete(pk)
+        data = UserManage().role_delete(request, pk)
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -405,7 +405,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["put"], url_path="assign/(?P<user_id>[^/.]+)")
     @uma_permission("role_add_user")
     def assign_role(self, request, pk: str, user_id: str):
-        UserManage().role_add_user(pk, user_id)
+        UserManage().role_add_user(request, pk, user_id)
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -419,7 +419,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["delete"], url_path="withdraw/(?P<user_id>[^/.]+)")
     @uma_permission("role_remove_user")
     def withdraw_role(self, request, pk: str, user_id: str):
-        UserManage().role_remove_user(pk, user_id)
+        UserManage().role_remove_user(request, pk, user_id)
         return WebUtils.response_success()
 
     @swagger_auto_schema(
