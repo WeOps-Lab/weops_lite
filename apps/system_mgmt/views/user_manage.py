@@ -189,6 +189,17 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
+        operation_id="user_info",
+        operation_description="获取用户信息",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="用户ID", type=openapi.TYPE_STRING),
+        ],
+    )
+    def retrieve(self, request, pk: str):
+        data = UserManage().get_user_info(pk)
+        return WebUtils.response_success(data)
+
+    @swagger_auto_schema(
         operation_id="user_list_by_role",
         operation_description="获取该角色下的所有用户",
         manual_parameters=[
