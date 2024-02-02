@@ -66,8 +66,7 @@ class KeyCloakClient:
 
     def create_user(self, username, password, email, lastname, role_name) -> bool:
         try:
-            client_id = self.realm_client.get_client_id(KEYCLOAK_CLIENT_ID)
-            role = self.realm_client.get_client_role(client_id, role_name)
+            role = self.realm_client.get_realm_role(role_name)
             user = {
                 'username': username,
                 'credentials': [{"value": password, "type": 'password', 'temporary': False}],
@@ -75,8 +74,8 @@ class KeyCloakClient:
                 'lastName': lastname,
                 'enabled': True
             }
-            user_id = self.realm_client.create_user(user)
-            self.realm_client.assign_client_role(user_id, client_id, role)
+            user_id = self.realm_client.create_user(user, True)
+            self.realm_client.assign_realm_roles(user_id, role)
             return True
         except Exception as e:
             traceback.print_exception(e)
