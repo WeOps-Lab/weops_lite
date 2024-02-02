@@ -24,6 +24,8 @@ ADD ./apps ./apps
 ADD ./manage.py ./manage.py
 ADD ./assets ./assets
 ADD ./templates ./templates
+ADD ./support-files ./support-files
+
 RUN python manage.py collectstatic --noinput
 
 RUN opentelemetry-bootstrap -a install
