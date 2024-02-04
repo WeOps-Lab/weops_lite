@@ -1,4 +1,4 @@
-from apps.core.exceptions.param_validation_exception import ParamValidationException
+from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import NORMAL, APP_MODULE, GROUP, USER, ROLE
 from apps.system_mgmt.models import OperationLog
@@ -53,7 +53,7 @@ class UserManage(object):
     def group_delete(self, request):
         """删除用户组"""
         if not request.data:
-            raise ParamValidationException
+            raise BaseAppException("参数验证失败!")
 
         groups = []
         for group_id in request.data:
@@ -83,7 +83,7 @@ class UserManage(object):
     def group_add_users(self, request, group_id):
         """将一些用户添加到组"""
         if not request.data:
-            raise ParamValidationException
+            raise BaseAppException("参数验证失败!")
 
         group = UserManage().group_retrieve(group_id)
         users = []
@@ -109,7 +109,7 @@ class UserManage(object):
     def group_remove_users(self, request, group_id):
         """将一些用户从组中移除"""
         if not request.data:
-            raise ParamValidationException
+            raise BaseAppException("参数验证失败!")
 
         group = UserManage().group_retrieve(group_id)
         users = []
@@ -140,7 +140,7 @@ class UserManage(object):
     def group_add_roles(self, request, group_id):
         """将一些角色添加到组"""
         if not request.data:
-            raise ParamValidationException
+            raise BaseAppException("参数验证失败!")
 
         roles = get_realm_roles(self.keycloak_client.realm_client)
         role_list = [i for i in roles if i["id"] in request.data]
@@ -165,7 +165,7 @@ class UserManage(object):
     def group_remove_roles(self, request, group_id):
         """将一些角色从组中移除"""
         if not request.data:
-            raise ParamValidationException
+            raise BaseAppException("参数验证失败!")
 
         roles = get_realm_roles(self.keycloak_client.realm_client)
         role_list = [i for i in roles if i["id"] in request.data]
