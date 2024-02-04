@@ -1,7 +1,7 @@
 from apps.core.constants import AUTH_TOKEN_HEADER_NAME
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import ADMIN
-from apps.system_mgmt.utils.keycloak import get_client_id, SupplementApi
+from apps.system_mgmt.utils.keycloak import SupplementApi
 
 
 class LoginInfo(object):
@@ -26,7 +26,7 @@ class LoginInfo(object):
         # 若用户非超管，就获取用户的权限列表
         if not is_super:
             # 获取角色对应的policy_ids
-            client_id = get_client_id(self.keycloak_client.realm_client)
+            client_id = self.keycloak_client.get_client_id()
             policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)
             policy_ids = [i["id"] for i in policies if i["name"] in user_roles]
 

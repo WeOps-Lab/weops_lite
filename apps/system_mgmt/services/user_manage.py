@@ -2,7 +2,7 @@ from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import NORMAL, APP_MODULE, GROUP, USER, ROLE
 from apps.system_mgmt.models import OperationLog
-from apps.system_mgmt.utils.keycloak import get_first_and_max, get_client_id, SupplementApi, get_realm_roles, \
+from apps.system_mgmt.utils.keycloak import get_first_and_max, SupplementApi, get_realm_roles, \
     get_realm_roles_of_user
 
 
@@ -343,7 +343,7 @@ class UserManage(object):
 
     def role_permissions(self, role_name):
         """获取角色权限"""
-        client_id = get_client_id(self.keycloak_client.realm_client)
+        client_id = self.keycloak_client.get_client_id()
         policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)
         policy_id = None
         for policy in policies:
@@ -360,7 +360,7 @@ class UserManage(object):
         """创建角色，先创建角色再创建角色对应的策略"""
         role_name = self.keycloak_client.realm_client.create_realm_role(request.data, True)
         role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
-        client_id = get_client_id(self.keycloak_client.realm_client)
+        client_id = self.keycloak_client.get_client_id()
         policy_data = {
             "type": "role",
             "logic": "POSITIVE",
@@ -422,7 +422,7 @@ class UserManage(object):
 
     def role_set_permissions(self, request, role_name):
         """设置角色权限"""
-        client_id = get_client_id(self.keycloak_client.realm_client)
+        client_id = self.keycloak_client.get_client_id()
         all_permissions = self.keycloak_client.realm_client.get_client_authz_permissions(client_id)
         # 获取角色映射的policy_id（角色与policy一对一映射）
         policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)

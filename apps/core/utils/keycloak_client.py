@@ -2,12 +2,12 @@ import json
 import logging
 import traceback
 
-from dotenv import load_dotenv
+from django.conf import settings
 from keycloak import KeycloakAdmin, KeycloakOpenID
 from singleton_decorator import singleton
 from apps.core.entities.user_token_entit import UserTokenEntity
 from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_ADMIN_PASSWORD, KEYCLOAK_ADMIN_USERNAME, \
-    KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID, KEYCLOAK_CLIENT_SECRET_KEY
+    KEYCLOAK_REALM, KEYCLOAK_CLIENT_ID
 
 
 @singleton
@@ -22,8 +22,38 @@ class KeyCloakClient:
             server_url=KEYCLOAK_URL,
             client_id=KEYCLOAK_CLIENT_ID,
             realm_name=KEYCLOAK_REALM,
-            client_secret_key=KEYCLOAK_CLIENT_SECRET_KEY)
+            client_secret_key=self.get_client_secret_key())
         self.logger = logging.getLogger(__name__)
+
+    def set_client_secret_and_id(self):
+        """设置域id与secret"""
+        client_secret_key, client_id = None, None
+        try:
+            clients = self.realm_client.get_clients()
+            for client in clients:
+                if client["clientId"] == KEYCLOAK_CLIENT_ID:
+                    settings.CLIENT_ID = client_id = client["id"]
+                    settings.CLIENT_SECRET_KEY = client_secret_key = client["secret"]
+                    break
+            return client_secret_key, client_id
+        except Exception:
+            return client_secret_key, client_id
+
+    def get_client_secret_key(self):
+        """获取客户端secret_key"""
+        try:
+            return settings.CLIENT_SECRET_KEY
+        except Exception:
+            client_secret_key, _ = self.set_client_secret_and_id()
+            return client_secret_key
+
+    def get_client_id(self):
+        """获取客户端client_id"""
+        try:
+            return settings.CLIENT_ID
+        except Exception:
+            _, client_id = self.set_client_secret_and_id()
+            return client_id
 
     def get_realm_client(self):
         return self.realm_client

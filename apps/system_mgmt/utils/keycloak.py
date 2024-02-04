@@ -15,15 +15,6 @@ def get_first_and_max(params):
     return _first, _max
 
 
-def get_client_id(realm_client):
-    """获取客户端的id"""
-    # TODO 考虑放入缓存
-    clients = realm_client.get_clients()
-    for client in clients:
-        if client["clientId"] == KEYCLOAK_CLIENT_ID:
-            return client["id"]
-
-
 def get_realm_roles(realm_client):
     """获取域角色，并过滤掉内置角色"""
     result = realm_client.get_realm_roles()

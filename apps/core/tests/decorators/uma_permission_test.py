@@ -4,7 +4,7 @@ import os
 from keycloak import KeycloakOpenID
 
 from apps.core.utils.keycloak_client import KeyCloakClient
-from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_REALM, KEYCLOAK_CLIENT_SECRET_KEY
+from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_REALM
 
 
 class TestUmaPermission:
@@ -14,8 +14,7 @@ class TestUmaPermission:
         self.openid_client = KeycloakOpenID(
             server_url=KEYCLOAK_URL,
             client_id='weops-lite-web',
-            realm_name=KEYCLOAK_REALM,
-            client_secret_key=KEYCLOAK_CLIENT_SECRET_KEY)
+            realm_name=KEYCLOAK_REALM)
         self.keycloak_test_admin = os.getenv('KEYCLOAK_TEST_ADMIN')
         self.keycloak_test_admin_password = os.getenv('KEYCLOAK_TEST_ADMIN_PASSWORD')
         self.test_token = self.openid_client.token(self.keycloak_test_admin, self.keycloak_test_admin_password)[
