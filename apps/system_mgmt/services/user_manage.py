@@ -358,7 +358,8 @@ class UserManage(object):
 
     def role_create(self, request):
         """创建角色，先创建角色再创建角色对应的策略"""
-        role_name = self.keycloak_client.realm_client.create_realm_role(request.data, True)
+        self.keycloak_client.realm_client.create_realm_role(request.data, True)
+        role_name = request.data["name"]
         role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
         client_id = self.keycloak_client.get_client_id()
         policy_data = {
@@ -386,9 +387,33 @@ class UserManage(object):
         return role_info
 
     def role_delete(self, request, role_name):
-        """删除角色"""
-        role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
+        """
+            删除角色
+            1.移除角色绑定的权限
+            2.删除角色
+        """
 
+        # 移除角色权限
+        client_id = self.keycloak_client.get_client_id()
+        policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)
+        policy_id = None
+        for policy in policies:
+            if policy["name"] == role_name:
+                policy_id = policy["id"]
+                break
+        permissions = SupplementApi(
+            self.keycloak_client.realm_client.connection).get_permission_by_policy_id(client_id, policy_id)
+        supplement_api = SupplementApi(self.keycloak_client.realm_client.connection)
+        for permission_info in permissions:
+            del permission_info["config"]
+            permission_policies = supplement_api.get_policies_by_permission_id(client_id, permission_info["id"])
+            permission_policy_ids = [i["id"] for i in permission_policies]
+            permission_policy_ids.remove(policy_id)
+            permission_info.update(policies=permission_policy_ids, description="")
+            supplement_api.update_permission(client_id, permission_info["id"], permission_info)
+
+        # 删除角色
+        role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
         result = self.keycloak_client.realm_client.delete_realm_role(role_name)
 
         OperationLog.objects.create(
@@ -423,10 +448,11 @@ class UserManage(object):
     def role_set_permissions(self, request, role_name):
         """设置角色权限"""
         client_id = self.keycloak_client.get_client_id()
-        all_permissions = self.keycloak_client.realm_client.get_client_authz_permissions(client_id)
+        all_resources = self.keycloak_client.realm_client.get_client_authz_resources(client_id)
+        resource_mapping = {i["name"]: i["_id"] for i in all_resources}
         # 获取角色映射的policy_id（角色与policy一对一映射）
         policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)
-        policy_id = ""
+        policy_id = None
         for policy in policies:
             if policy["name"] == role_name:
                 policy_id = policy["id"]
@@ -435,20 +461,24 @@ class UserManage(object):
         permission_name_set = set(request.data)
 
         # 判断是否需要初始化权限，若需要就进行资源与权限的初始化
+        all_permissions = self.keycloak_client.realm_client.get_client_authz_permissions(client_id)
         need_init_permissions = permission_name_set - {i["name"] for i in all_permissions}
         for permission_name in need_init_permissions:
-            resource = {
-                "name": permission_name,
-                "displayName": "",
-                "type": "",
-                "icon_uri": "",
-                "scopes": [],
-                "ownerManagedAccess": False,
-                "attributes": {}
-            }
-            resource_resp = self.keycloak_client.realm_client.create_client_authz_resource(client_id, resource, True)
+            resource_id = resource_mapping.get(permission_name)
+            if not resource_id:
+                resource = {
+                    "name": permission_name,
+                    "displayName": "",
+                    "type": "",
+                    "icon_uri": "",
+                    "scopes": [],
+                    "ownerManagedAccess": False,
+                    "attributes": {}
+                }
+                resource_resp = self.keycloak_client.realm_client.create_client_authz_resource(client_id, resource, True)
+                resource_id = resource_resp["_id"]
             permission = {
-                "resources": [resource_resp["_id"]],
+                "resources": [resource_id],
                 "policies": [],
                 "name": permission_name,
                 "description": "",
@@ -458,6 +488,7 @@ class UserManage(object):
             self.keycloak_client.realm_client.create_client_authz_resource_based_permission(client_id, permission, True)
 
         # 判断权限是否需要更新
+        all_permissions = self.keycloak_client.realm_client.get_client_authz_permissions(client_id)
         supplement_api = SupplementApi(self.keycloak_client.realm_client.connection)
         for permission_info in all_permissions:
 
