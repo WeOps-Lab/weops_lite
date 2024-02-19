@@ -51,12 +51,21 @@ class UserManage(object):
         return {"id": group_id}
 
     def group_delete(self, request):
-        """删除用户组"""
+        """
+            删除用户组
+            1.校验用户组下是否存在用户
+            2.删除操作
+        """
         if not request.data:
             raise BaseAppException("参数验证失败!")
 
         groups = []
         for group_id in request.data:
+            users = self.keycloak_client.realm_client.get_group_members(group_id)
+            if users:
+                msg = "、".join([i["username"] for i in users])
+                raise BaseAppException(f"组织下已存在用户：{msg}！")
+
             group = UserManage().group_retrieve(group_id)
             groups.append(group["name"])
 
@@ -216,7 +225,6 @@ class UserManage(object):
 
     def user_list_by_role(self, request, role_name):
         """获取角色下用户"""
-        _first, _max = get_first_and_max(request.query_params)
         result = self.keycloak_client.realm_client.get_realm_role_members(role_name)
         return result
 
@@ -389,9 +397,20 @@ class UserManage(object):
     def role_delete(self, request, role_name):
         """
             删除角色
-            1.移除角色绑定的权限
-            2.删除角色
+            1.角色关联校验（校验角色是否被用户或者组织关联）
+            2.移除角色绑定的权限
+            3.删除角色
         """
+        # 角色关联校验（校验角色是否被用户或者组织关联）
+        groups = self.keycloak_client.realm_client.get_realm_role_groups(role_name)
+        if groups:
+            msg = "、".join([i["name"] for i in groups])
+            raise BaseAppException(f"角色已被下列组织使用：{msg}！")
+
+        users = self.keycloak_client.realm_client.get_realm_role_members(role_name)
+        if users:
+            msg = "、".join([i["username"] for i in users])
+            raise BaseAppException(f"角色已被下列用户使用：{msg}！")
 
         # 移除角色权限
         client_id = self.keycloak_client.get_client_id()
@@ -597,6 +616,5 @@ class UserManage(object):
 
     def role_groups(self, request, role_name):
         """获取角色关联的组"""
-        _first, _max = get_first_and_max(request.query_params)
         result = self.keycloak_client.realm_client.get_realm_role_groups(role_name)
         return result
