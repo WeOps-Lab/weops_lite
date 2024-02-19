@@ -8,7 +8,7 @@ class WebUtils:
         return JsonResponse({
             'data': response_data,
             'result': True,
-            'messages': ''
+            'message': ''
         }, status=status.HTTP_200_OK)
 
     @staticmethod
@@ -16,5 +16,5 @@ class WebUtils:
         return JsonResponse({
             'data': response_data,
             'result': False,
-            'messages': error_message
+            'message': error_message
         }, status=status)
