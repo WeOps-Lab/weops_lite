@@ -23,8 +23,19 @@ def get_realm_roles(realm_client):
 
 def get_realm_roles_of_user(realm_client, user_id):
     """获取用户关联的角色，并过滤掉内置角色"""
-    result = realm_client.get_realm_roles_of_user(user_id)
-    return [i for i in result if i.get("name") not in BUILT_IN_ROLES]
+    self_roles = realm_client.get_realm_roles_of_user(user_id)
+    self_role_name_set = {i["name"] for i in self_roles}
+    all_roles = realm_client.get_composite_realm_roles_of_user(user_id)
+    roles = []
+    for role_info in all_roles:
+        if role_info.get("name") in BUILT_IN_ROLES:
+            continue
+        if role_info.get("name") in self_role_name_set:
+            role_info.update(role_type="user")
+        else:
+            role_info.update(role_type="group")
+        roles.append(role_info)
+    return roles
 
 
 # python-keycloak库缺少的api, 在此处补充
