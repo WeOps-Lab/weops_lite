@@ -35,4 +35,4 @@ keycloak_init:
 
 
 bdd_test:
-	behave ./apps/system_mgmt/features
+	DJANGO_SETTINGS_MODULE=weops_lite.settings behave ./apps/system_mgmt/features
