@@ -275,6 +275,8 @@ class UserManage(object):
 
         mes = []
         for key, value in data.items():
+            if user_info[key] == value:
+                continue
             mes.append(f"{key}: {user_info[key]}->{value}")
         OperationLog.objects.create(
             operator=operator,
