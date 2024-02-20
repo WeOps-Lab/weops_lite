@@ -4,7 +4,6 @@ from keycloak import urls_patterns, KeycloakGetError
 from keycloak.exceptions import raise_error_from_response
 
 from apps.system_mgmt.constants import BUILT_IN_ROLES
-from weops_lite.components.keycloak import KEYCLOAK_CLIENT_ID
 
 
 def get_first_and_max(params):
