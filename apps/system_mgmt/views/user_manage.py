@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
 from apps.system_mgmt.services.user_manage import UserManage
+from apps.system_mgmt.utils.keycloak import get_first_and_max
 
 
 class KeycloakGroupViewSet(viewsets.ViewSet):
@@ -13,14 +14,12 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
         operation_id="group_list",
         operation_description="用户组列表",
         manual_parameters=[
-            openapi.Parameter("page", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
-            openapi.Parameter("page_size", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
             openapi.Parameter("search", in_=openapi.IN_QUERY, type=openapi.TYPE_STRING),
         ]
     )
     @uma_permission("group_list")
     def list(self, request):
-        data = UserManage().group_list(request.query_params)
+        data = UserManage().group_list(dict(search=request.query_params.get("search", "")))
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -86,15 +85,11 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         operation_id="group_users",
         operation_description="获取该组下的所有用户",
-        manual_parameters=[
-            openapi.Parameter("page", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
-            openapi.Parameter("page_size", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER)
-        ],
     )
     @action(detail=True, methods=["get"], url_path="users")
     @uma_permission("group_users")
     def get_users_in_group(self, request, pk: str):
-        data = UserManage().group_users(request.query_params, pk)
+        data = UserManage().group_users(pk)
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -185,7 +180,8 @@ class KeycloakUserViewSet(viewsets.ViewSet):
     )
     @uma_permission("user_list")
     def list(self, request):
-        data = UserManage().user_list(request.query_params)
+        _first, _max = get_first_and_max(request.query_params)
+        data = UserManage().user_list(dict(first=_first, max=_max, search=request.query_params.get("search", "")))
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(

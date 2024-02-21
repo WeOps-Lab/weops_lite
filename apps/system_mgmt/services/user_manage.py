@@ -2,19 +2,16 @@ from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import NORMAL, APP_MODULE, GROUP, USER, ROLE
 from apps.system_mgmt.models import OperationLog
-from apps.system_mgmt.utils.keycloak import get_first_and_max, SupplementApi, get_realm_roles, \
-    get_realm_roles_of_user
+from apps.system_mgmt.utils.keycloak import SupplementApi, get_realm_roles, get_realm_roles_of_user
 
 
 class UserManage(object):
     def __init__(self):
         self.keycloak_client = KeyCloakClient()
 
-    def group_list(self, params):
+    def group_list(self, query_params):
         """用户组列表"""
-        _first, _max = get_first_and_max(params)
-        groups = self.keycloak_client.realm_client.get_groups(
-            dict(first=_first, max=_max, search=params.get("search", "")))
+        groups = self.keycloak_client.realm_client.get_groups(query_params)
         return groups
 
     def group_retrieve(self, group_id):
@@ -83,10 +80,9 @@ class UserManage(object):
         ]
         OperationLog.objects.bulk_create(objs, batch_size=100)
 
-    def group_users(self, params, group_id):
+    def group_users(self, group_id):
         """获取用户组下用户"""
-        _first, _max = get_first_and_max(params)
-        users = self.keycloak_client.realm_client.get_group_members(group_id, dict(first=_first, max=_max))
+        users = self.keycloak_client.realm_client.get_group_members(group_id)
         return users
 
     def group_add_users(self, data, group_id, operator):
@@ -196,11 +192,9 @@ class UserManage(object):
 
         return {"id": group_id}
 
-    def user_list(self, params):
+    def user_list(self, query_params):
         """用户列表"""
-        _first, _max = get_first_and_max(params)
-        users = self.keycloak_client.realm_client.get_users(
-            dict(first=_first, max=_max, search=params.get("search")))
+        users = self.keycloak_client.realm_client.get_users(query_params)
         for user_info in users:
 
             # 用户补充角色信息
