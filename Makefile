@@ -22,7 +22,7 @@ run:
 	daphne -b 0.0.0.0 -p 8000 weops_lite.asgi:application
 
 test:
-	pytest
+	pytest --cov --cov-report html
 
 show_test_result:
 	allure serve ./allure-results
@@ -35,4 +35,4 @@ keycloak_init:
 
 
 bdd_test:
-	DJANGO_SETTINGS_MODULE=weops_lite.settings behave ./apps/system_mgmt/features
+	DJANGO_SETTINGS_MODULE=weops_lite.settings  behave ./apps/system_mgmt/features
