@@ -218,7 +218,7 @@ def 创建子组织(context):
 
 @then('根据组织ID，查询组织信息并进行信息校验')
 def 校验组织信息(context):
-    resp = MockRequestClient().get(f'/api/group/?search={context.groupinfo["group_name"]}')
+    resp = MockRequestClient().get(f'api/group/?search={context.groupinfo["group_name"]}')
     groupinfo = None
     for group_info in resp["data"]:
         if group_info["id"] == context.group_id:
@@ -229,7 +229,7 @@ def 校验组织信息(context):
 
 @then('根据子组织ID，查询子组织信息并进行信息校验')
 def 校验子组织信息(context):
-    resp = MockRequestClient().get(f'/api/group/{context.subgroup_id}/')
+    resp = MockRequestClient().get(f'api/group/{context.subgroup_id}/')
     assert resp["data"]["name"] == context.subgroupinfo["group_name"]
 
 
@@ -251,7 +251,7 @@ def 删除子组织(context):
 @then('不存在组织')
 def 验证组织不存在(context):
 
-    resp = MockRequestClient().get(f'/api/group/?search={context.groupinfo["group_name"]}')
+    resp = MockRequestClient().get(f'api/group/?search={context.groupinfo["group_name"]}')
     absent_group = True
     for group_info in resp["data"]:
         if group_info["id"] == context.group_id:
