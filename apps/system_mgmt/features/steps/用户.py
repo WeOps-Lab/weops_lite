@@ -251,7 +251,7 @@ def 删除子组织(context):
 @then('不存在组织')
 def 验证组织不存在(context):
 
-    resp = MockRequestClient().get(f'/api/group/?search={context.groupinfo["group_name"]}')
+    resp = MockRequestClient().get(f'api/group/?search={context.groupinfo["group_name"]}')
     absent_group = True
     for group_info in resp["data"]:
         if group_info["id"] == context.group_id:
