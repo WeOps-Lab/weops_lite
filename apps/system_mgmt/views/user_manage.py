@@ -24,7 +24,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
 
     @swagger_auto_schema(
         operation_id="group_retrieve",
-        operation_description="获取一个组以及其子组",
+        operation_description="获取组织或者子组的信息",
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="用户组ID", type=openapi.TYPE_STRING),
         ],
