@@ -1,7 +1,8 @@
 .PHONY: test celery win-celery-worker win-celery-beat celery-inspect celery-flower
 
 test:
-	rm -Rf ./htmlcov && DEBUG=False pytest --cov-config=.coveragerc --cov --cov-report html -s
+	rm -Rf ./htmlcov && DEBUG=False pytest --cov-config=.coveragerc --cov --cov-report html -s 
+	# -n auto 
 
 celery:
 	celery -A weops_lite worker -B --loglevel=info
