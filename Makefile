@@ -33,7 +33,7 @@ keycloak_init:
 
 
 bdd_test:
-	DJANGO_SETTINGS_MODULE=weops_lite.settings  behave ./features
+	DJANGO_SETTINGS_MODULE=weops_lite.settings behavex --parallel-processes 4
 
 migrate:
 	python manage.py makemigrations
