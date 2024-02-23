@@ -13,3 +13,4 @@ token
 assets/static
 templates/index.prod.html
 output
+swagger.yml
