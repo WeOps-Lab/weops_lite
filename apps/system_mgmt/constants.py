@@ -34,7 +34,12 @@ MENU_DATA = {
 }
 
 # keycloak默认角色（查询角色列表要过滤掉默认角色）
-BUILT_IN_ROLES = {f"default-roles-{os.getenv('KEYCLOAK_REALM')}", "default-roles-master", "uma_authorization", "offline_access"}
+BUILT_IN_ROLES = {
+    f"default-roles-{os.getenv('KEYCLOAK_REALM')}",
+    "default-roles-master",
+    "uma_authorization",
+    "offline_access",
+}
 
 # 模块
 APP_MODULE = "系统管理"
