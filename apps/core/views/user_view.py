@@ -25,11 +25,14 @@ class UserView(ViewSet):
         if serialize.is_valid():
             validated_data = serialize.validated_data
             keycloak_client = KeyCloakClient()
-            user_token_entity = keycloak_client.get_token(validated_data.get('username'),
-                                                          validated_data.get('password'))
+            user_token_entity = keycloak_client.get_token(
+                validated_data.get("username"), validated_data.get("password")
+            )
             if user_token_entity.success:
                 return WebUtils.response_success({"token": user_token_entity.token})
             else:
-                return WebUtils.response_error(error_message=user_token_entity.error_message)
+                return WebUtils.response_error(
+                    error_message=user_token_entity.error_message
+                )
         else:
             return WebUtils.response_error(error_message=serialize.error_messages)
