@@ -1,28 +1,67 @@
-import logging
-import os
-
-from keycloak import KeycloakOpenID
+import pytest
+from apps.core.constants import AUTH_TOKEN_HEADER_NAME
+from apps.core.decorators.uma_permission import uma_permission
 
 from apps.core.utils.keycloak_client import KeyCloakClient
-from weops_lite.components.keycloak import KEYCLOAK_URL, KEYCLOAK_REALM
+from weops_lite.components.base import DEBUG
+
+
+class MockRequest:
+    def __init__(self, headers=None):
+        self.META = headers
 
 
 class TestUmaPermission:
-    def setup_method(self):
-        self.logger = logging.getLogger(__name__)
-        self.client = KeyCloakClient()
-        self.openid_client = KeycloakOpenID(
-            server_url=KEYCLOAK_URL,
-            client_id='weops-lite-web',
-            realm_name=KEYCLOAK_REALM)
-        self.keycloak_test_admin = os.getenv('KEYCLOAK_TEST_ADMIN')
-        self.keycloak_test_admin_password = os.getenv('KEYCLOAK_TEST_ADMIN_PASSWORD')
-        self.test_token = self.openid_client.token(self.keycloak_test_admin, self.keycloak_test_admin_password)[
-            'access_token']
 
-    def test_is_superadmin(self):
-        result = self.client.is_super_admin(self.test_token)
-        self.logger.info(result)
+    def test_uma_permission_with_valid_token_for_super_admin(
+        self, mocker, keycloak_client
+    ):
+        mocker.patch.object(keycloak_client, "is_super_admin", return_value=True)
 
-        result = self.client.has_permission(self.test_token, 'sys_group_create')
-        self.logger.info(result)
+        @uma_permission("permission")
+        def wrapped_func(request):
+            return "success"
+
+        request = MockRequest(headers={AUTH_TOKEN_HEADER_NAME: "Bearer valid_token"})
+        response = wrapped_func(request)
+
+        assert response == "success"
+
+    def test_uma_permission_with_valid_token_and_permission(
+        self, mocker, keycloak_client
+    ):
+        mocker.patch.object(keycloak_client, "is_super_admin", return_value=False)
+        mocker.patch.object(keycloak_client, "has_permission", return_value=True)
+
+        @uma_permission("permission")
+        def wrapped_func(request):
+            return "success"
+
+        request = MockRequest(headers={AUTH_TOKEN_HEADER_NAME: "Bearer valid_token"})
+        response = wrapped_func(request)
+
+        assert response == "success"
+
+    def test_uma_permission_with_invalid_token(self, mocker, keycloak_client):
+        mocker.patch.object(keycloak_client, "is_super_admin", return_value=False)
+
+        @uma_permission("permission")
+        def wrapped_func(request):
+            return "success"
+
+        request = MockRequest(headers={})
+        response = wrapped_func(request)
+        assert response.status_code == 403
+
+    def test_uma_permission_with_invalid_permission(self, mocker, keycloak_client):
+        mocker.patch.object(keycloak_client, "is_super_admin", return_value=False)
+        mocker.patch.object(keycloak_client, "has_permission", return_value=False)
+
+        @uma_permission("permission")
+        def wrapped_func(request):
+            return "success"
+
+        request = MockRequest(headers={"HTTP_AUTHORIZATION": "Bearer valid_token"})
+        response = wrapped_func(request)
+
+        assert response.status_code == 403

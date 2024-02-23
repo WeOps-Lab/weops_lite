@@ -75,14 +75,21 @@ class KeyCloakClient:
         return self.openid_client.userinfo(token)
 
     def get_roles(self, token: str) -> list:
-        token_info = self.openid_client.introspect(token)
-        return token_info["realm_access"]["roles"]
+        try:
+            token_info = self.openid_client.introspect(token)
+            return token_info["realm_access"]["roles"]
+        except Exception:
+            self.logger.error("获取用户角色失败")
+            return []
 
     def is_super_admin(self, token: str) -> bool:
-        token_info = self.openid_client.introspect(token)
-        if "admin" in token_info["realm_access"]["roles"]:
-            return True
-        else:
+        try:
+            token_info = self.openid_client.introspect(token)
+            if "admin" in token_info["realm_access"]["roles"]:
+                return True
+            else:
+                return False
+        except:
             return False
 
     def has_permission(self, token: str, permission: str) -> bool:
