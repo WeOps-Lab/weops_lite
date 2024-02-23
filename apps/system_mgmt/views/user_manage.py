@@ -5,6 +5,9 @@ from rest_framework.decorators import action
 
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
+from apps.system_mgmt.responses.user_manage import user_list_responses, user_info_responses, \
+    user_list_by_role_responses, user_create_responses, user_delete_responses, user_update_responses, \
+    user_reset_password_responses, user_add_groups_responses, user_remove_groups_responses
 from apps.system_mgmt.services.user_manage import UserManage
 from apps.system_mgmt.utils.keycloak import get_first_and_max
 
@@ -18,6 +21,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
             openapi.Parameter("page_size", in_=openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
             openapi.Parameter("search", in_=openapi.IN_QUERY, type=openapi.TYPE_STRING),
         ],
+        responses=user_list_responses
     )
     @uma_permission("user_list")
     def list(self, request):
@@ -31,6 +35,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="用户ID", type=openapi.TYPE_STRING),
         ],
+        responses=user_info_responses,
     )
     def retrieve(self, request, pk: str):
         data = UserManage().get_user_info(pk)
@@ -42,6 +47,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("role_name", openapi.IN_PATH, description="角色英文名称", type=openapi.TYPE_STRING)
         ],
+        responses=user_list_by_role_responses,
     )
     @action(detail=False, methods=["get"], url_path="roles/(?P<role_name>.+?)")
     @uma_permission("user_list_by_role")
@@ -62,6 +68,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
             },
             required=["username", "password"],
         ),
+        responses=user_create_responses,
     )
     @uma_permission("user_create")
     def create(self, request):
@@ -74,6 +81,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="用户id", type=openapi.TYPE_STRING)
         ],
+        responses=user_delete_responses,
     )
     @uma_permission("user_delete")
     def destroy(self, request, pk: str):
@@ -90,10 +98,10 @@ class KeycloakUserViewSet(viewsets.ViewSet):
             type=openapi.TYPE_OBJECT,
             properties={
                 "email": openapi.Schema(type=openapi.TYPE_STRING, description="User email"),
-                "firstName": openapi.Schema(type=openapi.TYPE_STRING, description="User first name"),
                 "lastName": openapi.Schema(type=openapi.TYPE_STRING, description="User last name"),
             },
         ),
+        responses=user_update_responses,
     )
     @uma_permission("user_update")
     def update(self, request, pk: str):
@@ -113,6 +121,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
             },
             required=["password"],
         ),
+        responses=user_reset_password_responses,
     )
     @uma_permission("user_reset_password")
     def partial_update(self, request, pk: str):
@@ -129,6 +138,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID"),
         ),
+        responses=user_add_groups_responses,
     )
     @action(detail=True, methods=["patch"], url_path="assign_groups")
     @uma_permission("user_add_groups")
@@ -146,6 +156,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID"),
         ),
+        responses=user_remove_groups_responses,
     )
     @action(detail=True, methods=["delete"], url_path="unassign_groups")
     @uma_permission("user_remove_groups")
