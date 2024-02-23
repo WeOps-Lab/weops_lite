@@ -13,20 +13,19 @@ win-celery-beat:
     celery -A weops_lite beat --loglevel=info
 
 celery-inspect:
-    celery -A weops_lite inspect scheduled
+	celery -A weops_lite inspect scheduled
 
 celery-flower:
-    celery -A weops_lite flower
+	celery -A weops_lite flower
 
 run:
 	daphne -b 0.0.0.0 -p 8000 weops_lite.asgi:application
-
 
 show_test_result:
 	allure serve ./allure-results
 
 collectstatic:
-    python manage.py collectstatic --noinput
+	python manage.py collectstatic --noinput
 
 keycloak_init:
 	python ./manage.py keycloak_init
