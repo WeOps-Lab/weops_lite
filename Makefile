@@ -1,4 +1,4 @@
-.PHONY: test celery win-celery-worker win-celery-beat celery-inspect celery-flower
+.PHONY: test celery win-celery-worker win-celery-beat celery-inspect celery-flower generate-swagger
 
 test:
 	rm -Rf ./htmlcov && DEBUG=False pytest --cov-config=.coveragerc --cov --cov-report html -s 
@@ -40,4 +40,5 @@ migrate:
 	python manage.py migrate
 	DJANGO_SUPERUSER_USERNAME=admin DJANGO_SUPERUSER_EMAIL=admin@example.com DJANGO_SUPERUSER_PASSWORD=password python manage.py createsuperuser --noinput
 
-
+generate-swagger:
+	python manage.py generate_swagger -f yaml swagger.yml
