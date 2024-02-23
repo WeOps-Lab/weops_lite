@@ -60,7 +60,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
                 "lastName": openapi.Schema(type=openapi.TYPE_STRING, description="User last name"),
                 "password": openapi.Schema(type=openapi.TYPE_STRING, description="User password"),
             },
-            required=["username", "password"]
+            required=["username", "password"],
         ),
     )
     @uma_permission("user_create")
@@ -111,7 +111,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
             properties={
                 "password": openapi.Schema(type=openapi.TYPE_STRING, description="User password"),
             },
-            required=["password"]
+            required=["password"],
         ),
     )
     @uma_permission("user_reset_password")
@@ -127,7 +127,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         ],
         request_body=openapi.Schema(
             type=openapi.TYPE_ARRAY,
-            items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID")
+            items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID"),
         ),
     )
     @action(detail=True, methods=["patch"], url_path="assign_groups")
@@ -144,7 +144,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         ],
         request_body=openapi.Schema(
             type=openapi.TYPE_ARRAY,
-            items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID")
+            items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID"),
         ),
     )
     @action(detail=True, methods=["delete"], url_path="unassign_groups")
