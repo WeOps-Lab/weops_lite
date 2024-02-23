@@ -5,6 +5,10 @@ from rest_framework.decorators import action
 
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
+from apps.system_mgmt.responses.role_manage import role_list_responses, role_permissions_responses, \
+    role_create_responses, role_delete_responses, role_update_responses, role_set_permissions_responses, \
+    role_add_user_responses, role_remove_user_responses, role_add_groups_responses, role_remove_groups_responses, \
+    role_groups_responses
 from apps.system_mgmt.services.user_manage import UserManage
 
 
@@ -12,6 +16,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         operation_id="role_list",
         operation_description="获取所有角色",
+        responses=role_list_responses,
     )
     @uma_permission("role_list")
     def list(self, request):
@@ -24,6 +29,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="角色英文名称", type=openapi.TYPE_STRING)
         ],
+        responses=role_permissions_responses,
     )
     @uma_permission("role_permissions")
     @action(detail=True, methods=["get"], url_path="permissions")
@@ -42,6 +48,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
             },
             required=["name"]
         ),
+        responses=role_create_responses,
     )
     @uma_permission("role_create")
     def create(self, request):
@@ -54,6 +61,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="角色英文名称", type=openapi.TYPE_STRING),
         ],
+        responses=role_delete_responses,
     )
     @uma_permission("role_delete")
     def destroy(self, request, pk: str):
@@ -69,14 +77,14 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                "name": openapi.Schema(type=openapi.TYPE_STRING, description="角色英文名"),
                 "description": openapi.Schema(type=openapi.TYPE_STRING, description="描述"),
             }
-        )
+        ),
+        responses=role_update_responses,
     )
     @uma_permission("role_update")
     def update(self, request, pk: str):
-        UserManage().role_update(request.data, pk, request.userinfo.get("username"))
+        UserManage().role_update(request.data.get("description", ""), pk, request.userinfo.get("username"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -89,6 +97,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="权限名称")
         ),
+        responses=role_set_permissions_responses,
     )
     @role_permissions.mapping.patch
     @uma_permission("role_set_permissions")
@@ -103,6 +112,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
             openapi.Parameter("id", openapi.IN_PATH, description="角色的ID", type=openapi.TYPE_STRING),
             openapi.Parameter("user_id", openapi.IN_PATH, description="用户的ID", type=openapi.TYPE_STRING),
         ],
+        responses=role_add_user_responses,
     )
     @action(detail=True, methods=["put"], url_path="assign/(?P<user_id>[^/.]+)")
     @uma_permission("role_add_user")
@@ -117,6 +127,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
             openapi.Parameter("id", openapi.IN_PATH, description="角色的ID", type=openapi.TYPE_STRING),
             openapi.Parameter("user_id", openapi.IN_PATH, description="用户的ID", type=openapi.TYPE_STRING),
         ],
+        responses=role_remove_user_responses,
     )
     @action(detail=True, methods=["delete"], url_path="withdraw/(?P<user_id>[^/.]+)")
     @uma_permission("role_remove_user")
@@ -134,6 +145,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID")
         ),
+        responses=role_add_groups_responses,
     )
     @action(detail=True, methods=["patch"], url_path="assign_groups")
     @uma_permission("role_add_groups")
@@ -151,6 +163,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID")
         ),
+        responses=role_remove_groups_responses,
     )
     @action(detail=True, methods=["delete"], url_path="unassign_groups")
     @uma_permission("role_remove_groups")
@@ -164,6 +177,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("role_name", openapi.IN_PATH, description="角色英文名称", type=openapi.TYPE_STRING)
         ],
+        responses=role_groups_responses,
     )
     @action(detail=False, methods=["get"], url_path="groups/(?P<role_name>.+?)")
     @uma_permission("role_groups")

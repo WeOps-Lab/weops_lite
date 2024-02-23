@@ -5,6 +5,10 @@ from rest_framework.decorators import action
 
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
+from apps.system_mgmt.responses.group_manage import group_list_responses, group_retrieve_responses, \
+    group_create_responses, group_update_responses, group_delete_responses, group_users_responses, \
+    group_add_users_responses, group_remove_users_responses, group_roles_responses, group_add_roles_responses, \
+    group_remove_roles_responses
 from apps.system_mgmt.services.user_manage import UserManage
 
 
@@ -14,7 +18,8 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
         operation_description="用户组列表",
         manual_parameters=[
             openapi.Parameter("search", in_=openapi.IN_QUERY, type=openapi.TYPE_STRING),
-        ]
+        ],
+        responses=group_list_responses,
     )
     @uma_permission("group_list")
     def list(self, request):
@@ -27,6 +32,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="用户组ID", type=openapi.TYPE_STRING),
         ],
+        responses=group_retrieve_responses,
     )
     @uma_permission("group_retrieve")
     def retrieve(self, request, pk: str):
@@ -43,7 +49,8 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
                 "parent_group_id": openapi.Schema(type=openapi.TYPE_STRING, description="description"),
             },
             required=["group_name"]
-        )
+        ),
+        responses=group_create_responses,
     )
     @uma_permission("group_create")
     def create(self, request):
@@ -61,6 +68,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
             properties={"group_name": openapi.Schema(type=openapi.TYPE_STRING, description="group name")},
             required=["group_name"]
         ),
+        responses=group_update_responses,
     )
     @uma_permission("group_update")
     def update(self, request, pk: str):
@@ -73,7 +81,8 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="组ID")
         ),
-        operation_description="删除组"
+        operation_description="删除组",
+        responses=group_delete_responses,
     )
     @action(detail=False, methods=["delete"])
     @uma_permission("group_delete")
@@ -84,6 +93,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         operation_id="group_users",
         operation_description="获取该组下的所有用户",
+        responses=group_users_responses,
     )
     @action(detail=True, methods=["get"], url_path="users")
     @uma_permission("group_users")
@@ -98,6 +108,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="用户ID")
         ),
+        responses=group_add_users_responses,
     )
     @action(detail=True, methods=["patch"], url_path="assign_users")
     @uma_permission("group_add_users")
@@ -112,6 +123,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="用户ID")
         ),
+        responses=group_remove_users_responses,
     )
     @action(detail=True, methods=["delete"], url_path="unassign_users")
     @uma_permission("group_remove_users")
@@ -125,6 +137,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="用户组ID", type=openapi.TYPE_STRING)
         ],
+        responses=group_roles_responses,
     )
     @action(detail=True, methods=["get"], url_path="roles")
     @uma_permission("group_roles")
@@ -142,6 +155,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="角色ID")
         ),
+        responses=group_add_roles_responses,
     )
     @action(detail=True, methods=["patch"], url_path="assign_roles")
     @uma_permission("group_add_roles")
@@ -159,6 +173,7 @@ class KeycloakGroupViewSet(viewsets.ViewSet):
             type=openapi.TYPE_ARRAY,
             items=openapi.Schema(type=openapi.TYPE_STRING, description="角色ID")
         ),
+        responses=group_remove_roles_responses,
     )
     @action(detail=True, methods=["delete"], url_path="unassign_roles")
     @uma_permission("group_remove_roles")

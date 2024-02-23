@@ -441,21 +441,19 @@ class UserManage(object):
         )
         return result
 
-    def role_update(self, data, role_name, operator):
+    def role_update(self, description, role_name, operator):
         """修改角色信息"""
         role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
 
-        self.keycloak_client.realm_client.update_realm_role(role_name, data)
+        self.keycloak_client.realm_client.update_realm_role(role_name, dict(description=description, name=role_name))
 
-        mes = []
-        for key, value in data.items():
-            mes.append(f"{key}: {role_info[key]}->{value}")
+        mes = f"{role_info['description']}->{description}"
 
         OperationLog.objects.create(
             operator=operator,
             operate_type=OperationLog.MODIFY,
             operate_obj=role_info["name"],
-            operate_summary=f"修改角色信息！[{str(mes)}]",
+            operate_summary=f"修改角色描述！[{str(mes)}]",
             app_module=APP_MODULE,
             obj_type=ROLE,
         )

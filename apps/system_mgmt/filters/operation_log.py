@@ -9,5 +9,5 @@ class OperationLogFilter(FilterSet):
     create_time = DateTimeFromToRangeFilter(field_name="created_at", lookup_expr="range", label="创建时间区间")
 
     class Meta:
-        models = OperationLog
+        model = OperationLog
         fields = ["operator", "operate_type", "create_time"]

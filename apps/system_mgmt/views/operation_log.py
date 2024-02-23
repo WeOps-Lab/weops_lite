@@ -12,10 +12,8 @@ from apps.system_mgmt.serializers.operation_log import OperationLogSer
 
 
 class OperationLogViewSet(ListModelMixin, GenericViewSet):
-    queryset = OperationLog.objects.all()
+    queryset = OperationLog.objects.all().order_by("-created_at")
     serializer_class = OperationLogSer
-    ordering_fields = ["created_at"]
-    ordering = ["-created_at"]
     filterset_class = OperationLogFilter
     pagination_class = CustomPageNumberPagination
 

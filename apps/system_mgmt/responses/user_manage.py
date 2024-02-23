@@ -164,7 +164,6 @@ user_list_responses = {
         }
     )
 }
-
 user_info_responses = {
     200: openapi.Response(
         "成功",
@@ -192,7 +191,6 @@ user_info_responses = {
         }
     )
 }
-
 user_list_by_role_responses = {
     200: openapi.Response(
         "成功",
@@ -215,7 +213,6 @@ user_list_by_role_responses = {
         }
     )
 }
-
 user_create_responses = {
     200: openapi.Response(
         "成功",
@@ -226,7 +223,6 @@ user_create_responses = {
         }
     )
 }
-
 user_delete_responses = {
     200: openapi.Response(
         "成功",
@@ -237,7 +233,6 @@ user_delete_responses = {
         }
     )
 }
-
 user_update_responses = {
     200: openapi.Response(
         "成功",
@@ -248,7 +243,6 @@ user_update_responses = {
         }
     )
 }
-
 user_reset_password_responses = {
     200: openapi.Response(
         "成功",
@@ -259,7 +253,6 @@ user_reset_password_responses = {
         }
     )
 }
-
 user_add_groups_responses = {
     200: openapi.Response(
         "成功",
@@ -268,7 +261,6 @@ user_add_groups_responses = {
         }
     )
 }
-
 user_remove_groups_responses = {
     200: openapi.Response(
         "成功",
