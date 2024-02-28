@@ -9,7 +9,7 @@ from apps.system_mgmt.responses.role_manage import role_list_responses, role_per
     role_create_responses, role_delete_responses, role_update_responses, role_set_permissions_responses, \
     role_add_user_responses, role_remove_user_responses, role_add_groups_responses, role_remove_groups_responses, \
     role_groups_responses
-from apps.system_mgmt.services.user_manage import UserManage
+from apps.system_mgmt.services.role_manage import RoleManage
 
 
 class KeycloakRoleViewSet(viewsets.ViewSet):
@@ -20,7 +20,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     )
     @uma_permission("role_list")
     def list(self, request):
-        data = UserManage().role_list()
+        data = RoleManage().role_list()
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -34,7 +34,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @uma_permission("role_permissions")
     @action(detail=True, methods=["get"], url_path="permissions")
     def role_permissions(self, request, pk: str):
-        data = UserManage().role_permissions(pk)
+        data = RoleManage().role_permissions(pk)
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -52,7 +52,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     )
     @uma_permission("role_create")
     def create(self, request):
-        data = UserManage().role_create(request.data, request.userinfo.get("username"))
+        data = RoleManage().role_create(request.data, request.userinfo.get("username"))
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -65,7 +65,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     )
     @uma_permission("role_delete")
     def destroy(self, request, pk: str):
-        data = UserManage().role_delete(pk, request.userinfo.get("username"))
+        data = RoleManage().role_delete(pk, request.userinfo.get("username"))
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
@@ -84,7 +84,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     )
     @uma_permission("role_update")
     def update(self, request, pk: str):
-        UserManage().role_update(request.data.get("description", ""), pk, request.userinfo.get("username"))
+        RoleManage().role_update(request.data.get("description", ""), pk, request.userinfo.get("username"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -102,7 +102,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @role_permissions.mapping.patch
     @uma_permission("role_set_permissions")
     def ch_permission(self, request, pk: str):
-        UserManage().role_set_permissions(request.data, pk, request.userinfo.get("username"))
+        RoleManage().role_set_permissions(request.data, pk, request.userinfo.get("username"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -117,7 +117,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["put"], url_path="assign/(?P<user_id>[^/.]+)")
     @uma_permission("role_add_user")
     def assign_role(self, request, pk: str, user_id: str):
-        UserManage().role_add_user(pk, user_id, request.userinfo.get("username"))
+        RoleManage().role_add_user(pk, user_id, request.userinfo.get("username"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -132,7 +132,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["delete"], url_path="withdraw/(?P<user_id>[^/.]+)")
     @uma_permission("role_remove_user")
     def withdraw_role(self, request, pk: str, user_id: str):
-        UserManage().role_remove_user(pk, user_id, request.userinfo.get("username"))
+        RoleManage().role_remove_user(pk, user_id, request.userinfo.get("username"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -150,7 +150,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["patch"], url_path="assign_groups")
     @uma_permission("role_add_groups")
     def assign_groups(self, request, pk: str):
-        UserManage().role_add_groups(request.data, pk, request.userinfo.get("username"))
+        RoleManage().role_add_groups(request.data, pk, request.userinfo.get("username"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -168,7 +168,7 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=True, methods=["delete"], url_path="unassign_groups")
     @uma_permission("role_remove_groups")
     def unassign_groups(self, request, pk: str):
-        UserManage().role_remove_groups(request.data, pk, request.userinfo.get("username"))
+        RoleManage().role_remove_groups(request.data, pk, request.userinfo.get("username"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -182,5 +182,5 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="groups/(?P<role_name>.+?)")
     @uma_permission("role_groups")
     def get_groups_by_role(self, request, role_name: str):
-        data = UserManage().role_groups(role_name)
+        data = RoleManage().role_groups(role_name)
         return WebUtils.response_success(data)
