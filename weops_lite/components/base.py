@@ -42,7 +42,9 @@ INSTALLED_APPS += [
 # 业务组件
 INSTALLED_APPS += [
     'apps.core',
-    'apps.system_mgmt'
+    'apps.system_mgmt',
+    'apps.cmdb_mgmt',
+    'apps.node_mgmt',
 ]
 
 MIDDLEWARE = [
