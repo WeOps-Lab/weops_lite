@@ -1,0 +1,3908 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "v1",
+    "version": "last"
+  },
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "group",
+      "description": "组织管理"
+    },
+    {
+      "name": "login_info",
+      "description": "login_info"
+    },
+    {
+      "name": "logo",
+      "description": "logo"
+    },
+    {
+      "name": "menu",
+      "description": "menu"
+    },
+    {
+      "name": "operation_log",
+      "description": "operation_log"
+    },
+    {
+      "name": "role",
+      "description": "角色管理"
+    },
+    {
+      "name": "user",
+      "description": "用户管理"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/group/{id}/": {
+      "put": {
+        "tags": [
+          "group"
+        ],
+        "summary": "修改组织名<group_update>",
+        "description": "修改组名",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "组织ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "group_name"
+              ],
+              "type": "object",
+              "properties": {
+                "group_name": {
+                  "description": "group name",
+                  "type": "string",
+                  "title": "组织名称"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "title": "ID"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "group"
+        ],
+        "summary": "查询组织信息<group_retrieve>",
+        "description": "获取组织或者子组的信息",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "组织ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "title": "ID"
+                    },
+                    "name": {
+                      "type": "string",
+                      "title": "组织名称"
+                    },
+                    "path": {
+                      "type": "string",
+                      "title": "组织路径"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "path"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/": {
+      "post": {
+        "tags": [
+          "group"
+        ],
+        "summary": "创建组织<group_create>",
+        "description": "创建一个组，如有父组织请添加字段parent\\_group\\_id",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "group_name"
+              ],
+              "type": "object",
+              "properties": {
+                "group_name": {
+                  "type": "string",
+                  "title": "组织名称"
+                },
+                "parent_group_id": {
+                  "type": "string",
+                  "title": "父组织ID",
+                  "description": "创建子组织时需要填写"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "group"
+        ],
+        "summary": "组织列表<group_list>",
+        "description": "用户组列表",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "title": "ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "title": "组名称"
+                      },
+                      "path": {
+                        "type": "string",
+                        "title": "组织路径"
+                      },
+                      "subGroupCount": {
+                        "type": "number",
+                        "title": "子组数"
+                      },
+                      "subGroups": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "title": "子组ID"
+                            },
+                            "name": {
+                              "type": "string",
+                              "title": "子组名称"
+                            },
+                            "path": {
+                              "type": "string",
+                              "title": "子组组织路径"
+                            },
+                            "parentId": {
+                              "type": "string",
+                              "title": "父组ID"
+                            },
+                            "subGroupCount": {
+                              "type": "number",
+                              "title": "子组数"
+                            },
+                            "subGroups": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "title": "子组列表"
+                            },
+                            "access": {
+                              "type": "object",
+                              "properties": {
+                                "view": {
+                                  "type": "boolean"
+                                },
+                                "viewMembers": {
+                                  "type": "boolean"
+                                },
+                                "manageMembers": {
+                                  "type": "boolean"
+                                },
+                                "manage": {
+                                  "type": "boolean"
+                                },
+                                "manageMembership": {
+                                  "type": "boolean"
+                                }
+                              },
+                              "required": [
+                                "view",
+                                "viewMembers",
+                                "manageMembers",
+                                "manage",
+                                "manageMembership"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "path",
+                            "parentId",
+                            "subGroupCount",
+                            "subGroups",
+                            "access"
+                          ]
+                        },
+                        "title": "子组列表"
+                      },
+                      "access": {
+                        "type": "object",
+                        "properties": {
+                          "view": {
+                            "type": "boolean"
+                          },
+                          "viewMembers": {
+                            "type": "boolean"
+                          },
+                          "manageMembers": {
+                            "type": "boolean"
+                          },
+                          "manage": {
+                            "type": "boolean"
+                          },
+                          "manageMembership": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "view",
+                          "viewMembers",
+                          "manageMembers",
+                          "manage",
+                          "manageMembership"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "path",
+                      "subGroupCount",
+                      "subGroups",
+                      "access"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/delete_groups/": {
+      "delete": {
+        "tags": [
+          "group"
+        ],
+        "summary": "删除组织<group_delete>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "组ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/{id}/assign_users/": {
+      "patch": {
+        "tags": [
+          "group"
+        ],
+        "summary": "将一些用户添加到组织下<group_add_users>",
+        "description": "将一些用户添加到用户组织下",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "用户ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/{id}/unassign_users/": {
+      "delete": {
+        "tags": [
+          "group"
+        ],
+        "summary": "将一系列用户从组织移除<group_remove_users>",
+        "description": "将一系列用户从组移除",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "用户ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/{id}/unassign_roles/": {
+      "delete": {
+        "tags": [
+          "group"
+        ],
+        "summary": "将一系列角色从组移除<group_remove_roles>",
+        "description": "将一系列角色从组移除",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "组织ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "角色ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/{id}/assign_roles/": {
+      "patch": {
+        "tags": [
+          "group"
+        ],
+        "summary": "将一系列角色添加到组织<group_add_roles>",
+        "description": "将一系列角色添加到组",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "组织ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "角色ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/{id}/users/": {
+      "get": {
+        "tags": [
+          "group"
+        ],
+        "summary": "获取该组织下的所有用户<group_users>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "组织ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "title": "用户ID"
+                      },
+                      "username": {
+                        "type": "string",
+                        "title": "用户名"
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "title": "中文名称"
+                      },
+                      "email": {
+                        "type": "string",
+                        "title": "邮箱"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "username",
+                      "lastName",
+                      "email"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/group/{id}/roles/": {
+      "get": {
+        "tags": [
+          "group"
+        ],
+        "summary": "获取该组织下的所有角色<group_roles>",
+        "description": "获取该组下的所有角色",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "组织ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "title": "角色ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "title": "角色名称"
+                      },
+                      "description": {
+                        "type": "string",
+                        "title": "备注"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "description"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/login_info/": {
+      "get": {
+        "tags": [
+          "login_info"
+        ],
+        "summary": "用户登录之后，获取基本信息",
+        "description": "用户登录之后，获取基本信息",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "user_info": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "中文名称"
+                        },
+                        "email": {
+                          "type": "string",
+                          "title": "邮箱"
+                        },
+                        "preferred_username": {
+                          "type": "string",
+                          "title": "用户名"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "email",
+                        "preferred_username"
+                      ],
+                      "title": "用户信息"
+                    },
+                    "is_super": {
+                      "type": "boolean",
+                      "title": "是否为超管"
+                    },
+                    "menus_permissions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "菜单权限"
+                    }
+                  },
+                  "required": [
+                    "user_info",
+                    "is_super",
+                    "menus_permissions"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/logo/": {
+      "put": {
+        "tags": [
+          "logo"
+        ],
+        "summary": "更新logo<logo_update>",
+        "description": "更新logo",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "file"
+              ],
+              "type": "object",
+              "properties": {
+                "file": {
+                  "description": "logo文件",
+                  "type": "file",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "required": [
+                "file"
+              ],
+              "type": "object",
+              "properties": {
+                "file": {
+                  "description": "logo文件",
+                  "type": "file",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "logo"
+        ],
+        "summary": "获取logo<logo>",
+        "description": "获取logo",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "title": "logo名称"
+                    },
+                    "value": {
+                      "type": "string",
+                      "title": "logobase64数据"
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "value"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/logo/reset/": {
+      "post": {
+        "tags": [
+          "logo"
+        ],
+        "summary": "重置为默认logo<logo_reset>",
+        "description": "重置为默认logo",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {},
+              "$$ref": "#/definitions/Log"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "type": "string",
+                      "title": "logo名称"
+                    },
+                    "value": {
+                      "type": "string",
+                      "title": "logobase64数据"
+                    }
+                  },
+                  "required": [
+                    "key",
+                    "value"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/menu/get_use_menu/": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "查询启用的菜单<get_menu_use>",
+        "description": "查询启用的菜单",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "type": "string"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "required": [
+                "count",
+                "next",
+                "previous",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "id",
+                      "created_by",
+                      "updated_by",
+                      "created_at",
+                      "updated_at",
+                      "menu_name",
+                      "default",
+                      "use",
+                      "menu"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "title": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                      },
+                      "created_by": {
+                        "title": "创建者",
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 1
+                      },
+                      "updated_by": {
+                        "title": "更新者",
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 1
+                      },
+                      "created_at": {
+                        "title": "创建时间",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                      },
+                      "updated_at": {
+                        "title": "修改时间",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                      },
+                      "menu_name": {
+                        "title": "菜单名称",
+                        "type": "string",
+                        "maxLength": 64,
+                        "minLength": 1
+                      },
+                      "default": {
+                        "title": "是否是内置菜单",
+                        "type": "boolean"
+                      },
+                      "use": {
+                        "title": "是否启用(只能有一个)",
+                        "type": "boolean"
+                      },
+                      "menu": {
+                        "title": "菜单内容",
+                        "type": "object",
+                        "properties": {},
+                        "required": []
+                      }
+                    },
+                    "$$ref": "#/definitions/MenuManageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/menu/{id}/": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "查询某个菜单<menu_retrieve>",
+        "description": "查询某个菜单",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "required": [
+                "id",
+                "created_by",
+                "updated_by",
+                "created_at",
+                "updated_at",
+                "menu_name",
+                "default",
+                "use",
+                "menu"
+              ],
+              "type": "object",
+              "properties": {
+                "id": {
+                  "title": "ID",
+                  "type": "integer",
+                  "readOnly": true
+                },
+                "created_by": {
+                  "title": "创建者",
+                  "type": "string",
+                  "maxLength": 32,
+                  "minLength": 1
+                },
+                "updated_by": {
+                  "title": "更新者",
+                  "type": "string",
+                  "maxLength": 32,
+                  "minLength": 1
+                },
+                "created_at": {
+                  "title": "创建时间",
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "updated_at": {
+                  "title": "修改时间",
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "menu_name": {
+                  "title": "菜单名称",
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "default": {
+                  "title": "是否是内置菜单",
+                  "type": "boolean"
+                },
+                "use": {
+                  "title": "是否启用(只能有一个)",
+                  "type": "boolean"
+                },
+                "menu": {
+                  "title": "菜单内容",
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "$$ref": "#/definitions/MenuManageModel"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "菜单删除<menu_delete>",
+        "description": "菜单删除",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "result"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "default": "{\"type\":\"object\",\"title\":\"title\",\"properties\":{}}"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "菜单更新<menu_update>",
+        "description": "菜单更新",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "A unique integer value identifying this 菜单管理.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "id",
+                "created_by",
+                "updated_by",
+                "created_at",
+                "updated_at",
+                "menu_name",
+                "default",
+                "use",
+                "menu"
+              ],
+              "type": "object",
+              "properties": {
+                "id": {
+                  "title": "ID",
+                  "type": "integer",
+                  "readOnly": true
+                },
+                "created_by": {
+                  "title": "创建者",
+                  "type": "string",
+                  "maxLength": 32,
+                  "minLength": 1
+                },
+                "updated_by": {
+                  "title": "更新者",
+                  "type": "string",
+                  "maxLength": 32,
+                  "minLength": 1
+                },
+                "created_at": {
+                  "title": "创建时间",
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "updated_at": {
+                  "title": "修改时间",
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "menu_name": {
+                  "title": "菜单名称",
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "default": {
+                  "title": "是否是内置菜单",
+                  "type": "boolean"
+                },
+                "use": {
+                  "title": "是否启用(只能有一个)",
+                  "type": "boolean"
+                },
+                "menu": {
+                  "title": "菜单内容",
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "$$ref": "#/definitions/MenuManageModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "title": "ID"
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "title": "创建人"
+                    },
+                    "updated_by": {
+                      "type": "string",
+                      "title": "更新人"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "title": "创建时间"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "title": "上次更新时间"
+                    },
+                    "menu_name": {
+                      "type": "string",
+                      "title": "名称"
+                    },
+                    "default": {
+                      "type": "boolean",
+                      "title": "是否默认"
+                    },
+                    "use": {
+                      "type": "boolean",
+                      "title": "是否启用"
+                    },
+                    "menu": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          },
+                          "auth": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "boolean"
+                                },
+                                "apiKey": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "label",
+                                "value",
+                                "apiKey"
+                              ]
+                            }
+                          },
+                          "icon": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "originName": {
+                            "type": "string"
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "auth": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "key": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "label": {
+                                        "type": "string"
+                                      },
+                                      "value": {
+                                        "type": "boolean"
+                                      },
+                                      "apiKey": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "key",
+                                      "type",
+                                      "label",
+                                      "value",
+                                      "apiKey"
+                                    ]
+                                  }
+                                },
+                                "icon": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "originName": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "url",
+                                "auth",
+                                "icon",
+                                "name",
+                                "originName"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "url",
+                          "auth",
+                          "icon",
+                          "name",
+                          "originName",
+                          "children"
+                        ]
+                      },
+                      "title": "菜单内容"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "created_by",
+                    "updated_by",
+                    "created_at",
+                    "updated_at",
+                    "menu_name",
+                    "default",
+                    "use",
+                    "menu"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "菜单更新（部分属性）<menu_partial_update>",
+        "description": "菜单更新（部分属性）",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "menu_name": {
+                  "title": "菜单名称",
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "use": {
+                  "title": "是否启用(只能有一个)",
+                  "type": "boolean"
+                },
+                "menu": {
+                  "title": "菜单内容",
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "$$ref": "#/definitions/MenuManageModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number",
+                      "title": "ID"
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "title": "创建人"
+                    },
+                    "updated_by": {
+                      "type": "string",
+                      "title": "更新人"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "title": "创建时间"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "title": "上次更新时间"
+                    },
+                    "menu_name": {
+                      "type": "string",
+                      "title": "名称"
+                    },
+                    "default": {
+                      "type": "boolean",
+                      "title": "是否默认"
+                    },
+                    "use": {
+                      "type": "boolean",
+                      "title": "是否启用"
+                    },
+                    "menu": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "url": {
+                            "type": "string"
+                          },
+                          "auth": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string"
+                                },
+                                "type": {
+                                  "type": "string"
+                                },
+                                "label": {
+                                  "type": "string"
+                                },
+                                "value": {
+                                  "type": "boolean"
+                                },
+                                "apiKey": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  }
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "label",
+                                "value",
+                                "apiKey"
+                              ]
+                            }
+                          },
+                          "icon": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "originName": {
+                            "type": "string"
+                          },
+                          "children": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string"
+                                },
+                                "url": {
+                                  "type": "string"
+                                },
+                                "auth": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "key": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "label": {
+                                        "type": "string"
+                                      },
+                                      "value": {
+                                        "type": "boolean"
+                                      },
+                                      "apiKey": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "key",
+                                      "type",
+                                      "label",
+                                      "value",
+                                      "apiKey"
+                                    ]
+                                  }
+                                },
+                                "icon": {
+                                  "type": "string"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "originName": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "url",
+                                "auth",
+                                "icon",
+                                "name",
+                                "originName"
+                              ]
+                            }
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "url",
+                          "auth",
+                          "icon",
+                          "name",
+                          "originName",
+                          "children"
+                        ]
+                      },
+                      "title": "菜单内容"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "created_by",
+                    "updated_by",
+                    "created_at",
+                    "updated_at",
+                    "menu_name",
+                    "default",
+                    "use",
+                    "menu"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/menu/": {
+      "get": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "菜单列表<menu_list>",
+        "description": "菜单列表",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "type": "string"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number",
+                      "title": "自定义菜单数量"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number",
+                            "title": "自定义菜单ID"
+                          },
+                          "created_by": {
+                            "type": "string",
+                            "title": "创建时间"
+                          },
+                          "updated_by": {
+                            "type": "string",
+                            "title": "上次更新时间"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "title": "创建者"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "title": "上次更新人"
+                          },
+                          "menu_name": {
+                            "type": "string",
+                            "title": "自定义菜单名称"
+                          },
+                          "default": {
+                            "type": "boolean",
+                            "title": "是否为默认自定义菜单"
+                          },
+                          "use": {
+                            "type": "boolean",
+                            "title": "是否使用"
+                          },
+                          "menu": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "title": "系统菜单ID"
+                                },
+                                "url": {
+                                  "type": "string",
+                                  "title": "系统菜单路径"
+                                },
+                                "auth": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "key": {
+                                        "type": "string"
+                                      },
+                                      "type": {
+                                        "type": "string"
+                                      },
+                                      "label": {
+                                        "type": "string"
+                                      },
+                                      "value": {
+                                        "type": "boolean"
+                                      },
+                                      "apiKey": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    },
+                                    "required": [
+                                      "key",
+                                      "type",
+                                      "label",
+                                      "value",
+                                      "apiKey"
+                                    ]
+                                  },
+                                  "title": "菜单下的操作项列表"
+                                },
+                                "icon": {
+                                  "type": "string",
+                                  "title": "系统菜单图标"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "title": "系统菜单名称"
+                                },
+                                "originName": {
+                                  "type": "string",
+                                  "title": "系统菜单菜单层级路径"
+                                },
+                                "children": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "id": {
+                                        "type": "string"
+                                      },
+                                      "url": {
+                                        "type": "string"
+                                      },
+                                      "auth": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "object",
+                                          "properties": {
+                                            "key": {
+                                              "type": "string"
+                                            },
+                                            "type": {
+                                              "type": "string"
+                                            },
+                                            "label": {
+                                              "type": "string"
+                                            },
+                                            "value": {
+                                              "type": "boolean"
+                                            },
+                                            "apiKey": {
+                                              "type": "array",
+                                              "items": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          "required": [
+                                            "key",
+                                            "type",
+                                            "label",
+                                            "value",
+                                            "apiKey"
+                                          ]
+                                        }
+                                      },
+                                      "icon": {
+                                        "type": "string"
+                                      },
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "originName": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "id",
+                                      "url",
+                                      "auth",
+                                      "icon",
+                                      "name",
+                                      "originName"
+                                    ]
+                                  }
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "url",
+                                "auth",
+                                "icon",
+                                "name",
+                                "originName",
+                                "children"
+                              ]
+                            },
+                            "title": "系统菜单列表"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "created_by",
+                          "updated_by",
+                          "created_at",
+                          "updated_at",
+                          "menu_name",
+                          "default",
+                          "use",
+                          "menu"
+                        ]
+                      },
+                      "title": "自定义菜单列表"
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "data"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "菜单创建<menu_create>",
+        "description": "菜单创建",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "id",
+                "created_by",
+                "updated_by",
+                "created_at",
+                "updated_at",
+                "menu_name",
+                "default",
+                "use",
+                "menu"
+              ],
+              "type": "object",
+              "properties": {
+                "id": {
+                  "title": "ID",
+                  "type": "integer",
+                  "readOnly": true
+                },
+                "created_by": {
+                  "title": "创建者",
+                  "type": "string",
+                  "maxLength": 32,
+                  "minLength": 1
+                },
+                "updated_by": {
+                  "title": "更新者",
+                  "type": "string",
+                  "maxLength": 32,
+                  "minLength": 1
+                },
+                "created_at": {
+                  "title": "创建时间",
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "updated_at": {
+                  "title": "修改时间",
+                  "type": "string",
+                  "format": "date-time",
+                  "readOnly": true
+                },
+                "menu_name": {
+                  "title": "菜单名称",
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "default": {
+                  "title": "是否是内置菜单",
+                  "type": "boolean"
+                },
+                "use": {
+                  "title": "是否启用(只能有一个)",
+                  "type": "boolean"
+                },
+                "menu": {
+                  "title": "菜单内容",
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "$$ref": "#/definitions/MenuManageModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/menu/{id}/use_menu/": {
+      "patch": {
+        "tags": [
+          "menu"
+        ],
+        "summary": "菜单启用<menu_use>",
+        "description": "菜单启用",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "title": "菜单ID"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/operation_log/": {
+      "get": {
+        "tags": [
+          "operation_log"
+        ],
+        "summary": "操作日志列表<operation_log_list>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "type": "string"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "description": "",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "required": [
+                "count",
+                "next",
+                "previous",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "required": [
+                      "id",
+                      "operator",
+                      "operate_type",
+                      "created_at",
+                      "operate_obj",
+                      "operate_summary",
+                      "app_module",
+                      "obj_type"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "title": "ID",
+                        "type": "integer",
+                        "readOnly": true
+                      },
+                      "operator": {
+                        "title": "操作者",
+                        "type": "string",
+                        "maxLength": 128,
+                        "minLength": 1,
+                        "x-nullable": true
+                      },
+                      "operate_type": {
+                        "title": "操作类型",
+                        "type": "string",
+                        "enum": [
+                          "add",
+                          "increase",
+                          "modify",
+                          "exec",
+                          "delete",
+                          "remove",
+                          "download",
+                          "upload",
+                          "login"
+                        ]
+                      },
+                      "created_at": {
+                        "title": "创建时间",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                      },
+                      "operate_obj": {
+                        "title": "操作对象",
+                        "type": "string",
+                        "maxLength": 200,
+                        "minLength": 1
+                      },
+                      "operate_summary": {
+                        "title": "操作概要",
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "app_module": {
+                        "title": "所属模块",
+                        "type": "string",
+                        "maxLength": 20,
+                        "minLength": 1
+                      },
+                      "obj_type": {
+                        "title": "对象类型",
+                        "type": "string",
+                        "maxLength": 30,
+                        "minLength": 1
+                      }
+                    },
+                    "$$ref": "#/definitions/OperationLogSer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/operation_log/custom/operate_type/enum/": {
+      "get": {
+        "tags": [
+          "operation_log"
+        ],
+        "summary": "操作日志类型<operate_type_enum>",
+        "description": "获取操作类型枚举值",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "description": "key为操作类型的ID，value为操作类型的展示名称"
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/role/{role_name}/": {
+      "put": {
+        "tags": [
+          "role"
+        ],
+        "summary": "修改角色信息<role_update>",
+        "description": "修改角色信息",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role_name",
+            "in": "path",
+            "description": "角色名称",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "title": "描述"
+                }
+              },
+              "required": [
+                "description"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "role"
+        ],
+        "summary": "删除角色<role_delete>",
+        "description": "删除角色",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role_name",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "title": "title",
+              "properties": {}
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/role/": {
+      "post": {
+        "tags": [
+          "role"
+        ],
+        "summary": "创建角色<role_create>",
+        "description": "创建角色",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "name",
+                "description"
+              ],
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "角色名称"
+                },
+                "description": {
+                  "type": "string",
+                  "title": "描述"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "title": "用户ID"
+                    },
+                    "name": {
+                      "type": "string",
+                      "title": "用户名称"
+                    },
+                    "description": {
+                      "type": "string",
+                      "title": "描述"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "name",
+                    "description"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "获取所有角色<role_list>",
+        "description": "获取所有角色",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "title": "角色ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "title": "角色名称"
+                      },
+                      "description": {
+                        "type": "string",
+                        "title": "备注"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "description"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/role/{id}/withdraw/{user_id}/": {
+      "delete": {
+        "tags": [
+          "role"
+        ],
+        "summary": "将一个用户从角色移除<role_remove_user>",
+        "description": "将一个用户从角色移除",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "角色的ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "用户的ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "default": "{\"type\":\"object\",\"title\":\"title\",\"properties\":{}}"
+            }
+          }
+        }
+      }
+    },
+    "/role/{id}/assign/{user_id}/": {
+      "put": {
+        "tags": [
+          "role"
+        ],
+        "summary": "将一个用户添加到角色<role_add_user>",
+        "description": "将一个用户添加到角色",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "角色的ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "用户的ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "string",
+              "format": "binary",
+              "default": "{\"type\":\"object\",\"title\":\"title\",\"properties\":{}}"
+            }
+          }
+        }
+      }
+    },
+    "/role/{id}/unassign_groups/": {
+      "delete": {
+        "tags": [
+          "role"
+        ],
+        "summary": "将该角色从一系列组中移除<role_remove_groups>",
+        "description": "将该角色从一系列组中移除",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "角色ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "组ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/role/{id}/assign_groups/": {
+      "patch": {
+        "tags": [
+          "role"
+        ],
+        "summary": "将该角色添加到一系列组中<role_add_groups>",
+        "description": "将该角色添加到一系列组中",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "角色的ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "组ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/role/{role_name}/permissions/": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "获取角色拥有的权限<role_permissions>",
+        "description": "获取角色拥有的权限",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role_name",
+            "in": "path",
+            "description": "角色名称",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "权限列表"
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "role"
+        ],
+        "summary": "设置角色权限<role_set_permissions>",
+        "description": "设置角色权限",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role_name",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "权限名称"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/role/groups/{role_name}/": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "获取该角色下的所有组<role_groups>",
+        "description": "获取该角色下的所有组",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role_name",
+            "in": "path",
+            "description": "角色名称",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "title": "组织ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "title": "组织名称"
+                      },
+                      "path": {
+                        "type": "string",
+                        "title": "组织路径"
+                      },
+                      "subGroups": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "title": "子组织信息"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "path",
+                      "subGroups"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/role/groups/{role_name}/_1709518130591": {
+      "get": {
+        "tags": [
+          "role"
+        ],
+        "summary": "获取该角色下的所有组<role_groups>_copy",
+        "description": "获取该角色下的所有组",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role_name",
+            "in": "path",
+            "description": "角色名称",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "title": "组织ID"
+                      },
+                      "name": {
+                        "type": "string",
+                        "title": "组织名称"
+                      },
+                      "path": {
+                        "type": "string",
+                        "title": "组织路径"
+                      },
+                      "subGroups": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "title": "子组织信息"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name",
+                      "path",
+                      "subGroups"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/": {
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "修改用户信息<user_update>",
+        "description": "修改用户信息",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "description": "User email",
+                  "type": "string",
+                  "title": "邮箱"
+                },
+                "lastName": {
+                  "description": "User last name",
+                  "type": "string",
+                  "title": "中文名称"
+                }
+              },
+              "required": [
+                "email",
+                "lastName"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "删除用户<user_delete>",
+        "description": "删除用户",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "获取用户信息<user_info>",
+        "description": "获取用户信息",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "title": "用户ID"
+                    },
+                    "username": {
+                      "type": "string",
+                      "title": "用户名"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "title": "中文名称"
+                    },
+                    "email": {
+                      "type": "string",
+                      "title": "邮箱"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "username",
+                    "lastName",
+                    "email"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "重置用户密码<user_reset_password>",
+        "description": "重置用户密码",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "password"
+              ],
+              "type": "object",
+              "properties": {
+                "password": {
+                  "description": "User password",
+                  "type": "string",
+                  "title": "密码"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "创建用户<user_create>",
+        "description": "创建用户",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "username",
+                "email",
+                "lastName",
+                "password"
+              ],
+              "type": "object",
+              "properties": {
+                "username": {
+                  "description": "User username",
+                  "type": "string",
+                  "title": "用户名"
+                },
+                "email": {
+                  "description": "User email",
+                  "type": "string",
+                  "title": "邮箱"
+                },
+                "lastName": {
+                  "description": "User last name",
+                  "type": "string",
+                  "title": "中文名"
+                },
+                "password": {
+                  "description": "User password",
+                  "type": "string",
+                  "title": "密码"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "查询用户列表<user_list>",
+        "description": "查询用户列表",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "title": "用户ID"
+                          },
+                          "username": {
+                            "type": "string",
+                            "title": "用户名"
+                          },
+                          "lastName": {
+                            "type": "string",
+                            "title": "中文名称"
+                          },
+                          "email": {
+                            "type": "string",
+                            "title": "游戏"
+                          },
+                          "roles": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "title": "角色ID"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "title": "角色名称"
+                                },
+                                "description": {
+                                  "type": "string",
+                                  "title": "备注"
+                                },
+                                "role_type": {
+                                  "type": "string",
+                                  "title": "角色类型"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "description",
+                                "role_type"
+                              ]
+                            },
+                            "title": "用户角色列表"
+                          },
+                          "groups": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "string",
+                                  "title": "组织ID"
+                                },
+                                "name": {
+                                  "type": "string",
+                                  "title": "组织名称"
+                                },
+                                "path": {
+                                  "type": "string",
+                                  "title": "组织路径"
+                                },
+                                "parentId": {
+                                  "type": "string",
+                                  "title": "父组织ID"
+                                },
+                                "subGroups": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string"
+                                  },
+                                  "title": "子组织信息"
+                                }
+                              },
+                              "required": [
+                                "id",
+                                "name",
+                                "path",
+                                "parentId",
+                                "subGroups"
+                              ]
+                            },
+                            "title": "用户组织列表"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "username",
+                          "lastName",
+                          "email",
+                          "roles",
+                          "groups"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "users"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/unassign_groups/": {
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "将一系列组从该用户移除<user_remove_groups>",
+        "description": "将一系列组从该用户移除",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "组ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/assign_groups/": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "将一系列组添加到用户<user_add_groups>",
+        "description": "将一系列组添加到用户",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "组ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/roles/{role_name}/": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "获取该角色下的所有用户<user_list_by_role>",
+        "description": "获取该角色下的所有用户",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "role_name",
+            "in": "path",
+            "description": "角色名称",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "title": "用户ID"
+                      },
+                      "username": {
+                        "type": "string",
+                        "title": "用户名"
+                      },
+                      "lastName": {
+                        "type": "string",
+                        "title": "中文名称"
+                      },
+                      "email": {
+                        "type": "string",
+                        "title": "邮箱"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "username",
+                      "lastName",
+                      "email"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
