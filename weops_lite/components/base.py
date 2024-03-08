@@ -43,6 +43,9 @@ INSTALLED_APPS += [
 INSTALLED_APPS += [
     'apps.core',
     'apps.system_mgmt',
+    'apps.cmdb_mgmt',
+    'apps.node_mgmt',
+    'apps.system_mgmt',
     'apps.resource',
 ]
 
