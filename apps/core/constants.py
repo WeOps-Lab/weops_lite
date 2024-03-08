@@ -18,3 +18,6 @@ with open(REALM_FILE_PATH, "r", encoding="utf-8") as f:
 
 # 默认组织ID
 DEFAULT_GROUP_ID = REALM_SETTINGS["groups"][0]["id"]
+
+# 默认图名称
+GRAPH_NAME = "cmdb"
