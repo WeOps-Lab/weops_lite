@@ -163,3 +163,43 @@ class KeycloakUserViewSet(viewsets.ViewSet):
     def unassign_user_groups(self, request, pk: str):
         UserManage().user_remove_groups(request.data, pk, request.userinfo.get("username"))
         return WebUtils.response_success()
+
+    @swagger_auto_schema(
+        operation_id="my_userinfo_update",
+        operation_description="修改个人信息",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="User ID", type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "email": openapi.Schema(type=openapi.TYPE_STRING, description="User email"),
+                "lastName": openapi.Schema(type=openapi.TYPE_STRING, description="User last name"),
+            },
+        ),
+        responses=user_update_responses,
+    )
+    @action(detail=True, methods=["put"], url_path="my_userinfo/update")
+    def my_userinfo_update(self, request, pk: str):
+        data = UserManage().user_update(request.data, pk, request.userinfo.get("username"))
+        return WebUtils.response_success(data)
+
+    @swagger_auto_schema(
+        operation_id="my_pwd_reset",
+        operation_description="重置个人密码",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="User ID", type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "password": openapi.Schema(type=openapi.TYPE_STRING, description="User password"),
+            },
+            required=["password"],
+        ),
+        responses=user_reset_password_responses,
+    )
+    @action(detail=True, methods=["patch"], url_path="my_pwd/reset")
+    def my_pwd_reset(self, request, pk: str):
+        data = UserManage().user_reset_password(request.data, pk, request.userinfo.get("username"))
+        return WebUtils.response_success(data)

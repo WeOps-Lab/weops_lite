@@ -3147,23 +3147,46 @@
         }
       }
     },
-    "/role/groups/{role_name}/_1709518130591": {
-      "get": {
+    "/user/{id}/my_userinfo/update/": {
+      "put": {
         "tags": [
-          "role"
+          "user"
         ],
-        "summary": "获取该角色下的所有组<role_groups>_copy",
-        "description": "获取该角色下的所有组",
+        "summary": "修改个人信息",
+        "description": "修改用户信息",
         "consumes": [
           "application/json"
         ],
         "parameters": [
           {
-            "name": "role_name",
+            "name": "id",
             "in": "path",
-            "description": "角色名称",
+            "description": "用户ID",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "description": "User email",
+                  "type": "string",
+                  "title": "邮箱"
+                },
+                "lastName": {
+                  "description": "User last name",
+                  "type": "string",
+                  "title": "中文名称"
+                }
+              },
+              "required": [
+                "email",
+                "lastName"
+              ]
+            }
           }
         ],
         "responses": {
@@ -3180,37 +3203,9 @@
                   "type": "string"
                 },
                 "data": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "title": "组织ID"
-                      },
-                      "name": {
-                        "type": "string",
-                        "title": "组织名称"
-                      },
-                      "path": {
-                        "type": "string",
-                        "title": "组织路径"
-                      },
-                      "subGroups": {
-                        "type": "array",
-                        "items": {
-                          "type": "string"
-                        },
-                        "title": "子组织信息"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "name",
-                      "path",
-                      "subGroups"
-                    ]
-                  }
+                  "type": "object",
+                  "properties": {},
+                  "required": []
                 }
               },
               "required": [
@@ -3892,6 +3887,71 @@
                       "email"
                     ]
                   }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}/my_pwd/reset/": {
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "重置个人密码",
+        "description": "重置用户密码",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "用户ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "required": [
+                "password"
+              ],
+              "type": "object",
+              "properties": {
+                "password": {
+                  "description": "User password",
+                  "type": "string",
+                  "title": "密码"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
                 }
               },
               "required": [
