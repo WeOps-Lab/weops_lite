@@ -27,6 +27,10 @@ from weops_lite import settings
 from weops_lite.components.base import DEBUG
 
 urlpatterns = [
+
+    # 重定向到index
+    path('', RedirectView.as_view(url='/index')),
+
     # rest_framework_simplejwt自带的得到token
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 
