@@ -45,7 +45,6 @@ INSTALLED_APPS += [
     'apps.system_mgmt',
     'apps.cmdb_mgmt',
     'apps.node_mgmt',
-    'apps.resource',
 ]
 
 MIDDLEWARE = [
