@@ -1,6 +1,51 @@
 import os
 import age
 from apps.core.constants import GRAPH_NAME
+from psycopg2 import sql
+
+from apps.core.exceptions.base_app_exception import BaseAppException
+
+
+class LocalAge(age.Age):
+
+    @staticmethod
+    def _execCypher(conn, graphName, cypherStmt, cols=None, params=None):
+        if conn == None or conn.closed:
+            raise age.NoConnection()
+        cursor = conn.cursor()
+        # clean up the string for mogrification
+        cypherStmt = cypherStmt.replace("\n", "")
+        cypherStmt = cypherStmt.replace("\t", "")
+        cypher = cursor.mogrify(cypherStmt, params).decode('utf-8')
+
+        preparedStmt = "SELECT * FROM age_prepare_cypher({graphName},{cypherStmt})"
+
+        cursor = conn.cursor()
+        try:
+            cursor.execute(
+                sql.SQL(preparedStmt).format(graphName=sql.Literal(graphName), cypherStmt=sql.Literal(cypher)))
+        except SyntaxError as cause:
+            conn.rollback()
+            raise cause
+        except Exception as cause:
+            conn.rollback()
+            raise age.SqlExecutionError("Execution ERR[" + str(cause) + "](" + preparedStmt + ")", cause)
+
+        stmt = age.buildCypher(graphName, cypher, cols)
+
+        cursor = conn.cursor()
+        try:
+            cursor.execute(stmt)
+            return cursor
+        except SyntaxError as cause:
+            conn.rollback()
+            raise cause
+        except Exception as cause:
+            conn.rollback()
+            raise age.SqlExecutionError("Execution ERR[" + str(cause) + "](" + stmt + ")", cause)
+
+    def execCypher(self, cypherStmt: str, cols: list = None, params: tuple = None):
+        return self._execCypher(self.connection, self.graphName, cypherStmt, cols=cols, params=params)
 
 
 class AgClient(object):
@@ -16,7 +61,9 @@ class AgClient(object):
 
     def get_con(self):
         """获取图库的连接"""
-        return age.connect(graph=self.graph_name, dsn=self.dsn)
+        ag = LocalAge()
+        ag.connect(graph=self.graph_name, dsn=self.dsn)
+        return ag
 
     def set_graph(self):
         """创建图"""
@@ -61,18 +108,18 @@ class AgClient(object):
 
         # 校验必填项标签非空
         if not label:
-            raise Exception("标签为空！")
+            raise BaseAppException("标签为空！")
 
         # 校验必填项实体名非空
         entity_name = properties.get("entity_name")
         if not entity_name:
-            raise Exception("实体名为空！")
+            raise BaseAppException("实体名为空！")
 
         # 校验实体名称的唯一性
         entity_name_str = "{entity_name:'" + entity_name + "'}"
         entity_count = con.execCypher(f"MATCH (n:{label} {entity_name_str}) RETURN n").rowcount
         if entity_count > 0:
-            raise Exception("实体名称重复！")
+            raise BaseAppException("实体名称重复！")
 
         # 创建实体
         properties_str = AgClient.format_properties(properties)
@@ -92,12 +139,12 @@ class AgClient(object):
 
         # 校验必填项标签非空
         if not label:
-            raise Exception("标签为空！")
+            raise BaseAppException("标签为空！")
 
         # 校验边是否已经存在
         edge_count = con.execCypher(f"MATCH (a:{a_label})-[e]-(b:{b_label}) WHERE id(a) = {a_id} AND id(b) = {b_id} RETURN e").rowcount
         if edge_count > 0:
-            raise Exception("边已存在！")
+            raise BaseAppException("边已存在！")
 
         # 创建边
         properties_str = AgClient.format_properties(properties)

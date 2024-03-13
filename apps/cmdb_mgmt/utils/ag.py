@@ -1,5 +1,6 @@
+from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.ag_client import AgClient
-from apps.resource.utils.format_type import FORMAT_TYPE
+from apps.cmdb_mgmt.utils.format_type import FORMAT_TYPE
 
 
 class AgUtils(object):
@@ -56,18 +57,17 @@ class AgUtils(object):
 
         # 校验必填项标签非空
         if not label:
-            raise Exception("标签为空！")
+            raise BaseAppException("标签为空！")
 
         # 校验必填项实体名非空
         check_unique_attr_val = properties.get(check_unique_attr)
         if not check_unique_attr_val:
-            raise Exception("实体名为空！")
+            raise BaseAppException("实体名为空！")
 
         # 校验实体名称的唯一性
-        entity_name_str = "{" + check_unique_attr + ":'" + check_unique_attr_val + "'}"
-        entity_count = self.con.execCypher(f"MATCH (n:{label} {entity_name_str}) RETURN n").rowcount
-        if entity_count > 0:
-            raise Exception("实体重复！")
+        _, counts = self.query_entity(label, [{"field": check_unique_attr, "type": "str=", "value": check_unique_attr_val}])
+        if counts > 0:
+            raise BaseAppException("实体重复！")
 
         # 创建实体
         properties_str = self.format_properties(properties)
@@ -88,12 +88,12 @@ class AgUtils(object):
 
         # 校验必填项标签非空
         if not label:
-            raise Exception("标签为空！")
+            raise BaseAppException("标签为空！")
 
         # 校验边是否已经存在
         edge_count = self.con.execCypher(f"MATCH (a:{a_label})-[e]-(b:{b_label}) WHERE id(a) = {a_id} AND id(b) = {b_id} RETURN e").rowcount
         if edge_count > 0:
-            raise Exception("边已存在！")
+            raise BaseAppException("边已存在！")
 
         # 创建边
         properties_str = self.format_properties(properties)
@@ -166,7 +166,7 @@ class AgUtils(object):
         if params_str == "":
             return params_str
         else:
-            return params_str[:-5]
+            return f"WHERE {params_str[:-5]}"
 
     def query_entity(self, label: str, params: list):
         """
@@ -205,7 +205,7 @@ class AgUtils(object):
         """
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_set(properties)
-        entity = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} SET {properties_str} RETURN n")
+        entity = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} SET {properties_str} RETURN n").fetchone()
         self.con.commit()
         return self.entity_to_dict(entity)
 
@@ -221,7 +221,7 @@ class AgUtils(object):
         """移除实体属性"""
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_remove(attrs)
-        entity = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} REMOVE {properties_str} RETURN n")
+        entity = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} REMOVE {properties_str} RETURN n").fetchone()
         self.con.commit()
         return self.entity_to_dict(entity)
 
@@ -229,4 +229,10 @@ class AgUtils(object):
         """删除实体"""
         label_str = f":{label}" if label else ""
         self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} DELETE n")
+        self.con.commit()
+
+    def delete_edge(self, label: str, edge_id: int):
+        """删除边"""
+        label_str = f":{label}" if label else ""
+        self.con.execCypher(f"MATCH ()-[n{label_str}]->() WHERE id(n) = {edge_id} DELETE n")
         self.con.commit()
