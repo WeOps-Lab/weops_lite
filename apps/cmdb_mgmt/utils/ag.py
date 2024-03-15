@@ -168,13 +168,21 @@ class AgUtils(object):
         else:
             return f"WHERE {params_str[:-5]}"
 
-    def query_entity(self, label: str, params: list):
+    def query_entity(self, label: str, params: list, page: dict = None, order: str = None):
         """
             查询实体
         """
         label_str = f":{label}" if label else ""
         params_str = AgUtils.format_params(params)
-        objs = self.con.execCypher(f"MATCH (n{label_str}) {params_str} RETURN n")
+        sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
+
+        if page:
+            sql_str += f" SKIP {page['skip']} LIMIT {page['limit']}"
+
+        if order:
+            sql_str += f" ORDER BY n.{order}"
+
+        objs = self.con.execCypher(sql_str)
         return self.entity_to_list(objs), objs.rowcount
 
     def query_edge(self, label: str, a_label: str, b_label: str, params: list):
@@ -225,10 +233,20 @@ class AgUtils(object):
         self.con.commit()
         return self.entity_to_dict(entity)
 
-    def delete_entity(self, label: str, entity_id: int):
+    def _delete_entity(self, label: str, entity_id: int):
         """删除实体"""
         label_str = f":{label}" if label else ""
         self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} DELETE n")
+
+    def delete_entity(self, label: str, entity_id: int):
+        """删除实体"""
+        self._delete_entity(label, entity_id)
+        self.con.commit()
+
+    def batch_delete_entity(self, label: str, entity_ids: list):
+        """批量删除实体"""
+        for entity_id in entity_ids:
+            self._delete_entity(label, entity_id)
         self.con.commit()
 
     def delete_edge(self, label: str, edge_id: int):

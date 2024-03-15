@@ -1,4 +1,3 @@
-import ast
 import json
 
 from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION
