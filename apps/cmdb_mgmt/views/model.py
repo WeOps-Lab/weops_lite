@@ -3,6 +3,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
+from apps.cmdb_mgmt.constants import ASSOCIATION_TYPE
 from apps.cmdb_mgmt.services.model import ModelManage
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
@@ -153,3 +154,12 @@ class ModelViewSet(viewsets.ViewSet):
     def model_attr_list(self, request, model_id: str):
         result = ModelManage.search_model_attr(model_id)
         return WebUtils.response_success(result)
+
+    @swagger_auto_schema(
+        operation_id="model_association_type",
+        operation_description="查询模型关联类型",
+    )
+    @uma_permission("model_association_type")
+    @action(detail=False, methods=["get"], url_path="model_association_type")
+    def model_association_type(self, request):
+        return WebUtils.response_success(ASSOCIATION_TYPE)
