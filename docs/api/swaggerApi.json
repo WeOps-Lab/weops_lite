@@ -33,6 +33,18 @@
     {
       "name": "user",
       "description": "用户管理"
+    },
+    {
+      "name": "classification",
+      "description": "模型分类"
+    },
+    {
+      "name": "model",
+      "description": "模型管理"
+    },
+    {
+      "name": "instance",
+      "description": "实例管理"
     }
   ],
   "schemes": [
@@ -3958,6 +3970,1641 @@
                 "result",
                 "message",
                 "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/classification/": {
+      "post": {
+        "tags": [
+          "classification"
+        ],
+        "summary": "创建模型分类<classification_create>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "classification_id": {
+                  "type": "string",
+                  "title": "模型分类ID"
+                },
+                "classification_name": {
+                  "type": "string",
+                  "title": "模型分类名称"
+                }
+              },
+              "required": [
+                "classification_id",
+                "classification_name"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "classification_id": {
+                      "type": "string"
+                    },
+                    "classification_name": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "classification_id",
+                    "classification_name"
+                  ]
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "data",
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "classification"
+        ],
+        "summary": "查询模型分类<classification_search>",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "classification_id": {
+                        "type": "string",
+                        "title": "模型分类ID"
+                      },
+                      "classification_name": {
+                        "type": "string",
+                        "title": "模型分类名称"
+                      }
+                    },
+                    "required": [
+                      "classification_id",
+                      "classification_name"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/classification/{classification_id}/": {
+      "delete": {
+        "tags": [
+          "classification"
+        ],
+        "summary": "删除模型分类<classification_delete>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "classification_id",
+            "in": "path",
+            "description": "模型分类ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/": {
+      "post": {
+        "tags": [
+          "model"
+        ],
+        "summary": "创建模型<model_create>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "classification_id": {
+                  "type": "string",
+                  "title": "模型分类ID"
+                },
+                "model_id": {
+                  "type": "string",
+                  "title": "模型ID"
+                },
+                "model_name": {
+                  "type": "string",
+                  "title": "模型名称"
+                },
+                "icn": {
+                  "type": "string",
+                  "title": "图标"
+                }
+              },
+              "required": [
+                "classification_id",
+                "model_id",
+                "model_name",
+                "icn"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "classification_id": {
+                      "type": "string",
+                      "title": "模型分类ID"
+                    },
+                    "model_id": {
+                      "type": "string",
+                      "title": "模型ID"
+                    },
+                    "model_name": {
+                      "type": "string",
+                      "title": "模型名称"
+                    },
+                    "icn": {
+                      "type": "string",
+                      "title": "图标"
+                    }
+                  },
+                  "required": [
+                    "classification_id",
+                    "model_id",
+                    "model_name",
+                    "icn"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "查询模型<model_list>",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "classification_id": {
+                      "type": "string",
+                      "title": "模型分类ID"
+                    },
+                    "model_id": {
+                      "type": "string",
+                      "title": "模型ID"
+                    },
+                    "model_name": {
+                      "type": "string",
+                      "title": "模型名称"
+                    },
+                    "icn": {
+                      "type": "string",
+                      "title": "图标"
+                    }
+                  },
+                  "required": [
+                    "classification_id",
+                    "model_id",
+                    "model_name",
+                    "icn"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/association/": {
+      "post": {
+        "tags": [
+          "model"
+        ],
+        "summary": "创建模型关联<model_association_create>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "asst_id": {
+                  "type": "string",
+                  "title": "关联关系"
+                },
+                "src_model_id": {
+                  "type": "string",
+                  "title": "源模型id"
+                },
+                "dst_model_id": {
+                  "type": "string",
+                  "title": "目标模型id"
+                },
+                "mapping": {
+                  "type": "string",
+                  "title": "约束关系"
+                },
+                "model_asst_id": {
+                  "type": "string",
+                  "title": "模型关联关系"
+                }
+              },
+              "required": [
+                "asst_id",
+                "src_model_id",
+                "dst_model_id",
+                "mapping",
+                "model_asst_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "asst_id": {
+                      "type": "string",
+                      "title": "关联关系"
+                    },
+                    "dst_model_id": {
+                      "type": "string",
+                      "title": "目标模型id"
+                    },
+                    "src_model_id": {
+                      "type": "string",
+                      "title": "源模型id"
+                    },
+                    "mapping": {
+                      "type": "string",
+                      "title": "约束关系"
+                    },
+                    "model_asst_id": {
+                      "type": "string",
+                      "title": "模型关联关系"
+                    }
+                  },
+                  "required": [
+                    "asst_id",
+                    "dst_model_id",
+                    "src_model_id",
+                    "mapping",
+                    "model_asst_id"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/{model_id}/attr/": {
+      "post": {
+        "tags": [
+          "model"
+        ],
+        "summary": "创建模型属性<model_attr_create>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "attr_id": {
+                  "type": "string",
+                  "title": "属性ID"
+                },
+                "attr_name": {
+                  "type": "string",
+                  "title": "属性名称"
+                },
+                "attr_type": {
+                  "type": "string",
+                  "title": "属性类型"
+                },
+                "isonly": {
+                  "type": "boolean",
+                  "title": "是否唯一"
+                },
+                "isrequired": {
+                  "type": "boolean",
+                  "title": "必填项"
+                },
+                "editable": {
+                  "type": "boolean",
+                  "title": "可编辑"
+                },
+                "option": {
+                  "type": "string",
+                  "title": "选项"
+                },
+                "attr_group": {
+                  "type": "string",
+                  "title": "属性分组"
+                }
+              },
+              "required": [
+                "attr_id",
+                "attr_name",
+                "attr_type",
+                "isonly",
+                "isrequired",
+                "editable",
+                "option",
+                "attr_group"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "attr_id": {
+                      "type": "string",
+                      "title": "属性ID"
+                    },
+                    "attr_name": {
+                      "type": "string",
+                      "title": "属性名称"
+                    },
+                    "attr_type": {
+                      "type": "string",
+                      "title": "属性类型"
+                    },
+                    "isonly": {
+                      "type": "boolean",
+                      "title": "是否唯一"
+                    },
+                    "isrequired": {
+                      "type": "boolean",
+                      "title": "必填项"
+                    },
+                    "editable": {
+                      "type": "boolean",
+                      "title": "可编辑"
+                    },
+                    "option": {
+                      "type": "string",
+                      "title": "选项"
+                    },
+                    "attr_group": {
+                      "type": "string",
+                      "title": "属性分组"
+                    }
+                  },
+                  "required": [
+                    "attr_id",
+                    "attr_name",
+                    "attr_type",
+                    "isonly",
+                    "isrequired",
+                    "editable",
+                    "option",
+                    "attr_group"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/{model_id}/": {
+      "delete": {
+        "tags": [
+          "model"
+        ],
+        "summary": "删除模型<model_delete>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/association/{model_asst_id}/": {
+      "delete": {
+        "tags": [
+          "model"
+        ],
+        "summary": "删除模型关联<model_association_delete>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model_asst_id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "asst_id": {
+                  "type": "string",
+                  "title": "关联关系"
+                },
+                "dst_model_id": {
+                  "type": "string",
+                  "title": "目标模型id"
+                },
+                "src_model_id": {
+                  "type": "string",
+                  "title": "源模型id"
+                },
+                "mapping": {
+                  "type": "string",
+                  "title": "约束关系"
+                }
+              },
+              "required": [
+                "asst_id",
+                "dst_model_id",
+                "src_model_id",
+                "mapping"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/{model_id}/attr/{attr_id}/": {
+      "delete": {
+        "tags": [
+          "model"
+        ],
+        "summary": "删除模型属性<model_attr_delete>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "attr_id",
+            "in": "path",
+            "description": "属性ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/{model_id}/association/": {
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "查询模型关联<model_association_list>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "asst_id": {
+                  "type": "string",
+                  "title": "关联关系"
+                },
+                "dst_model_id": {
+                  "type": "string",
+                  "title": "目标模型id"
+                },
+                "src_model_id": {
+                  "type": "string",
+                  "title": "源模型id"
+                },
+                "mapping": {
+                  "type": "string",
+                  "title": "约束关系"
+                }
+              },
+              "required": [
+                "asst_id",
+                "dst_model_id",
+                "src_model_id",
+                "mapping"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "asst_id": {
+                        "type": "string",
+                        "title": "关联关系"
+                      },
+                      "dst_model_id": {
+                        "type": "string",
+                        "title": "目标模型id"
+                      },
+                      "src_model_id": {
+                        "type": "string",
+                        "title": "源模型id"
+                      },
+                      "mapping": {
+                        "type": "string",
+                        "title": "约束关系"
+                      },
+                      "model_asst_id": {
+                        "type": "string",
+                        "title": "模型关联关系"
+                      }
+                    },
+                    "required": [
+                      "asst_id",
+                      "dst_model_id",
+                      "src_model_id",
+                      "mapping",
+                      "model_asst_id"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/model_association_type/": {
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "查询模型关联类型<model_association_type>",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "asst_id": {
+                        "type": "string",
+                        "title": "关联关系ID"
+                      },
+                      "asst_name": {
+                        "type": "string",
+                        "title": "关联关系名称"
+                      },
+                      "ispre": {
+                        "type": "boolean",
+                        "title": "是否预置"
+                      }
+                    },
+                    "required": [
+                      "asst_id",
+                      "asst_name",
+                      "ispre"
+                    ]
+                  }
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/{model_id}/attr_list/": {
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "查询模型属性<model_attr_list>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "attr_id": {
+                        "type": "string",
+                        "title": "属性ID"
+                      },
+                      "attr_name": {
+                        "type": "string",
+                        "title": "属性名称"
+                      },
+                      "attr_type": {
+                        "type": "string",
+                        "title": "属性类型"
+                      },
+                      "isonly": {
+                        "type": "boolean",
+                        "title": "是否唯一"
+                      },
+                      "isrequired": {
+                        "type": "boolean",
+                        "title": "必填项"
+                      },
+                      "editable": {
+                        "type": "boolean",
+                        "title": "可编辑"
+                      },
+                      "option": {
+                        "type": "string",
+                        "title": "选项"
+                      },
+                      "attr_group": {
+                        "type": "string",
+                        "title": "属性分组"
+                      }
+                    },
+                    "required": [
+                      "attr_id",
+                      "attr_name",
+                      "attr_type",
+                      "isonly",
+                      "isrequired",
+                      "editable",
+                      "option",
+                      "attr_group"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/{id}/": {
+      "patch": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "修改实例<instance_update>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "实例ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "title": "要修改的实例信息"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "title": "修改后的实例信息"
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "删除实例<instance_delete>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "实例ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "创建实例<instance_create>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "model_id": {
+                  "type": "string",
+                  "title": "模型ID"
+                },
+                "instance_info": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [],
+                  "title": "实例信息"
+                }
+              },
+              "required": [
+                "model_id",
+                "instance_info"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "number",
+                      "title": "实例ID"
+                    },
+                    "inst_name": {
+                      "type": "string",
+                      "title": "实例名称"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "inst_name"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/association/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "创建实例关联<instance_association_create>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "model_asst_id": {
+                  "type": "string",
+                  "title": "模型关联ID"
+                },
+                "src_model_id": {
+                  "type": "string",
+                  "title": "源模型ID"
+                },
+                "dst_model_id": {
+                  "type": "string",
+                  "title": "目标模型ID"
+                },
+                "src_inst_id": {
+                  "type": "number",
+                  "title": "源模型实例ID"
+                },
+                "dst_inst_id": {
+                  "type": "number",
+                  "title": "目标模型实例ID"
+                }
+              },
+              "required": [
+                "model_asst_id",
+                "src_model_id",
+                "dst_model_id",
+                "src_inst_id",
+                "dst_inst_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "number",
+                      "title": "关联ID"
+                    },
+                    "dst_inst_id": {
+                      "type": "number",
+                      "title": "目标模型实例ID"
+                    },
+                    "src_inst_id": {
+                      "type": "number",
+                      "title": "源模型实例ID"
+                    },
+                    "dst_model_id": {
+                      "type": "string",
+                      "title": "目标模型ID"
+                    },
+                    "src_model_id": {
+                      "type": "string",
+                      "title": "源模型ID"
+                    },
+                    "model_asst_id": {
+                      "type": "string",
+                      "title": "模型关联ID"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "dst_inst_id",
+                    "src_inst_id",
+                    "dst_model_id",
+                    "src_model_id",
+                    "model_asst_id"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/association/{id}/": {
+      "delete": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "删除实例关联<instance_association_delete>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "实例关联ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/search/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "实例列表<instance_list>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "query_list": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {},
+                    "required": []
+                  },
+                  "title": "条件列表"
+                },
+                "page": {
+                  "type": "number",
+                  "title": "第几页"
+                },
+                "page_size": {
+                  "type": "number",
+                  "title": "每页数量"
+                },
+                "order": {
+                  "type": "string",
+                  "title": "排序字段"
+                },
+                "model_id": {
+                  "type": "string",
+                  "title": "模型ID"
+                }
+              },
+              "required": [
+                "query_list",
+                "page",
+                "page_size",
+                "order",
+                "model_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "insts": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "number",
+                            "title": "实例ID"
+                          },
+                          "inst_name": {
+                            "type": "string",
+                            "title": "实例名"
+                          }
+                        },
+                        "required": [
+                          "_id",
+                          "inst_name"
+                        ]
+                      },
+                      "title": "实例详情列表"
+                    },
+                    "count": {
+                      "type": "number",
+                      "title": "实例总数"
+                    }
+                  },
+                  "required": [
+                    "insts",
+                    "count"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/association_list/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "查询实例关联关系<instance_association_list>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "model_asst_id": {
+                  "type": "string",
+                  "title": "模型关联ID"
+                },
+                "src_model_id": {
+                  "type": "string",
+                  "title": "源模型ID"
+                },
+                "dst_model_id": {
+                  "type": "string",
+                  "title": "目标模型ID"
+                },
+                "src_inst_id": {
+                  "type": "number",
+                  "title": "源模型实例ID"
+                },
+                "dst_inst_id": {
+                  "type": "number",
+                  "title": "目标模型实例ID"
+                }
+              },
+              "required": [
+                "model_asst_id",
+                "src_model_id",
+                "dst_model_id",
+                "src_inst_id",
+                "dst_inst_id"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "number",
+                        "title": "实例关联ID"
+                      },
+                      "dst_inst_id": {
+                        "type": "number",
+                        "title": "目标模型实例ID"
+                      },
+                      "src_inst_id": {
+                        "type": "number",
+                        "title": "源模型实例ID"
+                      },
+                      "dst_model_id": {
+                        "type": "string",
+                        "title": "目标模型ID"
+                      },
+                      "src_model_id": {
+                        "type": "string",
+                        "title": "源实例ID"
+                      },
+                      "model_asst_id": {
+                        "type": "string",
+                        "title": "模型关联ID"
+                      }
+                    },
+                    "required": [
+                      "_id",
+                      "dst_inst_id",
+                      "src_inst_id",
+                      "dst_model_id",
+                      "src_model_id",
+                      "model_asst_id"
+                    ]
+                  }
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/association_instance_list/{model_id}/{inst_id}/": {
+      "get": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "查询某个实例的所有关联实例<instance_association_instance_list>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "inst_id",
+            "in": "path",
+            "description": "实例ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "src_model_id": {
+                        "type": "string",
+                        "title": "源模型ID"
+                      },
+                      "dst_model_id": {
+                        "type": "string",
+                        "title": "目标模型ID"
+                      },
+                      "model_asst_id": {
+                        "type": "string",
+                        "title": "模型关联ID"
+                      },
+                      "inst_list": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "number",
+                              "title": "实例ID"
+                            },
+                            "inst_name": {
+                              "type": "string",
+                              "title": "实例名"
+                            }
+                          },
+                          "required": [
+                            "_id",
+                            "inst_name"
+                          ]
+                        },
+                        "title": "实例信息列表"
+                      }
+                    },
+                    "required": [
+                      "src_model_id",
+                      "dst_model_id",
+                      "model_asst_id",
+                      "inst_list"
+                    ]
+                  }
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
               ]
             }
           }
