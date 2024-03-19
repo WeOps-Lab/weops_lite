@@ -44,5 +44,5 @@ class ClassificationViewSet(viewsets.ViewSet):
     @uma_permission("classification_delete")
     def destroy(self, request, pk: str):
         classification_info = ClassificationManage.search_model_classification_info(pk)
-        ClassificationManage.delete_model_classification(classification_info.get("id"))
+        ClassificationManage.delete_model_classification(classification_info.get("_id"))
         return WebUtils.response_success()

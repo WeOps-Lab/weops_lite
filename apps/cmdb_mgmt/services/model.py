@@ -1,6 +1,6 @@
 import json
 
-from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION
+from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -14,7 +14,7 @@ class ModelManage(object):
         ag = AgUtils()
         result = ag.create_entity(MODEL, data, "model_name")
         ag.con.close()
-        return result.get("properties", {})
+        return result
 
     @staticmethod
     def delete_model(id: int):
@@ -33,7 +33,7 @@ class ModelManage(object):
         ag = AgUtils()
         models, _ = ag.query_entity(MODEL, [])
         ag.con.close()
-        return [i.get("properties", {}) for i in models]
+        return models
 
     @staticmethod
     def parse_attrs(attrs: str):
@@ -50,14 +50,14 @@ class ModelManage(object):
         if model_count == 0:
             raise BaseAppException("模型不存在！")
         model_info = models[0]
-        attrs = ModelManage.parse_attrs(model_info["properties"].get("attrs", "[]"))
+        attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         if attr_info["attr_id"] in {i["attr_id"] for i in attrs}:
             raise BaseAppException("属性ID已存在！")
         attrs.append(attr_info)
         result = ag.set_entity_properties(MODEL, model_info["id"], dict(attrs=json.dumps(attrs)))
         ag.con.close()
 
-        return ModelManage.parse_attrs(result.get("properties", {}).get("attrs", "[]"))
+        return ModelManage.parse_attrs(result.get("attrs", "[]"))
 
     @staticmethod
     def delete_model_attr(model_id: str, attr_id: str):
@@ -70,11 +70,16 @@ class ModelManage(object):
         if model_count == 0:
             raise BaseAppException("模型不存在！")
         model_info = models[0]
-        attrs = ModelManage.parse_attrs(model_info.get("properties", {}).get("attrs", "[]"))
+        attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         new_attrs = [attr for attr in attrs if attr["attr_id"] != attr_id]
         result = ag.set_entity_properties(MODEL, model_info["id"], dict(attrs=json.dumps(new_attrs)))
+
+        # 模型属性删除后，要删除对应模型实例的属性
+        model_params = [{"field": "model_id", "type": "str=", "value": model_id}]
+        ag.remove_entitys_properties(INSTANCE, model_params, [attr_id])
+
         ag.con.close()
-        return ModelManage.parse_attrs(result.get("properties", {}).get("attrs", "[]"))
+        return ModelManage.parse_attrs(result.get("attrs", "[]"))
 
     @staticmethod
     def search_model_info(model_id: str):
@@ -95,7 +100,7 @@ class ModelManage(object):
             查询模型属性
         """
         model_info = ModelManage.search_model_info(model_id)
-        return ModelManage.parse_attrs(model_info.get("properties", {}).get("attrs", "[]"))
+        return ModelManage.parse_attrs(model_info.get("attrs", "[]"))
 
     @staticmethod
     def model_association_create(**data):
@@ -104,7 +109,7 @@ class ModelManage(object):
         """
         ag = AgUtils()
         edge = ag.create_edge(MODEL_ASSOCIATION, data["src_id"], MODEL, data["dst_id"], MODEL, data)
-        return edge.get("properties", {})
+        return edge
 
     @staticmethod
     def model_association_delete(id: int):
@@ -140,4 +145,4 @@ class ModelManage(object):
         # 作为目标模型
         dst_query_data = {"field": "dst_model_id", "type": "str=", "value": model_id}
         dst_edge, _ = ag.query_edge(MODEL_ASSOCIATION, MODEL, MODEL, [dst_query_data])
-        return [i.get("properties", {}) for i in src_edge] + [i.get("properties", {}) for i in dst_edge]
+        return src_edge + dst_edge

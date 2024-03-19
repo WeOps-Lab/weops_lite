@@ -12,7 +12,7 @@ class ClassificationManage(object):
         ag = AgUtils()
         result = ag.create_entity(CLASSIFICATION, data, "classification_name")
         ag.con.close()
-        return result.get("properties", {})
+        return result
 
     @staticmethod
     def search_model_classification_info(classification_id: str):
@@ -44,4 +44,4 @@ class ClassificationManage(object):
         ag = AgUtils()
         classifications, _ = ag.query_entity(CLASSIFICATION, [])
         ag.con.close()
-        return [i.get("properties", {}) for i in classifications]
+        return classifications

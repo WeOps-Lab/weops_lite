@@ -47,7 +47,7 @@ class ModelViewSet(viewsets.ViewSet):
     @uma_permission("model_delete")
     def destroy(self, request, pk: str):
         model_info = ModelManage.search_model_info(pk)
-        ModelManage.delete_model(model_info.get("id"))
+        ModelManage.delete_model(model_info.get("_id"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -70,7 +70,7 @@ class ModelViewSet(viewsets.ViewSet):
     def model_association_create(self, request):
         src_model_info = ModelManage.search_model_info(request.data["src_model_id"])
         dst_model_info = ModelManage.search_model_info(request.data["dst_model_id"])
-        result = ModelManage.model_association_create(src_id=src_model_info["id"], dst_id=dst_model_info["id"], **request.data)
+        result = ModelManage.model_association_create(src_id=src_model_info["_id"], dst_id=dst_model_info["_id"], **request.data)
         return WebUtils.response_success(result)
 
     @swagger_auto_schema(
@@ -84,7 +84,7 @@ class ModelViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["delete"], url_path="association/(?P<model_asst_id>.+?)")
     def model_association_delete(self, request, model_asst_id: str):
         association_info = ModelManage.model_association_info_search(model_asst_id)
-        ModelManage.model_association_delete(association_info.get("id"))
+        ModelManage.model_association_delete(association_info.get("_id"))
         return WebUtils.response_success()
 
     @swagger_auto_schema(

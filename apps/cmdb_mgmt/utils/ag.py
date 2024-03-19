@@ -14,22 +14,30 @@ class AgUtils(object):
     @staticmethod
     def entity_to_list(data: iter):
         """将使用fetchall查询的结果转换成列表类型"""
-        return [dict(id=i[0].id, label=i[0].label, properties=i[0].properties) for i in data]
+        return [AgUtils.edge_to_dict(i) for i in data]
 
     @staticmethod
     def entity_to_dict(data: tuple):
         """将使用fetchone查询的结果转换成字典类型"""
-        return dict(id=data[0].id, label=data[0].label, properties=data[0].properties)
+        return dict(_id=data[0].id, _label=data[0].label, **data[0].properties)
 
     @staticmethod
-    def edge_to_list(data: iter):
+    def edge_to_list(data: iter, return_entity: bool):
         """将使用fetchall查询的结果转换成列表类型"""
-        return [dict(id=i[0].id, label=i[0].label, properties=i[0].properties, start_id=i[0].start_id, end_id=i[0].end_id) for i in data]
+        result = [
+            {
+                "src": AgUtils.entity_to_dict((i[0][0],)),
+                "edge": AgUtils.edge_to_dict((i[0][1],)),
+                "dst": AgUtils.entity_to_dict((i[0][2],)),
+            }
+            for i in data
+        ]
+        return result if return_entity else [i["edge"] for i in result]
 
     @staticmethod
     def edge_to_dict(data: tuple):
         """将使用fetchone查询的结果转换成字典类型"""
-        return dict(id=data[0].id, label=data[0].label, properties=data[0].properties, start_id=data[0].start_id, end_id=data[0].end_id)
+        return dict(_id=data[0].id, _label=data[0].label, **data[0].properties)
 
     @staticmethod
     def format_properties(properties: dict):
@@ -103,7 +111,7 @@ class AgUtils(object):
         # 提交事务
         self.con.commit()
 
-        return self.entity_to_dict(edge)
+        return self.edge_to_dict(edge)
 
     def batch_create_entity(self, label: str, properties_list: list, check_unique_attr: str):
         """批量创建实体"""
@@ -176,16 +184,19 @@ class AgUtils(object):
         params_str = AgUtils.format_params(params)
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
+        count = 0
+
         if page:
+            count = self.con.execCypher(sql_str).rowcount
             sql_str += f" SKIP {page['skip']} LIMIT {page['limit']}"
 
         if order:
             sql_str += f" ORDER BY n.{order}"
 
         objs = self.con.execCypher(sql_str)
-        return self.entity_to_list(objs), objs.rowcount
+        return self.entity_to_list(objs), count or objs.rowcount
 
-    def query_edge(self, label: str, a_label: str, b_label: str, params: list):
+    def query_edge(self, label: str, a_label: str, b_label: str, params: list, return_entity: bool = False):
         """
             查询边
         """
@@ -193,8 +204,17 @@ class AgUtils(object):
         a_label_str = f":{a_label}" if a_label else ""
         b_label_str = f":{b_label}" if b_label else ""
         params_str = AgUtils.format_params(params)
-        objs = self.con.execCypher(f"MATCH (a{a_label_str})-[n{label_str}]-(b{b_label_str}) {params_str} RETURN DISTINCT n")
-        return self.edge_to_list(objs), objs.rowcount
+        objs = self.con.execCypher(f"MATCH p=((a{a_label_str})-[n{label_str}]->(b{b_label_str})) {params_str} RETURN p")
+        return self.edge_to_list(objs, return_entity), objs.rowcount
+
+    def query_edge_by_id(self, label: str, id: int, return_entity: bool = False):
+        """
+            查询边
+        """
+        label_str = f":{label}" if label else ""
+        objs = self.con.execCypher(f"MATCH p=((a)-[n{label_str}]->(b)) id(n) = {id} RETURN p")
+        edges = self.edge_to_list(objs, return_entity)
+        return edges[0]
 
     @staticmethod
     def format_properties_set(properties: dict):
@@ -225,13 +245,13 @@ class AgUtils(object):
             properties_str += f"n.{attr},"
         return properties_str if properties_str == "" else properties_str[:-1]
 
-    def remove_entity_properties(self, label: str, entity_id: int, attrs: list):
-        """移除实体属性"""
+    def remove_entitys_properties(self, label: str, params: list, attrs: list):
+        """移除某些实体的某些属性"""
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_remove(attrs)
-        entity = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} REMOVE {properties_str} RETURN n").fetchone()
+        params_str = self.format_params(params)
+        self.con.execCypher(f"MATCH (n{label_str}) {params_str} REMOVE {properties_str} RETURN n")
         self.con.commit()
-        return self.entity_to_dict(entity)
 
     def _delete_entity(self, label: str, entity_id: int):
         """删除实体"""
