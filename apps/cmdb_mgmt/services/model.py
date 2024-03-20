@@ -54,10 +54,18 @@ class ModelManage(object):
         if attr_info["attr_id"] in {i["attr_id"] for i in attrs}:
             raise BaseAppException("属性ID已存在！")
         attrs.append(attr_info)
-        result = ag.set_entity_properties(MODEL, model_info["id"], dict(attrs=json.dumps(attrs)))
+        result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)))
         ag.con.close()
 
-        return ModelManage.parse_attrs(result.get("attrs", "[]"))
+        attrs = ModelManage.parse_attrs(result.get("attrs", "[]"))
+
+        attr = None
+        for attr in attrs:
+            if attr["attr_id"] != attr_info["attr_id"]:
+                continue
+            attr = attr
+
+        return attr
 
     @staticmethod
     def delete_model_attr(model_id: str, attr_id: str):
@@ -72,7 +80,7 @@ class ModelManage(object):
         model_info = models[0]
         attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         new_attrs = [attr for attr in attrs if attr["attr_id"] != attr_id]
-        result = ag.set_entity_properties(MODEL, model_info["id"], dict(attrs=json.dumps(new_attrs)))
+        result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(new_attrs)))
 
         # 模型属性删除后，要删除对应模型实例的属性
         model_params = [{"field": "model_id", "type": "str=", "value": model_id}]

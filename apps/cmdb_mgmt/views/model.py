@@ -119,7 +119,6 @@ class ModelViewSet(viewsets.ViewSet):
                 "option": openapi.Schema(type=openapi.TYPE_OBJECT, description="选项"),
                 "attr_group": openapi.Schema(type=openapi.TYPE_STRING, description="属性分组"),
             },
-            required=["password"],
         ),
     )
     @uma_permission("model_attr_create")
