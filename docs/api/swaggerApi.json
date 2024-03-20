@@ -5061,6 +5061,61 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "实例详情<instance_detail>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "实例ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "_id": {
+                      "type": "number",
+                      "title": "实例ID"
+                    },
+                    "inst_name": {
+                      "type": "string",
+                      "title": "实例名称"
+                    }
+                  },
+                  "required": [
+                    "_id",
+                    "inst_name"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
       }
     },
     "/instance/": {
