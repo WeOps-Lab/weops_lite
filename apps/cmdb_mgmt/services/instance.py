@@ -113,3 +113,11 @@ class InstanceManage(object):
         edge = ag.query_edge_by_id(INSTANCE_ASSOCIATION, asso_id, return_entity=True)
         ag.con.close()
         return edge
+
+    @staticmethod
+    def query_entity_by_id(inst_id: int):
+        """根据实例ID查询实例详情"""
+        ag = AgUtils()
+        entity = ag.query_entity_by_id(INSTANCE, inst_id)
+        ag.con.close()
+        return entity

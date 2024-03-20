@@ -41,3 +41,15 @@ ASSOCIATION_TYPE = [
         "ispre": True
     }
 ]
+
+# 默认的实例名属性
+INST_NAME_INFO = {
+    "attr_id": "inst_name",
+    "attr_name": "实例名",
+    "attr_type": "str",
+    "isonly": True,
+    "isrequired": True,
+    "editable": False,
+    "option": {},
+    "attr_group": "default"
+}

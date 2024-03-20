@@ -1,6 +1,6 @@
 import json
 
-from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE
+from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFO
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -12,6 +12,8 @@ class ModelManage(object):
             创建模型
         """
         ag = AgUtils()
+        # 对模型初始化默认属性实例名称
+        data.update(attrs=json.dumps([INST_NAME_INFO]))
         result = ag.create_entity(MODEL, data, "model_name")
         ag.con.close()
         return result

@@ -38,6 +38,18 @@ class InstanceViewSet(viewsets.ViewSet):
         return WebUtils.response_success(dict(insts=insts, count=count))
 
     @swagger_auto_schema(
+        operation_id="instance_detail",
+        operation_description="获取用户信息",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_INTEGER),
+        ],
+    )
+    @uma_permission("instance_detail")
+    def retrieve(self, request, pk: str):
+        data = InstanceManage.query_entity_by_id(int(pk))
+        return WebUtils.response_success(data)
+
+    @swagger_auto_schema(
         operation_id="instance_create",
         operation_description="创建实例",
         request_body=openapi.Schema(
@@ -75,8 +87,8 @@ class InstanceViewSet(viewsets.ViewSet):
         ),
     )
     @uma_permission("instance_update")
-    def partial_update(self, request):
-        inst = InstanceManage.instance_update(request.data.get("id"), request.data.get("update_info"))
+    def partial_update(self, request, pk: int):
+        inst = InstanceManage.instance_update(int(pk), request.data)
         return WebUtils.response_success(inst)
 
     @swagger_auto_schema(
