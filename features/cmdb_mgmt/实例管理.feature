@@ -11,7 +11,7 @@ Feature: 实例管理
       | 模型信息 | 实例信息 |
       | {"classification_id": "default", "model_id": "test", "model_name": "Test", "icn": "default"} | {"inst_name": "test001"} |
 
-  Scenario Outline: 删除实例属性
+  Scenario Outline: 删除实例
     Given 初始化一个模型：<模型信息>
     And 声明实例信息：<实例信息>
     When 创建实例
@@ -22,7 +22,7 @@ Feature: 实例管理
       | 模型信息 | 实例信息 |
       | {"classification_id": "default", "model_id": "test", "model_name": "Test", "icn": "default"} | {"inst_name": "test001"} |
 
-  Scenario Outline: 修改实例属性
+  Scenario Outline: 修改实例
     Given 初始化一个模型：<模型信息>
     And 初始化一个实例：<实例信息>
     When 修改实例属性：<实例属性>
