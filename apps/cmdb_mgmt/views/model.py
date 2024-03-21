@@ -52,6 +52,27 @@ class ModelViewSet(viewsets.ViewSet):
         return WebUtils.response_success()
 
     @swagger_auto_schema(
+        operation_id="model_update",
+        operation_description="更改模型信息",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "classification_id": openapi.Schema(type=openapi.TYPE_STRING, description="模型分类ID"),
+                "model_name": openapi.Schema(type=openapi.TYPE_STRING, description="模型名称"),
+                "icn": openapi.Schema(type=openapi.TYPE_STRING, description="图标"),
+            },
+        ),
+    )
+    @uma_permission("model_update")
+    def update(self, request, pk: str):
+        model_info = ModelManage.search_model_info(pk)
+        data = ModelManage.update_model(model_info.get("_id"), request.data)
+        return WebUtils.response_success(data)
+
+    @swagger_auto_schema(
         operation_id="model_association_create",
         operation_description="创建模型关联",
         request_body=openapi.Schema(
@@ -113,8 +134,8 @@ class ModelViewSet(viewsets.ViewSet):
                 "attr_id": openapi.Schema(type=openapi.TYPE_STRING, description="属性ID"),
                 "attr_name": openapi.Schema(type=openapi.TYPE_STRING, description="属性名称"),
                 "attr_type": openapi.Schema(type=openapi.TYPE_STRING, description="属性类型"),
-                "isonly": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="是否唯一"),
-                "isrequired": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="必填项"),
+                "is_only": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="是否唯一"),
+                "is_required": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="必填项"),
                 "editable": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="可编辑"),
                 "option": openapi.Schema(type=openapi.TYPE_OBJECT, description="选项"),
                 "attr_group": openapi.Schema(type=openapi.TYPE_STRING, description="属性分组"),
@@ -125,6 +146,32 @@ class ModelViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["post"], url_path="(?P<model_id>.+?)/attr")
     def model_attr_create(self, request, model_id):
         result = ModelManage.create_model_attr(model_id, request.data)
+        return WebUtils.response_success(result)
+
+    @swagger_auto_schema(
+        operation_id="model_attr_update",
+        operation_description="更新模型属性信息",
+        manual_parameters=[
+            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "attr_id": openapi.Schema(type=openapi.TYPE_STRING, description="属性ID"),
+                "attr_name": openapi.Schema(type=openapi.TYPE_STRING, description="属性名称"),
+                "attr_type": openapi.Schema(type=openapi.TYPE_STRING, description="属性类型"),
+                "is_only": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="是否唯一"),
+                "is_required": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="必填项"),
+                "editable": openapi.Schema(type=openapi.TYPE_BOOLEAN, description="可编辑"),
+                "option": openapi.Schema(type=openapi.TYPE_OBJECT, description="选项"),
+                "attr_group": openapi.Schema(type=openapi.TYPE_STRING, description="属性分组"),
+            },
+        ),
+    )
+    @uma_permission("model_attr_update")
+    @action(detail=False, methods=["put"], url_path="(?P<model_id>.+?)/attr_update")
+    def model_attr_update(self, request, model_id):
+        result = ModelManage.update_model_attr(model_id, request.data)
         return WebUtils.response_success(result)
 
     @swagger_auto_schema(

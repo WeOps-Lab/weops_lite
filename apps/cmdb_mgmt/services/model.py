@@ -26,6 +26,16 @@ class ModelManage(object):
             ag.delete_entity(MODEL, id)
 
     @staticmethod
+    def update_model(id: int, data: dict):
+        """
+            删除模型
+        """
+        data.pop("model_id", "")    # 不能更新model_id
+        with AgUtils() as ag:
+            model = ag.set_entity_properties(MODEL, id, data)
+        return model
+
+    @staticmethod
     def search_model():
         """
             查询模型分类
@@ -53,6 +63,43 @@ class ModelManage(object):
             if attr_info["attr_id"] in {i["attr_id"] for i in attrs}:
                 raise BaseAppException("属性ID已存在！")
             attrs.append(attr_info)
+            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)))
+
+        attrs = ModelManage.parse_attrs(result.get("attrs", "[]"))
+
+        attr = None
+        for attr in attrs:
+            if attr["attr_id"] != attr_info["attr_id"]:
+                continue
+            attr = attr
+
+        return attr
+
+    @staticmethod
+    def update_model_attr(model_id, attr_info):
+        """
+            创建模型属性
+        """
+        with AgUtils() as ag:
+            model_query = {"field": "model_id", "type": "str=", "value": model_id}
+            models, model_count = ag.query_entity(MODEL, [model_query])
+            if model_count == 0:
+                raise BaseAppException("模型不存在！")
+            model_info = models[0]
+            attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
+            if attr_info["attr_id"] not in {i["attr_id"] for i in attrs}:
+                raise BaseAppException("属性不存在！")
+            for attr in attrs:
+                if attr_info["attr_id"] != attr["attr_id"]:
+                    continue
+                attr.update(
+                    attr_group=attr_info["attr_group"],
+                    attr_name=attr_info["attr_name"],
+                    is_required=attr_info["is_required"],
+                    editable=attr_info["editable"],
+                    option=attr_info["option"],
+                )
+
             result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)))
 
         attrs = ModelManage.parse_attrs(result.get("attrs", "[]"))
