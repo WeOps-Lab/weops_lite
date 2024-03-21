@@ -3976,7 +3976,7 @@
         }
       }
     },
-    "/model/classification/": {
+    "/classification/": {
       "post": {
         "tags": [
           "classification"
@@ -4099,7 +4099,7 @@
         }
       }
     },
-    "/model/classification/{classification_id}/": {
+    "/classification/{classification_id}/": {
       "delete": {
         "tags": [
           "classification"
@@ -4135,6 +4135,279 @@
               "required": [
                 "result",
                 "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/{model_id}/": {
+      "put": {
+        "tags": [
+          "model"
+        ],
+        "summary": "修改模型<model_update>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "classification_id": {
+                  "type": "string",
+                  "title": "模型分类ID"
+                },
+                "model_name": {
+                  "type": "string",
+                  "title": "模型名称"
+                },
+                "icn": {
+                  "type": "string",
+                  "title": "图标"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "classification_id": {
+                      "type": "string",
+                      "title": "模型分类ID"
+                    },
+                    "model_id": {
+                      "type": "string",
+                      "title": "模型ID"
+                    },
+                    "model_name": {
+                      "type": "string",
+                      "title": "模型名称"
+                    },
+                    "icn": {
+                      "type": "string",
+                      "title": "图标"
+                    }
+                  },
+                  "required": [
+                    "classification_id",
+                    "model_id",
+                    "model_name",
+                    "icn"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "model"
+        ],
+        "summary": "删除模型<model_delete>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/{model_id}/attr_update/": {
+      "put": {
+        "tags": [
+          "model"
+        ],
+        "summary": "修改模型属性信息<model_attr_update>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "attr_id": {
+                  "type": "string",
+                  "title": "属性ID"
+                },
+                "attr_name": {
+                  "type": "string",
+                  "title": "属性名称"
+                },
+                "attr_type": {
+                  "type": "string",
+                  "title": "属性类型"
+                },
+                "is_only": {
+                  "type": "boolean",
+                  "title": "是否唯一"
+                },
+                "is_required": {
+                  "type": "boolean",
+                  "title": "必填项"
+                },
+                "editable": {
+                  "type": "boolean",
+                  "title": "可编辑"
+                },
+                "option": {
+                  "type": "string",
+                  "title": "选项"
+                },
+                "attr_group": {
+                  "type": "string",
+                  "title": "属性分组"
+                }
+              },
+              "required": [
+                "attr_id",
+                "attr_name",
+                "attr_type",
+                "is_only",
+                "is_required",
+                "editable",
+                "option",
+                "attr_group"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "attr_id": {
+                      "type": "string",
+                      "title": "属性ID"
+                    },
+                    "attr_name": {
+                      "type": "string",
+                      "title": "属性名称"
+                    },
+                    "attr_type": {
+                      "type": "string",
+                      "title": "属性类型"
+                    },
+                    "isonly": {
+                      "type": "boolean",
+                      "title": "是否唯一"
+                    },
+                    "isrequired": {
+                      "type": "boolean",
+                      "title": "必填项"
+                    },
+                    "editable": {
+                      "type": "boolean",
+                      "title": "可编辑"
+                    },
+                    "option": {
+                      "type": "string",
+                      "title": "选项"
+                    },
+                    "attr_group": {
+                      "type": "string",
+                      "title": "属性分组"
+                    }
+                  },
+                  "required": [
+                    "attr_id",
+                    "attr_name",
+                    "attr_type",
+                    "isonly",
+                    "isrequired",
+                    "editable",
+                    "option",
+                    "attr_group"
+                  ]
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
               ]
             }
           }
@@ -4435,11 +4708,11 @@
                   "type": "string",
                   "title": "属性类型"
                 },
-                "isonly": {
+                "is_only": {
                   "type": "boolean",
                   "title": "是否唯一"
                 },
-                "isrequired": {
+                "is_required": {
                   "type": "boolean",
                   "title": "必填项"
                 },
@@ -4460,8 +4733,8 @@
                 "attr_id",
                 "attr_name",
                 "attr_type",
-                "isonly",
-                "isrequired",
+                "is_only",
+                "is_required",
                 "editable",
                 "option",
                 "attr_group"
@@ -4534,48 +4807,6 @@
                 "result",
                 "message",
                 "data"
-              ]
-            }
-          }
-        }
-      }
-    },
-    "/model/{model_id}/": {
-      "delete": {
-        "tags": [
-          "model"
-        ],
-        "summary": "删除模型<model_delete>",
-        "description": "",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "parameters": [
-          {
-            "name": "model_id",
-            "in": "path",
-            "description": "模型ID",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$schema": "http://json-schema.org/draft-04/schema#",
-              "type": "object",
-              "properties": {
-                "result": {
-                  "type": "boolean"
-                },
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "result",
-                "message"
               ]
             }
           }
