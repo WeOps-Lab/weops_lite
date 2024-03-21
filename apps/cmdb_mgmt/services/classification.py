@@ -9,9 +9,8 @@ class ClassificationManage(object):
         """
             创建模型分类
         """
-        ag = AgUtils()
-        result = ag.create_entity(CLASSIFICATION, data, "classification_name")
-        ag.con.close()
+        with AgUtils() as ag:
+            result = ag.create_entity(CLASSIFICATION, data, "classification_name")
         return result
 
     @staticmethod
@@ -20,9 +19,8 @@ class ClassificationManage(object):
             查询模型分类属性
         """
         query_data = {"field": "classification_id", "type": "str=", "value": classification_id}
-        ag = AgUtils()
-        models, _ = ag.query_entity(CLASSIFICATION, [query_data])
-        ag.con.close()
+        with AgUtils() as ag:
+            models, _ = ag.query_entity(CLASSIFICATION, [query_data])
         if len(models) == 0:
             return {}
         return models[0]
@@ -32,16 +30,14 @@ class ClassificationManage(object):
         """
             删除模型分类
         """
-        ag = AgUtils()
-        ag.delete_entity(CLASSIFICATION, id)
-        ag.con.close()
+        with AgUtils() as ag:
+            ag.delete_entity(CLASSIFICATION, id)
 
     @staticmethod
     def search_model_classification():
         """
             查询模型分类
         """
-        ag = AgUtils()
-        classifications, _ = ag.query_entity(CLASSIFICATION, [])
-        ag.con.close()
+        with AgUtils() as ag:
+            classifications, _ = ag.query_entity(CLASSIFICATION, [])
         return classifications

@@ -11,36 +11,37 @@ class AgUtils(object):
         """关闭连接"""
         self.con.close()
 
-    @staticmethod
-    def entity_to_list(data: iter):
-        """将使用fetchall查询的结果转换成列表类型"""
-        return [AgUtils.edge_to_dict(i) for i in data]
+    def __enter__(self):
+        return self
 
-    @staticmethod
-    def entity_to_dict(data: tuple):
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
+    def entity_to_list(self, data: iter):
+        """将使用fetchall查询的结果转换成列表类型"""
+        return [self.edge_to_dict(i) for i in data]
+
+    def entity_to_dict(self, data: tuple):
         """将使用fetchone查询的结果转换成字典类型"""
         return dict(_id=data[0].id, _label=data[0].label, **data[0].properties)
 
-    @staticmethod
-    def edge_to_list(data: iter, return_entity: bool):
+    def edge_to_list(self, data: iter, return_entity: bool):
         """将使用fetchall查询的结果转换成列表类型"""
         result = [
             {
-                "src": AgUtils.entity_to_dict((i[0][0],)),
-                "edge": AgUtils.edge_to_dict((i[0][1],)),
-                "dst": AgUtils.entity_to_dict((i[0][2],)),
+                "src": self.entity_to_dict((i[0][0],)),
+                "edge": self.edge_to_dict((i[0][1],)),
+                "dst": self.entity_to_dict((i[0][2],)),
             }
             for i in data
         ]
         return result if return_entity else [i["edge"] for i in result]
 
-    @staticmethod
-    def edge_to_dict(data: tuple):
+    def edge_to_dict(self, data: tuple):
         """将使用fetchone查询的结果转换成字典类型"""
         return dict(_id=data[0].id, _label=data[0].label, **data[0].properties)
 
-    @staticmethod
-    def format_properties(properties: dict):
+    def format_properties(self, properties: dict):
         """将属性格式化为sql中的字符串格式"""
         properties_str = '{'
         for key, value in properties.items():
@@ -142,8 +143,7 @@ class AgUtils(object):
             results.append(result)
         self.con.commit()
 
-    @staticmethod
-    def format_params(params: list):
+    def format_params(self, params: list):
         """
             查询参数格式化:
             bool: {"field": "is_host", "type": "bool", "value": True} -> "n.is_host = True"
@@ -181,7 +181,7 @@ class AgUtils(object):
             查询实体
         """
         label_str = f":{label}" if label else ""
-        params_str = AgUtils.format_params(params)
+        params_str = self.format_params(params)
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
         count = 0
@@ -211,7 +211,7 @@ class AgUtils(object):
         label_str = f":{label}" if label else ""
         a_label_str = f":{a_label}" if a_label else ""
         b_label_str = f":{b_label}" if b_label else ""
-        params_str = AgUtils.format_params(params)
+        params_str = self.format_params(params)
         objs = self.con.execCypher(f"MATCH p=((a{a_label_str})-[n{label_str}]->(b{b_label_str})) {params_str} RETURN p")
         return self.edge_to_list(objs, return_entity), objs.rowcount
 
@@ -224,8 +224,7 @@ class AgUtils(object):
         edges = self.edge_to_list(objs, return_entity)
         return edges[0]
 
-    @staticmethod
-    def format_properties_set(properties: dict):
+    def format_properties_set(self, properties: dict):
         """格式化properties的set数据"""
         properties_str = ""
         for key, value in properties.items():
@@ -245,8 +244,7 @@ class AgUtils(object):
         self.con.commit()
         return self.entity_to_dict(entity)
 
-    @staticmethod
-    def format_properties_remove(attrs: list):
+    def format_properties_remove(self, attrs: list):
         """格式化properties的remove数据"""
         properties_str = ""
         for attr in attrs:
