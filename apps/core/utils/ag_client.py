@@ -1,5 +1,5 @@
 import os
-import age
+from libs import age
 from apps.core.constants import GRAPH_NAME
 from psycopg2 import sql
 
