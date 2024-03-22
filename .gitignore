@@ -2,6 +2,7 @@
 /.idea/
 /venv/
 /logs/
+static
 *.sqlite3
 */__pycache__/
 .vscode

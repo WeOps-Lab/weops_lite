@@ -14,6 +14,8 @@ RUN pip install -r ./requirements/requirements.txt
 RUN pip install -r ./requirements/requirements-dev.txt
 RUN pip install -r ./requirements/requirements-ops.txt
 
+RUN pip install apache-age-python==0.0.7 --no-deps
+
 ENV SECRET_KEY django-insecure-wi*fg%43$^^bwbus!1+p2sud3wnpe@3$is$3h8$cdw6h+s!-ug
 ENV DEBUG False
 ENV DB_ENGINE  django.db.backends.sqlite3

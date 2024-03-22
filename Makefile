@@ -42,3 +42,9 @@ migrate:
 
 generate-swagger:
 	python manage.py generate_swagger -f yaml swagger.yml
+
+copy-web:
+    rm -Rf ./assets/static
+    mkdir -p ./assets/static
+    cp -Rf ../weops-lite-web/static/dist ./assets/static
+    cp -Rf ../weops-lite-web/static/dist ./static/
