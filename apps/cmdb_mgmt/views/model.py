@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 
 from apps.cmdb_mgmt.constants import ASSOCIATION_TYPE
+from apps.cmdb_mgmt.migrate_model.service import MigrateModel
 from apps.cmdb_mgmt.services.model import ModelManage
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
@@ -209,3 +210,13 @@ class ModelViewSet(viewsets.ViewSet):
     @action(detail=False, methods=["get"], url_path="model_association_type")
     def model_association_type(self, request):
         return WebUtils.response_success(ASSOCIATION_TYPE)
+
+    @swagger_auto_schema(
+        operation_id="model_migrate",
+        operation_description="模型初始化",
+    )
+    @uma_permission("model_migrate")
+    @action(detail=False, methods=["get"], url_path="migrate")
+    def model_association_type(self, request):
+        MigrateModel().run()
+        return WebUtils.response_success()

@@ -43,6 +43,26 @@ class ClassificationViewSet(viewsets.ViewSet):
     )
     @uma_permission("classification_delete")
     def destroy(self, request, pk: str):
+        ClassificationManage.check_classification_is_used(pk)
         classification_info = ClassificationManage.search_model_classification_info(pk)
         ClassificationManage.delete_model_classification(classification_info.get("_id"))
         return WebUtils.response_success()
+
+    @swagger_auto_schema(
+        operation_id="classification_update",
+        operation_description="更改模型信息",
+        manual_parameters=[
+            openapi.Parameter("id", openapi.IN_PATH, description="模型分类ID", type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "classification_name": openapi.Schema(type=openapi.TYPE_STRING, description="模型分类名称"),
+            },
+        ),
+    )
+    @uma_permission("classification_update")
+    def update(self, request, pk: str):
+        classification_info = ClassificationManage.search_model_classification_info(pk)
+        data = ClassificationManage.update_model_classification(classification_info.get("_id"), request.data)
+        return WebUtils.response_success(data)

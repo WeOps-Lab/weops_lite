@@ -28,7 +28,7 @@ class ModelManage(object):
     @staticmethod
     def update_model(id: int, data: dict):
         """
-            删除模型
+            更新模型
         """
         data.pop("model_id", "")    # 不能更新model_id
         with AgUtils() as ag:
