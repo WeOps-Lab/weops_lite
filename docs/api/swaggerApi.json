@@ -3976,6 +3976,122 @@
         }
       }
     },
+    "/classification/{classification_id}/": {
+      "put": {
+        "tags": [
+          "classification"
+        ],
+        "summary": "修改模型分类信息<classification_update>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "classification_id",
+            "in": "path",
+            "description": "模型分类ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "classification_name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "classification_name"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "classification_id": {
+                      "type": "string",
+                      "title": "模型分类ID"
+                    },
+                    "classification_name": {
+                      "type": "string",
+                      "title": "模型分类名称"
+                    }
+                  },
+                  "required": [
+                    "classification_id",
+                    "classification_name"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "classification"
+        ],
+        "summary": "删除模型分类<classification_delete>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "classification_id",
+            "in": "path",
+            "description": "模型分类ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/classification/": {
       "post": {
         "tags": [
@@ -4093,48 +4209,6 @@
                 "result",
                 "message",
                 "data"
-              ]
-            }
-          }
-        }
-      }
-    },
-    "/classification/{classification_id}/": {
-      "delete": {
-        "tags": [
-          "classification"
-        ],
-        "summary": "删除模型分类<classification_delete>",
-        "description": "",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "parameters": [
-          {
-            "name": "classification_id",
-            "in": "path",
-            "description": "模型分类ID",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "schema": {
-              "$schema": "http://json-schema.org/draft-04/schema#",
-              "type": "object",
-              "properties": {
-                "result": {
-                  "type": "boolean"
-                },
-                "message": {
-                  "type": "string"
-                }
-              },
-              "required": [
-                "result",
-                "message"
               ]
             }
           }
@@ -5190,6 +5264,42 @@
                 "result",
                 "message",
                 "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/model/migrate/": {
+      "get": {
+        "tags": [
+          "model"
+        ],
+        "summary": "模型初始化<model_migrate>",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {}
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
               ]
             }
           }
