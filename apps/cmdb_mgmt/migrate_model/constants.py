@@ -18,10 +18,6 @@ CLASSIFICATIONS = [
     {
         "classification_id": "device",
         "classification_name": "网络设备"
-    },
-    {
-        "classification_id": "testf_ipo",
-        "classification_name": "测试分组"
     }
 ]
 
@@ -112,3 +108,82 @@ MODELS = [
     }
 ]
 
+ASSOCIATIONS = [
+    {
+        "asst_id": "belong",
+        "mapping": "n:n",
+        "dst_model_id": "biz",
+        "src_model_id": "host",
+        "model_asst_id": "host_belong_biz"
+    },
+    {
+        "asst_id": "belong",
+        "mapping": "n:n",
+        "dst_model_id": "biz",
+        "src_model_id": "loadbalance",
+        "model_asst_id": "loadbalance_belong_biz"
+    },
+    {
+        "asst_id": "belong",
+        "mapping": "n:n",
+        "dst_model_id": "biz",
+        "src_model_id": "router",
+        "model_asst_id": "router_belong_biz"
+    },
+    {
+        "asst_id": "belong",
+        "mapping": "n:n",
+        "dst_model_id": "biz",
+        "src_model_id": "firewall",
+        "model_asst_id": "firewall_belong_biz"
+    },
+    {
+        "asst_id": "belong",
+        "mapping": "n:n",
+        "dst_model_id": "biz",
+        "src_model_id": "switch",
+        "model_asst_id": "switch_belong_biz"
+    },
+    {
+        "asst_id": "install_on",
+        "mapping": "n:n",
+        "dst_model_id": "host",
+        "src_model_id": "oracle",
+        "model_asst_id": "oracle_install_on_host"
+    },
+    {
+        "asst_id": "install_on",
+        "mapping": "n:n",
+        "dst_model_id": "host",
+        "src_model_id": "mysql",
+        "model_asst_id": "mysql_install_on_host"
+    },
+    {
+        "asst_id": "install_on",
+        "mapping": "n:n",
+        "dst_model_id": "host",
+        "src_model_id": "mssql",
+        "model_asst_id": "mssql_install_on_host"
+    },
+    {
+        "asst_id": "install_on",
+        "mapping": "n:n",
+        "dst_model_id": "host",
+        "src_model_id": "tomcat",
+        "model_asst_id": "tomcat_install_on_host"
+    },
+    {
+        "asst_id": "install_on",
+        "mapping": "n:n",
+        "dst_model_id": "host",
+        "src_model_id": "apache",
+        "model_asst_id": "apache_install_on_host"
+    },
+    {
+        "asst_id": "install_on",
+        "mapping": "n:n",
+        "dst_model_id": "host",
+        "src_model_id": "nginx",
+        "model_asst_id": "nginx_install_on_host"
+    }
+]

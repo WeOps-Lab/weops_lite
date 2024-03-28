@@ -16,28 +16,28 @@ INSTANCE_ASSOCIATION = "instance_association"
 # 模型间的关联类型
 ASSOCIATION_TYPE = [
     {
-        "bk_asst_id": "belong",
-        "bk_asst_name": "属于",
+        "asst_id": "belong",
+        "asst_name": "属于",
         "is_pre": True
     },
     {
-        "bk_asst_id": "group",
-        "bk_asst_name": "组成",
+        "asst_id": "group",
+        "asst_name": "组成",
         "is_pre": True
     },
     {
-        "bk_asst_id": "run",
-        "bk_asst_name": "运行于",
+        "asst_id": "run",
+        "asst_name": "运行于",
         "is_pre": True
     },
     {
-        "bk_asst_id": "install_on",
-        "bk_asst_name": "安装于",
+        "asst_id": "install_on",
+        "asst_name": "安装于",
         "is_pre": True
     },
     {
-        "bk_asst_id": "contains",
-        "bk_asst_name": "包含",
+        "asst_id": "contains",
+        "asst_name": "包含",
         "is_pre": True
     }
 ]
@@ -49,7 +49,30 @@ INST_NAME_INFO = {
     "attr_type": "str",
     "is_only": True,
     "is_required": True,
-    "editable": False,
+    "editable": True,
     "option": {},
     "attr_group": "default"
 }
+
+# 创建模型分类时校验属性
+CREATE_CLASSIFICATION_CHECK_ATTR_MAP = dict(
+    is_only={"classification_id": "模型分类ID", "classification_name": "模型分类名称"},
+    is_required={"classification_id": "模型分类ID", "classification_name": "模型分类名称"},
+)
+# 更新模型分类时校验属性
+UPDATE_CLASSIFICATION_check_attr_map = dict(
+    is_only={"classification_name": "模型分类名称"},
+    is_required={"classification_name": "模型分类名称"},
+    editable={"classification_name": "模型分类名称"},
+)
+# 创建模型时校验属性
+CREATE_MODEL_CHECK_ATTR = dict(
+    is_only={"model_id": "模型ID", "model_name": "模型名称"},
+    is_required={"model_id": "模型ID", "model_name": "模型名称"},
+)
+# 更新模型时校验属性
+UPDATE_MODEL_CHECK_ATTR_MAP = dict(
+    is_only={"model_name": "模型名称"},
+    is_required={"model_name": "模型名称"},
+    editable={"model_name": "模型名称", "classification_id": "模型分类ID", "icn": "图标"},
+)

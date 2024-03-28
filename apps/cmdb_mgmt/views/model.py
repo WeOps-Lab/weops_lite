@@ -218,5 +218,5 @@ class ModelViewSet(viewsets.ViewSet):
     @uma_permission("model_migrate")
     @action(detail=False, methods=["get"], url_path="migrate")
     def migrate(self, request):
-        MigrateModel().run()
-        return WebUtils.response_success()
+        result = MigrateModel().run()
+        return WebUtils.response_success(result)

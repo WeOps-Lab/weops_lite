@@ -24,7 +24,7 @@ class InstanceViewSet(viewsets.ViewSet):
                 "page": openapi.Schema(type=openapi.TYPE_INTEGER, description="第几页"),
                 "page_size": openapi.Schema(type=openapi.TYPE_INTEGER, description="每页条目数"),
                 "order": openapi.Schema(type=openapi.TYPE_STRING, description="排序"),
-                "model_id": openapi.Schema(type=openapi.TYPE_STRING, description="排序"),
+                "model_id": openapi.Schema(type=openapi.TYPE_STRING, description="模型ID"),
             },
             required=["model_id"]
         ),
@@ -39,7 +39,7 @@ class InstanceViewSet(viewsets.ViewSet):
 
     @swagger_auto_schema(
         operation_id="instance_detail",
-        operation_description="获取用户信息",
+        operation_description="查询实例信息",
         manual_parameters=[
             openapi.Parameter("id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_INTEGER),
         ],

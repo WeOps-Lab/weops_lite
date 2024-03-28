@@ -1,4 +1,5 @@
 from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION
+from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -20,15 +21,37 @@ class InstanceManage(object):
     def instance_create(model_id: str, instance_info: dict):
         """创建实例"""
         instance_info.update(model_id=model_id)
+        attrs = ModelManage.search_model_attr(model_id)
+        check_attr_map = dict(is_only={}, is_required={})
+        for attr in attrs:
+            if attr["is_only"]:
+                check_attr_map["is_only"][attr["attr_id"]] = attr["attr_name"]
+            if attr["is_required"]:
+                check_attr_map["is_required"][attr["attr_id"]] = attr["attr_name"]
+
         with AgUtils() as ag:
-            result = ag.create_entity(INSTANCE, instance_info, "inst_name")
+            exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
+            result = ag.create_entity(INSTANCE, instance_info, check_attr_map, exist_items)
         return result
 
     @staticmethod
     def instance_update(inst_id: int, update_attr: dict):
         """修改实例属性"""
+        inst_info = InstanceManage.query_entity_by_id(inst_id)
+        attrs = ModelManage.search_model_attr(inst_info["model_id"])
+        check_attr_map = dict(is_only={}, is_required={}, editable={})
+        for attr in attrs:
+            if attr["is_only"]:
+                check_attr_map["is_only"][attr["attr_id"]] = attr["attr_name"]
+            if attr["is_required"]:
+                check_attr_map["is_required"][attr["attr_id"]] = attr["attr_name"]
+            if attr["editable"]:
+                check_attr_map["editable"][attr["attr_id"]] = attr["attr_name"]
+
         with AgUtils() as ag:
-            result = ag.set_entity_properties(INSTANCE, inst_id, update_attr)
+            exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_info["model_id"]}])
+            exist_items = [i for i in exist_items if i["_id"] != inst_id]
+            result = ag.set_entity_properties(INSTANCE, inst_id, update_attr, check_attr_map, exist_items)
         return result
 
     @staticmethod

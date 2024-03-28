@@ -1,4 +1,5 @@
-from apps.cmdb_mgmt.constants import CLASSIFICATION, MODEL
+from apps.cmdb_mgmt.constants import CLASSIFICATION, MODEL, CREATE_CLASSIFICATION_CHECK_ATTR_MAP, \
+    UPDATE_CLASSIFICATION_check_attr_map
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -11,7 +12,8 @@ class ClassificationManage(object):
             创建模型分类
         """
         with AgUtils() as ag:
-            result = ag.create_entity(CLASSIFICATION, data, "classification_name")
+            exist_items, _ = ag.query_entity(CLASSIFICATION, [])
+            result = ag.create_entity(CLASSIFICATION, data, CREATE_CLASSIFICATION_CHECK_ATTR_MAP, exist_items)
         return result
 
     @staticmethod
@@ -48,9 +50,12 @@ class ClassificationManage(object):
         """
             更新模型分类
         """
-        data.pop("classification_id", "")    # 不能更新classification_id
+        # 不能更新classification_id
+        data.pop("classification_id", "")
         with AgUtils() as ag:
-            model = ag.set_entity_properties(CLASSIFICATION, id, data)
+            exist_items, _ = ag.query_entity(CLASSIFICATION, [])
+            exist_items = [i for i in exist_items if i["_id"] != id]
+            model = ag.set_entity_properties(CLASSIFICATION, id, data, UPDATE_CLASSIFICATION_check_attr_map, exist_items)
         return model
 
     @staticmethod

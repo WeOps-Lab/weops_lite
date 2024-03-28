@@ -1,6 +1,7 @@
 import json
 
-from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFO
+from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFO, CREATE_MODEL_CHECK_ATTR, \
+    UPDATE_MODEL_CHECK_ATTR_MAP
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -13,8 +14,10 @@ class ModelManage(object):
         """
         # 对模型初始化默认属性实例名称
         data.update(attrs=json.dumps([INST_NAME_INFO]))
+
         with AgUtils() as ag:
-            result = ag.create_entity(MODEL, data, "model_name")
+            exist_items, _ = ag.query_entity(MODEL, [])
+            result = ag.create_entity(MODEL, data, CREATE_MODEL_CHECK_ATTR, exist_items)
         return result
 
     @staticmethod
@@ -22,6 +25,10 @@ class ModelManage(object):
         """
             删除模型
         """
+
+        # TODO 校验是否存在模型关联
+        # TODO 校验是否存在模型实例
+
         with AgUtils() as ag:
             ag.delete_entity(MODEL, id)
 
@@ -32,7 +39,8 @@ class ModelManage(object):
         """
         data.pop("model_id", "")    # 不能更新model_id
         with AgUtils() as ag:
-            model = ag.set_entity_properties(MODEL, id, data)
+            exist_items, _ = ag.query_entity(MODEL, [])
+            model = ag.set_entity_properties(MODEL, id, data, UPDATE_MODEL_CHECK_ATTR_MAP, exist_items)
         return model
 
     @staticmethod

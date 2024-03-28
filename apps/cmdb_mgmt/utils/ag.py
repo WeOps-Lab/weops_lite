@@ -53,30 +53,69 @@ class AgUtils(object):
         properties_str += "}"
         return properties_str
 
-    def create_entity(self, label: str, properties: dict, check_unique_attr: str):
+    def create_entity(self, label: str, properties: dict, check_attr_map: dict, exist_items: list):
         """
             快速创建一个实体
         """
-        result = self._create_entity(label, properties, check_unique_attr)
+        result = self._create_entity(label, properties, check_attr_map, exist_items)
         # 提交事务, 持久化到库
         self.con.commit()
         return result
 
-    def _create_entity(self, label: str, properties: dict, check_unique_attr: str):
+    def check_unique_attr(self, item, check_attr_map, exist_items, is_update=False):
+        """校验唯一属性"""
+        not_only_attr = set()
+
+        check_attrs = [i for i in check_attr_map.keys() if i in item] if is_update else check_attr_map.keys()
+
+        for exist_item in exist_items:
+            for attr in check_attrs:
+                if exist_item[attr] == item[attr]:
+                    not_only_attr.add(attr)
+
+        if not not_only_attr:
+            return
+
+        message = ""
+        for attr in not_only_attr:
+            message += f"{check_attr_map[attr]}重复；"
+
+        raise BaseAppException(message)
+
+    def check_required_attr(self, item, check_attr_map, is_update=False):
+        """校验必填属性"""
+        not_required_attr = set()
+
+        check_attrs = [i for i in check_attr_map.keys() if i in item] if is_update else check_attr_map.keys()
+
+        for attr in check_attrs:
+            if not item[attr]:
+                not_required_attr.add(attr)
+
+        if not not_required_attr:
+            return
+
+        message = ""
+        for attr in not_required_attr:
+            message += f"必填项{check_attr_map[attr]}为空；"
+
+        raise BaseAppException(message)
+
+    def get_editable_attr(self, item, check_attr_map):
+        """取可编辑属性"""
+        return {k: v for k, v in item.items() if k in check_attr_map}
+
+    def _create_entity(self, label: str, properties: dict, check_attr_map: dict, exist_items: list):
 
         # 校验必填项标签非空
         if not label:
             raise BaseAppException("标签为空！")
 
-        # 校验必填项实体名非空
-        check_unique_attr_val = properties.get(check_unique_attr)
-        if not check_unique_attr_val:
-            raise BaseAppException("实体名为空！")
+        # 校验唯一属性
+        self.check_unique_attr(properties, check_attr_map.get("is_only", {}), exist_items)
 
-        # 校验实体名称的唯一性
-        _, counts = self.query_entity(label, [{"field": check_unique_attr, "type": "str=", "value": check_unique_attr_val}])
-        if counts > 0:
-            raise BaseAppException("实体重复！")
+        # 校验必填项
+        self.check_required_attr(properties, check_attr_map.get("is_required", {}))
 
         # 创建实体
         properties_str = self.format_properties(properties)
@@ -114,36 +153,40 @@ class AgUtils(object):
 
         return self.edge_to_dict(edge)
 
-    def batch_create_entity(self, label: str, properties_list: list, check_unique_attr: str):
+    def batch_create_entity(self, label: str, properties_list: list, check_attr_map: dict, exist_items: list):
         """批量创建实体"""
         results = []
-        for properties in properties_list:
+        for index, properties in enumerate(properties_list):
             result = {}
             try:
-                entity = self._create_entity(label, properties, check_unique_attr)
+                entity = self._create_entity(label, properties, check_attr_map, exist_items)
                 result.update(data=entity, success=True)
-            except Exception as e:
-                result.update(message=e, success=False)
+                exist_items.append(entity)
+            except BaseAppException as e:
+                message = f"第{index + 1}条数据，{e.message}"
+                result.update(message=message, success=False)
             results.append(result)
         self.con.commit()
+        return results
 
-    def batch_create_edge(self, label: str, edge_list: list):
+    def batch_create_edge(self, label: str, a_label: str, b_label: str, edge_list: list):
         """批量创建边"""
         results = []
-        for edge_info in edge_list:
+        for index, edge_info in enumerate(edge_list):
             result = {}
             try:
-                a_id, a_label = edge_info["start_id"], edge_info["start_label"]
-                b_id, b_label = edge_info["end_id"], edge_info["end_label"]
-                properties = edge_info["properties"]
-                edge = self._create_edge(label, a_id, a_label, b_id, b_label, properties)
+                a_id = edge_info["src_id"]
+                b_id = edge_info["dst_id"]
+                edge = self._create_edge(label, a_id, a_label, b_id, b_label, edge_info)
                 result.update(data=edge, success=True)
-            except Exception as e:
-                result.update(message=e, success=False)
+            except BaseAppException as e:
+                message = f"第{index + 1}条数据，{e.message}"
+                result.update(message=message, success=False)
             results.append(result)
         self.con.commit()
+        return results
 
-    def format_params(self, params: list):
+    def format_params(self, params: list, param_type: str = "AND"):
         """
             查询参数格式化:
             bool: {"field": "is_host", "type": "bool", "value": True} -> "n.is_host = True"
@@ -169,19 +212,19 @@ class AgUtils(object):
                 continue
 
             params_str += method(param)
-            params_str += " AND "
+            params_str += f" {param_type} "
 
         if params_str == "":
             return params_str
         else:
             return f"WHERE {params_str[:-5]}"
 
-    def query_entity(self, label: str, params: list, page: dict = None, order: str = None):
+    def query_entity(self, label: str, params: list, page: dict = None, order: str = None, param_type="AND"):
         """
             查询实体
         """
         label_str = f":{label}" if label else ""
-        params_str = self.format_params(params)
+        params_str = self.format_params(params, param_type=param_type)
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
         count = 0
@@ -234,10 +277,19 @@ class AgUtils(object):
                 properties_str += f"n.{key}={value},"
         return properties_str if properties_str == "" else properties_str[:-1]
 
-    def set_entity_properties(self, label: str, entity_id: int, properties: dict):
+    def set_entity_properties(self, label: str, entity_id: int, properties: dict, check_attr_map: dict, exist_items: list):
         """
             设置实体属性
         """
+        # 校验唯一属性
+        self.check_unique_attr(properties, check_attr_map.get("is_only", {}), exist_items, is_update=True)
+
+        # 校验必填项
+        self.check_required_attr(properties, check_attr_map.get("is_required", {}), is_update=True)
+
+        # 取出可编辑属性
+        properties = self.get_editable_attr(properties, check_attr_map.get("editable", {}))
+
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_set(properties)
         entity = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} SET {properties_str} RETURN n").fetchone()
