@@ -1,11 +1,12 @@
 import os
-import age
+import libs.age as age
 from apps.core.constants import GRAPH_NAME
 from psycopg2 import sql
 
 
 class LocalAge(age.Age):
     """重写_execCypher，修复直接查询中文转码问题"""
+
     @staticmethod
     def _execCypher(conn, graphName, cypherStmt, cols=None, params=None):
         if conn == None or conn.closed:

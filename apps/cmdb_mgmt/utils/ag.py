@@ -18,6 +18,8 @@ class AgUtils(object):
         self.close()
 
     def entity_to_list(self, data: iter):
+        for i in data:
+            continue
         """将使用fetchall查询的结果转换成列表类型"""
         return [self.edge_to_dict(i) for i in data]
 
