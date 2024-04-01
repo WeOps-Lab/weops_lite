@@ -1,0 +1,3 @@
+EDGE_REPETITION = "边已存在！"
+MODEL_EDGE_REPETITION = "模型关联已存在！"
+INSTANCE_EDGE_REPETITION = "实例关联已存在！"

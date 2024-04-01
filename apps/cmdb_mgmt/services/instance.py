@@ -1,4 +1,5 @@
 from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION
+from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
 from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
@@ -114,7 +115,11 @@ class InstanceManage(object):
     def instance_association_create(data: dict):
         """创建实例关联"""
         with AgUtils() as ag:
-            edge = ag.create_edge(INSTANCE_ASSOCIATION, data["src_inst_id"], INSTANCE, data["dst_inst_id"], INSTANCE, data)
+            try:
+                edge = ag.create_edge(INSTANCE_ASSOCIATION, data["src_inst_id"], INSTANCE, data["dst_inst_id"], INSTANCE, data, "model_asst_id")
+            except BaseAppException as e:
+                if e.message == EDGE_REPETITION:
+                    raise BaseAppException(INSTANCE_EDGE_REPETITION)
         return edge
 
     @staticmethod

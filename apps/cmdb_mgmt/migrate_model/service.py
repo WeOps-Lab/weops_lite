@@ -37,5 +37,5 @@ class MigrateModel:
                     **i)
                 for i in ASSOCIATIONS
             ]
-            result = ag.batch_create_edge(MODEL_ASSOCIATION, MODEL, MODEL, associations)
+            result = ag.batch_create_edge(MODEL_ASSOCIATION, MODEL, MODEL, associations, "model_asst_id")
         return result

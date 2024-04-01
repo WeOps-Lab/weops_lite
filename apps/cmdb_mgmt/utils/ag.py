@@ -123,23 +123,24 @@ class AgUtils(object):
 
         return self.entity_to_dict(entity)
 
-    def create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict):
+    def create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict, check_asst_key: str):
         """
             快速创建一条边
         """
-        result = self._create_edge(label, a_id, a_label, b_id, b_label, properties)
+        result = self._create_edge(label, a_id, a_label, b_id, b_label, properties, check_asst_key)
         # 提交事务, 持久化到库
         self.con.commit()
         return result
 
-    def _create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict):
+    def _create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict, check_asst_key: str = "model_asst_id"):
 
         # 校验必填项标签非空
         if not label:
             raise BaseAppException("标签为空！")
 
         # 校验边是否已经存在
-        edge_count = self.con.execCypher(f"MATCH (a:{a_label})-[e]-(b:{b_label}) WHERE id(a) = {a_id} AND id(b) = {b_id} RETURN e").rowcount
+        check_asst_val = properties.get(check_asst_key)
+        edge_count = self.con.execCypher(f"MATCH (a:{a_label})-[e]-(b:{b_label}) WHERE id(a) = {a_id} AND id(b) = {b_id} AND e.{check_asst_key} = '{check_asst_val}' RETURN e").rowcount
         if edge_count > 0:
             raise BaseAppException("边已存在！")
 
@@ -169,7 +170,7 @@ class AgUtils(object):
         self.con.commit()
         return results
 
-    def batch_create_edge(self, label: str, a_label: str, b_label: str, edge_list: list):
+    def batch_create_edge(self, label: str, a_label: str, b_label: str, edge_list: list, check_asst_key: str):
         """批量创建边"""
         results = []
         for index, edge_info in enumerate(edge_list):
@@ -177,7 +178,7 @@ class AgUtils(object):
             try:
                 a_id = edge_info["src_id"]
                 b_id = edge_info["dst_id"]
-                edge = self._create_edge(label, a_id, a_label, b_id, b_label, edge_info)
+                edge = self._create_edge(label, a_id, a_label, b_id, b_label, edge_info, check_asst_key)
                 result.update(data=edge, success=True)
             except BaseAppException as e:
                 message = f"第{index + 1}条数据，{e.message}"

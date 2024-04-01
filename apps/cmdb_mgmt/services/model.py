@@ -2,6 +2,7 @@ import json
 
 from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFO, CREATE_MODEL_CHECK_ATTR, \
     UPDATE_MODEL_CHECK_ATTR_MAP
+from apps.cmdb_mgmt.messages import EDGE_REPETITION, MODEL_EDGE_REPETITION
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -167,7 +168,11 @@ class ModelManage(object):
             创建模型关联
         """
         with AgUtils() as ag:
-            edge = ag.create_edge(MODEL_ASSOCIATION, data["src_id"], MODEL, data["dst_id"], MODEL, data)
+            try:
+                edge = ag.create_edge(MODEL_ASSOCIATION, data["src_id"], MODEL, data["dst_id"], MODEL, data, "model_asst_id")
+            except BaseAppException as e:
+                if e.message == EDGE_REPETITION:
+                    raise BaseAppException(MODEL_EDGE_REPETITION)
         return edge
 
     @staticmethod
