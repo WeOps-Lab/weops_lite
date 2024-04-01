@@ -1,50 +1,6 @@
 import os
 import libs.age as age
 from apps.core.constants import GRAPH_NAME
-from psycopg2 import sql
-
-
-class LocalAge(age.Age):
-    """重写_execCypher，修复直接查询中文转码问题"""
-
-    @staticmethod
-    def _execCypher(conn, graphName, cypherStmt, cols=None, params=None):
-        if conn == None or conn.closed:
-            raise age.NoConnection()
-        cursor = conn.cursor()
-        # clean up the string for mogrification
-        cypherStmt = cypherStmt.replace("\n", "")
-        cypherStmt = cypherStmt.replace("\t", "")
-        cypher = cursor.mogrify(cypherStmt, params).decode('utf-8')
-
-        preparedStmt = "SELECT * FROM age_prepare_cypher({graphName},{cypherStmt})"
-
-        cursor = conn.cursor()
-        try:
-            cursor.execute(
-                sql.SQL(preparedStmt).format(graphName=sql.Literal(graphName), cypherStmt=sql.Literal(cypher)))
-        except SyntaxError as cause:
-            conn.rollback()
-            raise cause
-        except Exception as cause:
-            conn.rollback()
-            raise age.SqlExecutionError("Execution ERR[" + str(cause) + "](" + preparedStmt + ")", cause)
-
-        stmt = age.buildCypher(graphName, cypher, cols)
-
-        cursor = conn.cursor()
-        try:
-            cursor.execute(stmt)
-            return cursor
-        except SyntaxError as cause:
-            conn.rollback()
-            raise cause
-        except Exception as cause:
-            conn.rollback()
-            raise age.SqlExecutionError("Execution ERR[" + str(cause) + "](" + stmt + ")", cause)
-
-    def execCypher(self, cypherStmt: str, cols: list = None, params: tuple = None):
-        return self._execCypher(self.connection, self.graphName, cypherStmt, cols=cols, params=params)
 
 
 class AgClient(object):
@@ -60,7 +16,7 @@ class AgClient(object):
 
     def get_con(self):
         """获取图库的连接"""
-        ag = LocalAge()
+        ag = age.Age()
         ag.connect(graph=self.graph_name, dsn=self.dsn)
         return ag
 

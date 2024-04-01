@@ -116,8 +116,7 @@ def execCypher(conn:ext.connection, graphName:str, cypherStmt:str, cols:list=Non
     #clean up the string for mogrification
     cypherStmt = cypherStmt.replace("\n", "")
     cypherStmt = cypherStmt.replace("\t", "")
-    cypher = str(cursor.mogrify(cypherStmt, params))
-    cypher = cypher[2:len(cypher)-1]
+    cypher = cursor.mogrify(cypherStmt, params).decode('utf-8')
 
     preparedStmt = "SELECT * FROM age_prepare_cypher({graphName},{cypherStmt})"
 
