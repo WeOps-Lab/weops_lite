@@ -2,7 +2,8 @@ import json
 
 from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFO, CREATE_MODEL_CHECK_ATTR, \
     UPDATE_MODEL_CHECK_ATTR_MAP
-from apps.cmdb_mgmt.messages import EDGE_REPETITION, MODEL_EDGE_REPETITION
+from apps.cmdb_mgmt.messages import EDGE_REPETITION, MODEL_EDGE_REPETITION, MODEL_NOT_PRESENT, MODEL_ATTR_NOT_PRESENT, \
+    MODEL_ATTR_PRESENT
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -66,11 +67,11 @@ class ModelManage(object):
             model_query = {"field": "model_id", "type": "str=", "value": model_id}
             models, model_count = ag.query_entity(MODEL, [model_query])
             if model_count == 0:
-                raise BaseAppException("模型不存在！")
+                raise BaseAppException(MODEL_NOT_PRESENT)
             model_info = models[0]
             attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
             if attr_info["attr_id"] in {i["attr_id"] for i in attrs}:
-                raise BaseAppException("属性ID已存在！")
+                raise BaseAppException(MODEL_ATTR_PRESENT)
             attrs.append(attr_info)
             result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)))
 
@@ -87,17 +88,17 @@ class ModelManage(object):
     @staticmethod
     def update_model_attr(model_id, attr_info):
         """
-            创建模型属性
+            更新模型属性
         """
         with AgUtils() as ag:
             model_query = {"field": "model_id", "type": "str=", "value": model_id}
             models, model_count = ag.query_entity(MODEL, [model_query])
             if model_count == 0:
-                raise BaseAppException("模型不存在！")
+                raise BaseAppException(MODEL_NOT_PRESENT)
             model_info = models[0]
             attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
             if attr_info["attr_id"] not in {i["attr_id"] for i in attrs}:
-                raise BaseAppException("属性不存在！")
+                raise BaseAppException(MODEL_ATTR_NOT_PRESENT)
             for attr in attrs:
                 if attr_info["attr_id"] != attr["attr_id"]:
                     continue
@@ -130,7 +131,7 @@ class ModelManage(object):
             model_query = {"field": "model_id", "type": "str=", "value": model_id}
             models, model_count = ag.query_entity(MODEL, [model_query])
             if model_count == 0:
-                raise BaseAppException("模型不存在！")
+                raise BaseAppException(MODEL_NOT_PRESENT)
             model_info = models[0]
             attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
             new_attrs = [attr for attr in attrs if attr["attr_id"] != attr_id]
@@ -173,6 +174,8 @@ class ModelManage(object):
             except BaseAppException as e:
                 if e.message == EDGE_REPETITION:
                     raise BaseAppException(MODEL_EDGE_REPETITION)
+                else:
+                    raise BaseAppException(e.message)
         return edge
 
     @staticmethod

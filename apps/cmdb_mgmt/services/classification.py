@@ -1,5 +1,6 @@
 from apps.cmdb_mgmt.constants import CLASSIFICATION, MODEL, CREATE_CLASSIFICATION_CHECK_ATTR_MAP, \
     UPDATE_CLASSIFICATION_check_attr_map
+from apps.cmdb_mgmt.messages import CLASSIFICATION_USED
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -35,7 +36,7 @@ class ClassificationManage(object):
             model_query = {"field": "classification_id", "type": "str=", "value": classification_id}
             _, model_count = ag.query_entity(MODEL, [model_query])
             if model_count > 0:
-                raise BaseAppException("模型分类已使用！")
+                raise BaseAppException(CLASSIFICATION_USED)
 
     @staticmethod
     def delete_model_classification(id: int):
