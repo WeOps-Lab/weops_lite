@@ -1,6 +1,6 @@
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
-from apps.system_mgmt.constants import APP_MODULE, GROUP
+from apps.system_mgmt.constants import APP_MODULE, GROUP, DEFAULT_GROUP_NAME
 from apps.system_mgmt.models import OperationLog
 from apps.system_mgmt.utils.keycloak import get_realm_roles
 
@@ -12,6 +12,8 @@ class GroupManage(object):
     def group_list(self, query_params):
         """用户组列表"""
         groups = self.keycloak_client.realm_client.get_groups(query_params)
+        # 过滤组织，只返回默认组织
+        groups = [i for i in groups if i["name"] == DEFAULT_GROUP_NAME]
         return groups
 
     def group_retrieve(self, group_id):

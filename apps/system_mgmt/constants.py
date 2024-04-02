@@ -50,3 +50,6 @@ ROLE = "角色"
 GROUP = "用户组织"
 MENU = "自定义菜单"
 LOGO = "LOGO"
+
+# 默认组织名称
+DEFAULT_GROUP_NAME = "总公司"
