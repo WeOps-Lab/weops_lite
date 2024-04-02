@@ -1,9 +1,9 @@
 import json
 
-from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFO, CREATE_MODEL_CHECK_ATTR, \
+from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFOS, CREATE_MODEL_CHECK_ATTR, \
     UPDATE_MODEL_CHECK_ATTR_MAP
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, MODEL_EDGE_REPETITION, MODEL_NOT_PRESENT, MODEL_ATTR_NOT_PRESENT, \
-    MODEL_ATTR_PRESENT
+    MODEL_ATTR_PRESENT, EXIST_MODEL_EDGE, EXIST_MODEL_INST
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 
@@ -15,7 +15,7 @@ class ModelManage(object):
             创建模型
         """
         # 对模型初始化默认属性实例名称
-        data.update(attrs=json.dumps([INST_NAME_INFO]))
+        data.update(attrs=json.dumps(INST_NAME_INFOS))
 
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(MODEL, [])
@@ -27,10 +27,6 @@ class ModelManage(object):
         """
             删除模型
         """
-
-        # TODO 校验是否存在模型关联
-        # TODO 校验是否存在模型实例
-
         with AgUtils() as ag:
             ag.delete_entity(MODEL, id)
 
@@ -203,12 +199,26 @@ class ModelManage(object):
         """
             查询模型所有的关联
         """
+        query_list = [
+            {"field": "src_model_id", "type": "str=", "value": model_id},
+            {"field": "dst_model_id", "type": "str=", "value": model_id}
+        ]
         with AgUtils() as ag:
-            # 作为源模型
-            src_query_data = {"field": "src_model_id", "type": "str=", "value": model_id}
-            src_edge, _ = ag.query_edge(MODEL_ASSOCIATION, MODEL, MODEL, [src_query_data])
+            edges, _ = ag.query_edge(MODEL_ASSOCIATION, MODEL, MODEL, query_list, param_type="OR")
+        return edges
 
-            # 作为目标模型
-            dst_query_data = {"field": "dst_model_id", "type": "str=", "value": model_id}
-            dst_edge, _ = ag.query_edge(MODEL_ASSOCIATION, MODEL, MODEL, [dst_query_data])
-        return src_edge + dst_edge
+    @staticmethod
+    def check_model_exist_association(model_id):
+        """模型存在关联关系"""
+        edges = ModelManage.model_association_search(model_id)
+        if edges:
+            raise BaseAppException(EXIST_MODEL_EDGE)
+
+    @staticmethod
+    def check_model_exist_inst(model_id):
+        """模型存在实例"""
+        params = [{"field": "model_id", "type": "str=", "value": model_id}]
+        with AgUtils() as ag:
+            _, count = ag.query_entity(INSTANCE, params, page=dict(skip=0, limit=1))
+        if count > 0:
+            raise BaseAppException(EXIST_MODEL_INST)

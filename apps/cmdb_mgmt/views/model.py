@@ -48,6 +48,11 @@ class ModelViewSet(viewsets.ViewSet):
     )
     @uma_permission("model_delete")
     def destroy(self, request, pk: str):
+        # 校验模型是否存在关联
+        ModelManage.check_model_exist_association(pk)
+        # 校验模型是否存在实例
+        ModelManage.check_model_exist_inst(pk)
+        # 执行删除
         model_info = ModelManage.search_model_info(pk)
         ModelManage.delete_model(model_info.get("_id"))
         return WebUtils.response_success()

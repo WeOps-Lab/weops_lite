@@ -7,3 +7,6 @@ MODEL_ATTR_PRESENT = "属性已存在！"
 EDGE_REPETITION = "边已存在！"
 MODEL_EDGE_REPETITION = "模型关联已存在！"
 INSTANCE_EDGE_REPETITION = "实例关联已存在！"
+
+EXIST_MODEL_EDGE = "模型存在关联关系!"
+EXIST_MODEL_INST = "模型下已存在实例！"

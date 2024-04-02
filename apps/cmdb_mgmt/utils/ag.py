@@ -204,21 +204,24 @@ class AgUtils(object):
             int<: {"field": "mem", "type": "int<", "value": 200} -> "n.mem < 200"
             int<>: {"field": "mem", "type": "int<>", "value": 200} -> "n.mem <> 200"
             int[]: {"field": "mem", "type": "int[]", "value": [200]} -> "n.mem IN [200]"
+
+            list[]: {"field": "organization", "type": "list[]", "value": [1,2]} -> "n.organization @> ARRAY [1,2]"
         """
 
         params_str = ""
+        param_type = f" {param_type} "
         for param in params:
             method = FORMAT_TYPE.get(param["type"])
             if not method:
                 continue
 
             params_str += method(param)
-            params_str += f" {param_type} "
+            params_str += param_type
 
         if params_str == "":
             return params_str
         else:
-            return f"WHERE {params_str[:-5]}"
+            return f"WHERE {params_str[:-len(param_type)]}"
 
     def query_entity(self, label: str, params: list, page: dict = None, order: str = None, param_type="AND"):
         """
@@ -248,14 +251,14 @@ class AgUtils(object):
         obj = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {id} RETURN n").fetchone()
         return self.entity_to_dict(obj)
 
-    def query_edge(self, label: str, a_label: str, b_label: str, params: list, return_entity: bool = False):
+    def query_edge(self, label: str, a_label: str, b_label: str, params: list, param_type: str = "AND", return_entity: bool = False):
         """
             查询边
         """
         label_str = f":{label}" if label else ""
         a_label_str = f":{a_label}" if a_label else ""
         b_label_str = f":{b_label}" if b_label else ""
-        params_str = self.format_params(params)
+        params_str = self.format_params(params, param_type)
         objs = self.con.execCypher(f"MATCH p=((a{a_label_str})-[n{label_str}]->(b{b_label_str})) {params_str} RETURN p")
         return self.edge_to_list(objs, return_entity), objs.rowcount
 

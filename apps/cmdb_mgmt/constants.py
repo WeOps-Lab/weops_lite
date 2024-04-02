@@ -43,16 +43,30 @@ ASSOCIATION_TYPE = [
 ]
 
 # 默认的实例名属性
-INST_NAME_INFO = {
-    "attr_id": "inst_name",
-    "attr_name": "实例名",
-    "attr_type": "str",
-    "is_only": True,
-    "is_required": True,
-    "editable": True,
-    "option": {},
-    "attr_group": "default"
-}
+INST_NAME_INFOS = [
+    {
+        "attr_id": "inst_name",
+        "attr_name": "实例名",
+        "attr_type": "str",
+        "is_only": True,
+        "is_required": True,
+        "editable": True,
+        "option": {},
+        "attr_group": "default",
+        "is_pre": True
+    },
+    {
+        "attr_id": "organization",
+        "attr_name": "所属组织",
+        "attr_type": "list",
+        "is_only": True,
+        "is_required": True,
+        "editable": True,
+        "option": {},
+        "attr_group": "default",
+        "is_pre": True
+    }
+]
 
 # 创建模型分类时校验属性
 CREATE_CLASSIFICATION_CHECK_ATTR_MAP = dict(
