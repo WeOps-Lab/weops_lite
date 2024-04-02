@@ -39,6 +39,11 @@ ASSOCIATION_TYPE = [
         "asst_id": "contains",
         "asst_name": "包含",
         "is_pre": True
+    },
+    {
+        "asst_id": "default",
+        "asst_name": "关联",
+        "is_pre": True
     }
 ]
 
