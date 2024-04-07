@@ -5,6 +5,8 @@ from openpyxl.styles import PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
+from apps.cmdb_mgmt.constants import ENUM, ORGANIZATION
+
 
 class Export:
 
@@ -29,7 +31,7 @@ class Export:
             attrs_name.append(attr_name)
             attrs_id.append(attr_info["attr_id"])
             index += 1
-            if attr_info["attr_type"] == "enum":
+            if attr_info["attr_type"] in {ENUM, ORGANIZATION}:
                 sheet.add_data_validation(
                     self.set_enum_validation_by_sheet_data(workbook, attr_info["attr_name"], attr_info["option"], index)
                 )
@@ -49,17 +51,20 @@ class Export:
         return file_stream
 
     def set_enum_validation_by_sheet_data(self, workbook, filed_name, option, index):
-        """设置枚举值, 通过sheet数据"""
+        """设置枚举值, 通过sheet数据, 单选"""
         value_list = [i["name"] for i in option]
+
         # 将枚举数据放入sheet页
         filed_sheet = workbook.create_sheet(title=filed_name)
         for r, v in enumerate(value_list, start=1):
             filed_sheet.cell(row=r, column=1, value=v)
+
         # 创建 DataValidation 对象
         col = get_column_letter(index)
         last_row = len(filed_sheet["A"])
         dv = DataValidation(type="list", formula1=f"='{filed_sheet.title}'!$A$1:$A{last_row}")
         dv.sqref = f"{col}3:{col}999"
+
         return dv
 
     def export_template(self):
@@ -74,12 +79,12 @@ class Export:
         enum_field_dict = {
             attr_info["attr_id"]: {i["id"]: i["name"] for i in attr_info["option"]}
             for attr_info in self.attrs
-            if attr_info["attr_type"] == "enum"
+            if attr_info["attr_type"] in {ENUM, ORGANIZATION}
         }
         for inst_info in inst_list:
             sheet_data = []
             for attr in self.attrs:
-                if attr["attr_type"] == "enum":
+                if attr["attr_type"] in {ENUM, ORGANIZATION}:
                     sheet_data.append(
                         enum_field_dict[attr["attr_id"]].get(inst_info.get(attr["attr_id"]))
                     )

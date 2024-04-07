@@ -1,5 +1,5 @@
 import openpyxl
-from apps.cmdb_mgmt.constants import NEED_CONVERSION_TYPE, INSTANCE
+from apps.cmdb_mgmt.constants import NEED_CONVERSION_TYPE, INSTANCE, ENUM, ORGANIZATION
 from apps.cmdb_mgmt.utils.ag import AgUtils
 
 
@@ -19,7 +19,7 @@ class Import:
                 need_update_type_field_map[attr_info["attr_id"]] = attr_info["attr_type"]
                 continue
 
-            if attr_info["attr_type"] == "enum":
+            if attr_info["attr_type"] in {ENUM, ORGANIZATION}:
                 need_val_to_id_field_map[attr_info["attr_id"]] = {i["name"]: i["id"] for i in attr_info["option"]}
 
         # 读取临时文件
@@ -43,12 +43,14 @@ class Import:
                     method = NEED_CONVERSION_TYPE[need_update_type_field_map[keys[i]]]
                     item[keys[i]] = method(cell.value)
                     continue
+
                 # 将需要枚举字段name与id反转的建和值存入字典
                 if keys[i] in need_val_to_id_field_map:
                     enum_id = need_val_to_id_field_map[keys[i]].get(cell.value)
                     if enum_id:
                         item[keys[i]] = enum_id
                     continue
+
                 # 将键和值存入字典
                 item[keys[i]] = cell.value
             # 将字典添加到结果列表中

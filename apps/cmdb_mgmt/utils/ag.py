@@ -289,18 +289,19 @@ class AgUtils(object):
                 properties_str += f"n.{key}={value},"
         return properties_str if properties_str == "" else properties_str[:-1]
 
-    def set_entity_properties(self, label: str, entity_id: int, properties: dict, check_attr_map: dict, exist_items: list):
+    def set_entity_properties(self, label: str, entity_id: int, properties: dict, check_attr_map: dict, exist_items: list, check: bool = True):
         """
             设置实体属性
         """
-        # 校验唯一属性
-        self.check_unique_attr(properties, check_attr_map.get("is_only", {}), exist_items, is_update=True)
+        if check:
+            # 校验唯一属性
+            self.check_unique_attr(properties, check_attr_map.get("is_only", {}), exist_items, is_update=True)
 
-        # 校验必填项
-        self.check_required_attr(properties, check_attr_map.get("is_required", {}), is_update=True)
+            # 校验必填项
+            self.check_required_attr(properties, check_attr_map.get("is_required", {}), is_update=True)
 
-        # 取出可编辑属性
-        properties = self.get_editable_attr(properties, check_attr_map.get("editable", {}))
+            # 取出可编辑属性
+            properties = self.get_editable_attr(properties, check_attr_map.get("editable", {}))
 
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_set(properties)

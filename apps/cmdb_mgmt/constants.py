@@ -47,6 +47,11 @@ ASSOCIATION_TYPE = [
     }
 ]
 
+
+# 需要进行ID与NAME转化的属性类型
+ENUM = "enum"
+ORGANIZATION = "organization"
+
 # 默认的实例名属性
 INST_NAME_INFOS = [
     {
@@ -61,13 +66,13 @@ INST_NAME_INFOS = [
         "is_pre": True
     },
     {
-        "attr_id": "organization",
+        "attr_id": ORGANIZATION,
         "attr_name": "所属组织",
-        "attr_type": "list",
-        "is_only": True,
+        "attr_type": ORGANIZATION,
+        "is_only": False,
         "is_required": True,
         "editable": True,
-        "option": {},
+        "option": [],
         "attr_group": "default",
         "is_pre": True
     }

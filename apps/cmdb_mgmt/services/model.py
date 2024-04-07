@@ -1,11 +1,12 @@
 import json
 
 from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFOS, CREATE_MODEL_CHECK_ATTR, \
-    UPDATE_MODEL_CHECK_ATTR_MAP
+    UPDATE_MODEL_CHECK_ATTR_MAP, ORGANIZATION
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, MODEL_EDGE_REPETITION, MODEL_NOT_PRESENT, MODEL_ATTR_NOT_PRESENT, \
     MODEL_ATTR_PRESENT, EXIST_MODEL_EDGE, EXIST_MODEL_INST
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
+from apps.system_mgmt.services.group_manage import GroupManage
 
 
 class ModelManage(object):
@@ -69,7 +70,7 @@ class ModelManage(object):
             if attr_info["attr_id"] in {i["attr_id"] for i in attrs}:
                 raise BaseAppException(MODEL_ATTR_PRESENT)
             attrs.append(attr_info)
-            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)))
+            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)), {}, [], False)
 
         attrs = ModelManage.parse_attrs(result.get("attrs", "[]"))
 
@@ -106,7 +107,7 @@ class ModelManage(object):
                     option=attr_info["option"],
                 )
 
-            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)))
+            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)), {}, [], False)
 
         attrs = ModelManage.parse_attrs(result.get("attrs", "[]"))
 
@@ -131,7 +132,7 @@ class ModelManage(object):
             model_info = models[0]
             attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
             new_attrs = [attr for attr in attrs if attr["attr_id"] != attr_id]
-            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(new_attrs)))
+            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(new_attrs)), {}, [], False)
 
             # 模型属性删除后，要删除对应模型实例的属性
             model_params = [{"field": "model_id", "type": "str=", "value": model_id}]
@@ -152,12 +153,32 @@ class ModelManage(object):
         return models[0]
 
     @staticmethod
+    def get_organization_option(items: list, result: list):
+        for item in items:
+            result.append(dict(
+                id=item["id"],
+                name=item["path"],
+                is_default=False,
+                type="str",
+            ))
+            if item["subGroups"]:
+                ModelManage.get_organization_option(item["subGroups"], result)
+
+    @staticmethod
     def search_model_attr(model_id: str):
         """
             查询模型属性
         """
         model_info = ModelManage.search_model_info(model_id)
-        return ModelManage.parse_attrs(model_info.get("attrs", "[]"))
+        attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
+        for attr in attrs:
+            if attr["attr_type"] == ORGANIZATION:
+                group = GroupManage().group_list({'search': ''})
+                option = []
+                ModelManage.get_organization_option(group, option)
+                attr.update(option=option)
+                break
+        return attrs
 
     @staticmethod
     def model_association_create(**data):
