@@ -95,3 +95,12 @@ UPDATE_MODEL_CHECK_ATTR_MAP = dict(
     is_required={"model_name": "模型名称"},
     editable={"model_name": "模型名称", "classification_id": "模型分类ID", "icn": "图标"},
 )
+
+# 需要进行类型转换的数据类型
+NEED_CONVERSION_TYPE = {
+    "bool": lambda x: True if x in {"true", "True", "TRUE", True} else False,
+    "int": int,
+    "float": float,
+    "str": str,
+    "list": list,
+}

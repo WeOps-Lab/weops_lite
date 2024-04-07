@@ -251,6 +251,14 @@ class AgUtils(object):
         obj = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {id} RETURN n").fetchone()
         return self.entity_to_dict(obj)
 
+    def query_entity_by_ids(self, label: str, ids: list):
+        """
+            查询实体列表
+        """
+        label_str = f":{label}" if label else ""
+        objs = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) IN {ids} RETURN n")
+        return self.entity_to_list(objs)
+
     def query_edge(self, label: str, a_label: str, b_label: str, params: list, param_type: str = "AND", return_entity: bool = False):
         """
             查询边

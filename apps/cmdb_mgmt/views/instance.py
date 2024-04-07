@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
@@ -157,3 +158,57 @@ class InstanceViewSet(viewsets.ViewSet):
     def instance_association_instance_list(self, request, model_id: str, inst_id: int):
         asso_insts = InstanceManage.instance_association_instance_list(model_id, int(inst_id))
         return WebUtils.response_success(asso_insts)
+
+    @swagger_auto_schema(
+        operation_id="download_template",
+        operation_description="下载模型实例导入模板",
+        manual_parameters=[
+            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+        ],
+    )
+    @uma_permission("download_template")
+    @action(methods=["get"], detail=False, url_path=r"(?P<model_id>.+?)/download_template")
+    def download_template(self, request, model_id):
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response["Content-Disposition"] = f"attachment;filename={f'{model_id}_import_template.xlsx'}"
+        response.write(InstanceManage.download_import_template(model_id).read())
+        return response
+
+    @swagger_auto_schema(
+        operation_id="inst_import",
+        operation_description="实例导入",
+        manual_parameters=[
+            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "file": openapi.Schema(type=openapi.TYPE_FILE, format=openapi.FORMAT_BINARY, description='文件'),
+            },
+            required=["file"],
+        ),
+    )
+    @uma_permission("inst_import")
+    @action(methods=["post"], detail=False, url_path=r"(?P<model_id>.+?)/inst_import")
+    def inst_import(self, request, model_id):
+        result = InstanceManage.inst_import(model_id, request.data.get("file").file)
+        return WebUtils.response_success(result)
+
+    @swagger_auto_schema(
+        operation_id="inst_export",
+        operation_description="实例导出",
+        manual_parameters=[
+            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+        ],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(type=openapi.TYPE_INTEGER, description="实例ID")
+        ),
+    )
+    @uma_permission("inst_export")
+    @action(methods=["post"], detail=False, url_path=r"(?P<model_id>.+?)/inst_export")
+    def inst_export(self, request, model_id):
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response["Content-Disposition"] = f"attachment;filename={f'{model_id}_import_template.xlsx'}"
+        response.write(InstanceManage.inst_export(model_id, request.data).read())
+        return response

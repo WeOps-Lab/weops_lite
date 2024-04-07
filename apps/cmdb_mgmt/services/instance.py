@@ -2,6 +2,8 @@ from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
 from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
+from apps.cmdb_mgmt.utils.export import Export
+from apps.cmdb_mgmt.utils.Import import Import
 from apps.core.exceptions.base_app_exception import BaseAppException
 
 
@@ -141,3 +143,28 @@ class InstanceManage(object):
         with AgUtils() as ag:
             entity = ag.query_entity_by_id(INSTANCE, inst_id)
         return entity
+
+    @staticmethod
+    def download_import_template(model_id: str):
+        """下载导入模板"""
+        attrs = ModelManage.search_model_attr(model_id)
+        return Export(attrs).export_template()
+
+    @staticmethod
+    def inst_import(model_id: str, file_stream: bytes):
+        """实例导入"""
+        attrs = ModelManage.search_model_attr(model_id)
+        with AgUtils() as ag:
+            exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
+        return Import(model_id, attrs, exist_items).import_inst_list(file_stream)
+
+    @staticmethod
+    def inst_export(model_id: str, ids: list):
+        """实例导出"""
+        attrs = ModelManage.search_model_attr(model_id)
+        with AgUtils() as ag:
+            if ids:
+                inst_list = ag.query_entity_by_ids(INSTANCE, ids)
+            else:
+                inst_list, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
+        return Export(attrs).export_inst_list(inst_list)
