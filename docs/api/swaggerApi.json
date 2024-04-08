@@ -5306,6 +5306,34 @@
         }
       }
     },
+    "/instance/{model_id}/download_template/": {
+      "get": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "下载导入模板<download_template>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "title": "title",
+              "properties": {}
+            }
+          }
+        }
+      }
+    },
     "/instance/{id}/": {
       "patch": {
         "tags": [
@@ -5792,6 +5820,199 @@
               },
               "required": [
                 "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/{model_id}/inst_import/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "实例导入<inst_import>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "description": "excel文件",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "data": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "number"
+                          },
+                          "_label": {
+                            "type": "string"
+                          },
+                          "os_type": {
+                            "type": "string"
+                          },
+                          "model_id": {
+                            "type": "string"
+                          },
+                          "inst_name": {
+                            "type": "string"
+                          },
+                          "host_innerip": {
+                            "type": "string"
+                          },
+                          "organization": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "_id",
+                          "_label",
+                          "os_type",
+                          "model_id",
+                          "inst_name",
+                          "host_innerip",
+                          "organization"
+                        ],
+                        "title": "导入数据信息"
+                      },
+                      "success": {
+                        "type": "boolean",
+                        "title": "导入结果"
+                      }
+                    },
+                    "required": [
+                      "data",
+                      "success"
+                    ],
+                    "title": "导入的数据列表"
+                  }
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/{model_id}/inst_export/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "实例导出<inst_export>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "description": "列表为空代表导出所有实例",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "title": "实例ID列表",
+              "description": "列表为空代表导出所有实例"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "title": "title",
+              "properties": {}
+            }
+          }
+        }
+      }
+    },
+    "/instance/batch_delete/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "批量删除实例<instance_batch_delete>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              },
+              "title": "实例列表"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
                 "result",
                 "message"
               ]
