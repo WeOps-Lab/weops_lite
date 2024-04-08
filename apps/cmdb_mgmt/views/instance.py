@@ -80,6 +80,20 @@ class InstanceViewSet(viewsets.ViewSet):
         return WebUtils.response_success()
 
     @swagger_auto_schema(
+        operation_id="instance_batch_delete",
+        operation_description="批量删除实例",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(type=openapi.TYPE_INTEGER, description="实例ID")
+        ),
+    )
+    @uma_permission("instance_batch_delete")
+    @action(detail=False, methods=["post"], url_path="batch_delete")
+    def instance_batch_delete(self, request):
+        InstanceManage.instance_batch_delete(request.data)
+        return WebUtils.response_success()
+
+    @swagger_auto_schema(
         operation_id="instance_update",
         operation_description="更新实例属性",
         request_body=openapi.Schema(
