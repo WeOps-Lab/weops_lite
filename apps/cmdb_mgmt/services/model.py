@@ -173,7 +173,7 @@ class ModelManage(object):
         attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         for attr in attrs:
             if attr["attr_type"] == ORGANIZATION:
-                group = GroupManage().group_list({'search': ''})
+                group = GroupManage().group_list()
                 option = []
                 ModelManage.get_organization_option(group, option)
                 attr.update(option=option)

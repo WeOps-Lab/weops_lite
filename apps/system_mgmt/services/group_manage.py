@@ -9,8 +9,10 @@ class GroupManage(object):
     def __init__(self):
         self.keycloak_client = KeyCloakClient()
 
-    def group_list(self, query_params):
+    def group_list(self, query_params=None):
         """用户组列表"""
+        if query_params is None:
+            query_params = {"search": ""}
         groups = self.keycloak_client.realm_client.get_groups(query_params)
         # 过滤组织，只返回默认组织
         groups = [i for i in groups if i["name"] == DEFAULT_GROUP_NAME]
@@ -193,3 +195,35 @@ class GroupManage(object):
         OperationLog.objects.bulk_create(objs, batch_size=100)
 
         return {"id": group_id}
+
+    def get_group_id_and_subgroup_id(self, group_id: str):
+        """获取组织ID与子组ID的列表"""
+        group_list = self.group_list()
+        if group_list:
+            sub_group = self.get_subgroup(group_list[0], group_id)
+        else:
+            sub_group = None
+        group_id_list = [group_id]
+        if not sub_group:
+            return group_id_list
+        self.get_all_group_id_by_subgroups(sub_group["subGroups"], group_id_list)
+        return group_id_list
+
+    def get_subgroup(self, group, id):
+        """根据子组ID获取子组"""
+        for subgroup in group["subGroups"]:
+            if subgroup["id"] == id:
+                return subgroup
+            elif subgroup["subGroups"]:
+                for subgroup in group["subGroups"]:
+                    result = self.get_subgroup(subgroup, id)
+                    if result:
+                        return result
+        return None
+
+    def get_all_group_id_by_subgroups(self, subgroups: list, id_list: list):
+        """取出所有子组ID"""
+        for subgroup in subgroups:
+            id_list.append(subgroup["id"])
+            if subgroup["subGroups"]:
+                self.get_all_group_id_by_subgroups(subgroup["subGroups"], id_list)

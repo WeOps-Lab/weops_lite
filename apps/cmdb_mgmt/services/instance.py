@@ -1,13 +1,22 @@
-from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION
+from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
 from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.cmdb_mgmt.utils.export import Export
 from apps.cmdb_mgmt.utils.Import import Import
 from apps.core.exceptions.base_app_exception import BaseAppException
+from apps.system_mgmt.services.group_manage import GroupManage
 
 
 class InstanceManage(object):
+
+    @staticmethod
+    def supplementary_subgroups(params: list):
+        """对组织补充子组, 并将类型改为str[]"""
+        for param in params:
+            if param["field"] == ORGANIZATION and param["value"]:
+                param["value"] = GroupManage().get_group_id_and_subgroup_id(param["value"])
+                param["type"] = "str[]"
 
     @staticmethod
     def instance_list(model_id: str, params: list, page: int, page_size: int, order: str):
