@@ -211,6 +211,10 @@ class GroupManage(object):
 
     def get_subgroup(self, group, id):
         """根据子组ID获取子组"""
+
+        if group["id"] == id:
+            return group
+
         for subgroup in group["subGroups"]:
             if subgroup["id"] == id:
                 return subgroup

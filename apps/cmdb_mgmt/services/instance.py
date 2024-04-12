@@ -21,10 +21,11 @@ class InstanceManage(object):
     @staticmethod
     def instance_list(model_id: str, params: list, page: int, page_size: int, order: str):
         """实例列表"""
+        InstanceManage.supplementary_subgroups(params)
+        params.append({"field": "model_id", "type": "str=", "value": model_id})
         _page = dict(skip=(page - 1) * page_size, limit=page_size)
         if order and order.startswith("-"):
             order = f"{order.replace('-', '')} DESC"
-        params.append({"field": "model_id", "type": "str=", "value": model_id})
         with AgUtils() as ag:
             inst_list, count = ag.query_entity(INSTANCE, params, page=_page, order=order)
         return inst_list, count
