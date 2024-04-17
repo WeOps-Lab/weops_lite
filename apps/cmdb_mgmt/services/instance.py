@@ -178,3 +178,9 @@ class InstanceManage(object):
             else:
                 inst_list, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
         return Export(attrs).export_inst_list(inst_list)
+
+    @staticmethod
+    def fulltext_search(search: str):
+        with AgUtils() as ag:
+            inst_list = ag.entity_fulltext_search(INSTANCE, search, [])
+        return inst_list

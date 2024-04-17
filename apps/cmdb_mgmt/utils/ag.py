@@ -123,7 +123,8 @@ class AgUtils(object):
 
         return self.entity_to_dict(entity)
 
-    def create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict, check_asst_key: str):
+    def create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict,
+                    check_asst_key: str):
         """
             快速创建一条边
         """
@@ -132,7 +133,8 @@ class AgUtils(object):
         self.con.commit()
         return result
 
-    def _create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict, check_asst_key: str = "model_asst_id"):
+    def _create_edge(self, label: str, a_id: int, a_label: str, b_id: int, b_label: str, properties: dict,
+                     check_asst_key: str = "model_asst_id"):
 
         # 校验必填项标签非空
         if not label:
@@ -140,7 +142,8 @@ class AgUtils(object):
 
         # 校验边是否已经存在
         check_asst_val = properties.get(check_asst_key)
-        edge_count = self.con.execCypher(f"MATCH (a:{a_label})-[e]-(b:{b_label}) WHERE id(a) = {a_id} AND id(b) = {b_id} AND e.{check_asst_key} = '{check_asst_val}' RETURN e").rowcount
+        edge_count = self.con.execCypher(
+            f"MATCH (a:{a_label})-[e]-(b:{b_label}) WHERE id(a) = {a_id} AND id(b) = {b_id} AND e.{check_asst_key} = '{check_asst_val}' RETURN e").rowcount
         if edge_count > 0:
             raise BaseAppException("边已存在！")
 
@@ -259,7 +262,8 @@ class AgUtils(object):
         objs = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) IN {ids} RETURN n")
         return self.entity_to_list(objs)
 
-    def query_edge(self, label: str, a_label: str, b_label: str, params: list, param_type: str = "AND", return_entity: bool = False):
+    def query_edge(self, label: str, a_label: str, b_label: str, params: list, param_type: str = "AND",
+                   return_entity: bool = False):
         """
             查询边
         """
@@ -289,7 +293,8 @@ class AgUtils(object):
                 properties_str += f"n.{key}={value},"
         return properties_str if properties_str == "" else properties_str[:-1]
 
-    def set_entity_properties(self, label: str, entity_id: int, properties: dict, check_attr_map: dict, exist_items: list, check: bool = True):
+    def set_entity_properties(self, label: str, entity_id: int, properties: dict, check_attr_map: dict,
+                              exist_items: list, check: bool = True):
         """
             设置实体属性
         """
@@ -305,7 +310,8 @@ class AgUtils(object):
 
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_set(properties)
-        entity = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} SET {properties_str} RETURN n").fetchone()
+        entity = self.con.execCypher(
+            f"MATCH (n{label_str}) WHERE id(n) = {entity_id} SET {properties_str} RETURN n").fetchone()
         self.con.commit()
         return self.entity_to_dict(entity)
 
@@ -345,3 +351,24 @@ class AgUtils(object):
         label_str = f":{label}" if label else ""
         self.con.execCypher(f"MATCH ()-[n{label_str}]->() WHERE id(n) = {edge_id} DELETE n")
         self.con.commit()
+
+    def entity_fulltext_search(self, label: str, search: str, params: list):
+        """实体全网检索"""
+
+        label_str = f":{label}" if label else ""
+        params_str = self.format_params(params)
+        sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
+
+        inst_objs = self.con.execCypher(sql_str)
+
+        result = [
+            {
+                '_id': inst[0].id,
+                '_label': inst[0].label,
+                **inst[0].properties
+            }
+            for inst in inst_objs
+            if search in " ".join(map(str, inst[0].properties.values()))
+        ]
+
+        return result

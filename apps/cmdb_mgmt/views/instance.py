@@ -226,3 +226,18 @@ class InstanceViewSet(viewsets.ViewSet):
         response["Content-Disposition"] = f"attachment;filename={f'{model_id}_import_template.xlsx'}"
         response.write(InstanceManage.inst_export(model_id, request.data).read())
         return response
+
+    @swagger_auto_schema(
+        operation_id="instance_fulltext_search",
+        operation_description="实例全文检索",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={"search": openapi.Schema(type=openapi.TYPE_STRING, description="排序")},
+            required=["search"]
+        ),
+    )
+    @uma_permission("instance_fulltext_search")
+    @action(methods=["post"], detail=False)
+    def fulltext_search(self, request):
+        result = InstanceManage.fulltext_search(request.data["search"])
+        return WebUtils.response_success(result)
