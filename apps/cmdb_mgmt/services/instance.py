@@ -101,11 +101,34 @@ class InstanceManage(object):
                     "src_model_id": item["edge"]["src_model_id"],
                     "dst_model_id": item["edge"]["dst_model_id"],
                     "model_asst_id": item["edge"]["model_asst_id"],
+                    "asst_id": item["edge"].get("asst_id"),
                     "inst_list": [],
                 }
+            item[item_key].update(inst_asst_id=item["edge"]["_id"])
             result[model_asst_id]["inst_list"].append(item[item_key])
 
         return list(result.values())
+
+    @staticmethod
+    def instance_association(model_id: str, inst_id: int):
+        """查询模型实例关联的实例列表"""
+        with AgUtils() as ag:
+
+            # 作为源模型实例
+            src_query_data = [
+                {"field": "src_inst_id", "type": "int=", "value": inst_id},
+                {"field": "src_model_id", "type": "str=", "value": model_id},
+            ]
+            src_edge, _ = ag.query_edge(INSTANCE_ASSOCIATION, INSTANCE, INSTANCE, src_query_data)
+
+            # 作为目标模型实例
+            dst_query_data = [
+                {"field": "dst_inst_id", "type": "int=", "value": inst_id},
+                {"field": "dst_model_id", "type": "str=", "value": model_id},
+            ]
+            dst_edge, _ = ag.query_edge(INSTANCE_ASSOCIATION, INSTANCE, INSTANCE, dst_query_data)
+
+        return src_edge + dst_edge
 
     @staticmethod
     def instance_association_list(params: dict):
