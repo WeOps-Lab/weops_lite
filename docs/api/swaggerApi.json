@@ -5586,6 +5586,10 @@
                   "type": "string",
                   "title": "模型关联ID"
                 },
+                "asst_id": {
+                  "type": "string",
+                  "title": "关联ID"
+                },
                 "src_model_id": {
                   "type": "string",
                   "title": "源模型ID"
@@ -5608,7 +5612,8 @@
                 "src_model_id",
                 "dst_model_id",
                 "src_inst_id",
-                "dst_inst_id"
+                "dst_inst_id",
+                "asst_id"
               ]
             }
           }
@@ -5708,6 +5713,81 @@
                 }
               },
               "required": [
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/fulltext_search/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "实例全文检索<instance_fulltext_search>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "title": "title",
+              "properties": {
+                "search": {
+                  "type": "string",
+                  "title": "查询条件"
+                }
+              },
+              "required": [
+                "search"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "number",
+                        "title": "实例ID"
+                      },
+                      "model_id": {
+                        "type": "string",
+                        "title": "模型ID"
+                      }
+                    },
+                    "title": "实例详情",
+                    "required": [
+                      "_id",
+                      "model_id"
+                    ]
+                  },
+                  "title": "实例列表"
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
                 "result",
                 "message"
               ]
@@ -6134,6 +6214,98 @@
         }
       }
     },
+    "/instance/instance_association/{model_id}/{inst_id}/": {
+      "get": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "查询某个实例的所有关联实例<instance_association>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "inst_id",
+            "in": "path",
+            "description": "实例ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "number",
+                        "title": "实例关联ID"
+                      },
+                      "asst_id": {
+                        "type": "string",
+                        "title": "关联ID"
+                      },
+                      "dst_inst_id": {
+                        "type": "number",
+                        "title": "目标实例ID"
+                      },
+                      "src_inst_id": {
+                        "type": "number",
+                        "title": "源实例ID"
+                      },
+                      "dst_model_id": {
+                        "type": "string",
+                        "title": "目标模型ID"
+                      },
+                      "src_model_id": {
+                        "type": "string",
+                        "title": "源模型ID"
+                      },
+                      "model_asst_id": {
+                        "type": "string",
+                        "title": "模型关联关系ID"
+                      }
+                    },
+                    "required": [
+                      "_id",
+                      "asst_id",
+                      "dst_inst_id",
+                      "src_inst_id",
+                      "dst_model_id",
+                      "src_model_id",
+                      "model_asst_id"
+                    ]
+                  }
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/instance/association_instance_list/{model_id}/{inst_id}/": {
       "get": {
         "tags": [
@@ -6181,6 +6353,10 @@
                         "type": "string",
                         "title": "模型关联ID"
                       },
+                      "asst_id": {
+                        "type": "string",
+                        "title": "关联ID"
+                      },
                       "inst_list": {
                         "type": "array",
                         "items": {
@@ -6207,7 +6383,8 @@
                       "src_model_id",
                       "dst_model_id",
                       "model_asst_id",
-                      "inst_list"
+                      "inst_list",
+                      "asst_id"
                     ]
                   }
                 },
