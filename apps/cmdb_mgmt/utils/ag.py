@@ -190,7 +190,7 @@ class AgUtils(object):
         self.con.commit()
         return results
 
-    def format_params(self, params: list, param_type: str = "AND"):
+    def format_search_params(self, params: list, param_type: str = "AND"):
         """
             查询参数格式化:
             bool: {"field": "is_host", "type": "bool", "value": True} -> "n.is_host = True"
@@ -221,17 +221,27 @@ class AgUtils(object):
             params_str += method(param)
             params_str += param_type
 
-        if params_str == "":
-            return params_str
-        else:
-            return f"WHERE {params_str[:-len(param_type)]}"
+        return f"({params_str[:-len(param_type)]})" if params_str else params_str
 
-    def query_entity(self, label: str, params: list, page: dict = None, order: str = None, param_type="AND"):
+    def format_final_params(self, search_params: list, search_param_type: str = "AND", permission_params=None):
+        search_params_str = self.format_search_params(search_params, search_param_type)
+
+        if not search_params_str:
+            return permission_params
+
+        if not permission_params:
+            return search_params_str
+
+        return f"{search_params_str} AND {permission_params}"
+
+    def query_entity(self, label: str, params: list, page: dict = None, order: str = None, param_type="AND", permission_params: str = None):
         """
             查询实体
         """
         label_str = f":{label}" if label else ""
-        params_str = self.format_params(params, param_type=param_type)
+        params_str = self.format_final_params(params, search_param_type=param_type, permission_params=permission_params)
+        params_str = f"WHERE {params_str}" if params_str else params_str
+
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
         count = 0
@@ -270,7 +280,9 @@ class AgUtils(object):
         label_str = f":{label}" if label else ""
         a_label_str = f":{a_label}" if a_label else ""
         b_label_str = f":{b_label}" if b_label else ""
-        params_str = self.format_params(params, param_type)
+        params_str = self.format_search_params(params, param_type)
+        params_str = f"WHERE {params_str}" if params_str else params_str
+
         objs = self.con.execCypher(f"MATCH p=((a{a_label_str})-[n{label_str}]->(b{b_label_str})) {params_str} RETURN p")
         return self.edge_to_list(objs, return_entity), objs.rowcount
 
@@ -326,24 +338,16 @@ class AgUtils(object):
         """移除某些实体的某些属性"""
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_remove(attrs)
-        params_str = self.format_params(params)
+        params_str = self.format_search_params(params)
+        params_str = f"WHERE {params_str}" if params_str else params_str
+
         self.con.execCypher(f"MATCH (n{label_str}) {params_str} REMOVE {properties_str} RETURN n")
-        self.con.commit()
-
-    def _delete_entity(self, label: str, entity_id: int):
-        """删除实体"""
-        label_str = f":{label}" if label else ""
-        self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {entity_id} DELETE n")
-
-    def delete_entity(self, label: str, entity_id: int):
-        """删除实体"""
-        self._delete_entity(label, entity_id)
         self.con.commit()
 
     def batch_delete_entity(self, label: str, entity_ids: list):
         """批量删除实体"""
-        for entity_id in entity_ids:
-            self._delete_entity(label, entity_id)
+        label_str = f":{label}" if label else ""
+        self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) IN {entity_ids} DELETE n")
         self.con.commit()
 
     def delete_edge(self, label: str, edge_id: int):
@@ -352,11 +356,13 @@ class AgUtils(object):
         self.con.execCypher(f"MATCH ()-[n{label_str}]->() WHERE id(n) = {edge_id} DELETE n")
         self.con.commit()
 
-    def entity_fulltext_search(self, label: str, search: str, params: list):
+    def entity_fulltext_search(self, label: str, search: str, params: list, permission_params: str = None):
         """实体全网检索"""
 
         label_str = f":{label}" if label else ""
-        params_str = self.format_params(params)
+        params_str = self.format_final_params(params, permission_params=permission_params)
+        params_str = f"WHERE {params_str}" if params_str else params_str
+
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
         inst_objs = self.con.execCypher(sql_str)

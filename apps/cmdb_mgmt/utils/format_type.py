@@ -71,6 +71,11 @@ def format_list_in(param):
     return f"n.{field} @> ARRAY{value}"
 
 
+def id_in(param):
+    value = param["value"]
+    return f"id(n) IN {value}"
+
+
 # 映射参数类型和对应的转换函数
 FORMAT_TYPE = {
     "bool": format_bool,
@@ -85,4 +90,6 @@ FORMAT_TYPE = {
     "int<>": format_int_neq,
     "int[]": format_int_in,
     "list[]": format_list_in,
+    "id[]": id_in,
+
 }

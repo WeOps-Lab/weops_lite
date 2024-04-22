@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 
 from apps.cmdb_mgmt.services.instance import InstanceManage
+from apps.core.constants import AUTH_TOKEN_HEADER_NAME
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
 
@@ -35,7 +36,13 @@ class InstanceViewSet(viewsets.ViewSet):
     def search(self, request):
         page, page_size = int(request.data.get('page', 1)), int(request.data.get('page_size', 10))
         insts, count = InstanceManage.instance_list(
-            request.data["model_id"], request.data.get("query_list", []), page,  page_size, request.data.get("order", ""))
+            request.META.get(AUTH_TOKEN_HEADER_NAME),
+            request.data["model_id"],
+            request.data.get("query_list", []),
+            page,
+            page_size,
+            request.data.get("order", ""),
+        )
         return WebUtils.response_success(dict(insts=insts, count=count))
 
     @swagger_auto_schema(
@@ -76,7 +83,7 @@ class InstanceViewSet(viewsets.ViewSet):
     )
     @uma_permission("instance_delete")
     def destroy(self, request, pk: int):
-        InstanceManage.instance_batch_delete([int(pk)])
+        InstanceManage.instance_batch_delete(request.META.get(AUTH_TOKEN_HEADER_NAME), [int(pk)])
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -90,7 +97,7 @@ class InstanceViewSet(viewsets.ViewSet):
     @uma_permission("instance_batch_delete")
     @action(detail=False, methods=["post"], url_path="batch_delete")
     def instance_batch_delete(self, request):
-        InstanceManage.instance_batch_delete(request.data)
+        InstanceManage.instance_batch_delete(request.META.get(AUTH_TOKEN_HEADER_NAME), request.data)
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -103,7 +110,7 @@ class InstanceViewSet(viewsets.ViewSet):
     )
     @uma_permission("instance_update")
     def partial_update(self, request, pk: int):
-        inst = InstanceManage.instance_update(int(pk), request.data)
+        inst = InstanceManage.instance_update(request.META.get(AUTH_TOKEN_HEADER_NAME), int(pk), request.data)
         return WebUtils.response_success(inst)
 
     @swagger_auto_schema(
@@ -246,12 +253,15 @@ class InstanceViewSet(viewsets.ViewSet):
         operation_description="实例全文检索",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
-            properties={"search": openapi.Schema(type=openapi.TYPE_STRING, description="排序")},
+            properties={
+                "search": openapi.Schema(type=openapi.TYPE_STRING, description="排序"),
+                "model_id": openapi.Schema(type=openapi.TYPE_STRING, description="模型ID"),
+            },
             required=["search"]
         ),
     )
     @uma_permission("instance_fulltext_search")
     @action(methods=["post"], detail=False)
     def fulltext_search(self, request):
-        result = InstanceManage.fulltext_search(request.data["search"])
+        result = InstanceManage.fulltext_search(request.META.get(AUTH_TOKEN_HEADER_NAME), request.data)
         return WebUtils.response_success(result)

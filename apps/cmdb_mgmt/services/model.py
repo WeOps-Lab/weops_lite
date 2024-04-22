@@ -29,7 +29,7 @@ class ModelManage(object):
             删除模型
         """
         with AgUtils() as ag:
-            ag.delete_entity(MODEL, id)
+            ag.batch_delete_entity(MODEL, [id])
 
     @staticmethod
     def update_model(id: int, data: dict):

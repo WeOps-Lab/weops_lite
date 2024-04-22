@@ -44,7 +44,7 @@ class ClassificationManage(object):
             删除模型分类
         """
         with AgUtils() as ag:
-            ag.delete_entity(CLASSIFICATION, id)
+            ag.batch_delete_entity(CLASSIFICATION, [id])
 
     @staticmethod
     def update_model_classification(id: int, data: dict):

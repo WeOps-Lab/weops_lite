@@ -4,11 +4,36 @@ from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.cmdb_mgmt.utils.export import Export
 from apps.cmdb_mgmt.utils.Import import Import
+from apps.cmdb_mgmt.utils.permission import PermissionManage
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.system_mgmt.services.group_manage import GroupManage
 
 
 class InstanceManage(object):
+
+    @staticmethod
+    def get_permission_params(token, model_id):
+        """获取用户实例权限查询参数，用户用户查询实例"""
+        obj = PermissionManage(token, model_id)
+        permission_params = obj.get_permission_params()
+        return permission_params
+
+    @staticmethod
+    def check_instances_permission(token: str, instances: list, model_id: str):
+        """实例权限校验，用于操作之前"""
+        permission_params = InstanceManage.get_permission_params(token, model_id)
+        with AgUtils() as ag:
+            inst_list, count = ag.query_entity(INSTANCE, [], permission_params=permission_params)
+
+        permission_map = {i["_id"]: i for i in inst_list}
+        instances_map = {i["_id"]: i for i in instances}
+
+        non_permission_set = set(instances_map.keys()) - set(permission_map.keys())
+
+        if not non_permission_set:
+            return
+        message = f"实例：{'、'.join([instances_map[i]['inst_name'] for i in non_permission_set])}，无权限！"
+        raise BaseAppException(message)
 
     @staticmethod
     def supplementary_subgroups(params: list):
@@ -19,15 +44,18 @@ class InstanceManage(object):
                 param["type"] = "str[]"
 
     @staticmethod
-    def instance_list(model_id: str, params: list, page: int, page_size: int, order: str):
+    def instance_list(token: str, model_id: str, params: list, page: int, page_size: int, order: str):
         """实例列表"""
         InstanceManage.supplementary_subgroups(params)
         params.append({"field": "model_id", "type": "str=", "value": model_id})
         _page = dict(skip=(page - 1) * page_size, limit=page_size)
         if order and order.startswith("-"):
             order = f"{order.replace('-', '')} DESC"
+
+        permission_params = InstanceManage.get_permission_params(token, model_id)
+
         with AgUtils() as ag:
-            inst_list, count = ag.query_entity(INSTANCE, params, page=_page, order=order)
+            inst_list, count = ag.query_entity(INSTANCE, params, page=_page, order=order, permission_params=permission_params)
         return inst_list, count
 
     @staticmethod
@@ -48,9 +76,15 @@ class InstanceManage(object):
         return result
 
     @staticmethod
-    def instance_update(inst_id: int, update_attr: dict):
+    def instance_update(token: str, inst_id: int, update_attr: dict):
         """修改实例属性"""
         inst_info = InstanceManage.query_entity_by_id(inst_id)
+
+        if not inst_info:
+            raise BaseAppException("实例不存在！")
+
+        InstanceManage.check_instances_permission(token, [inst_info], inst_info["model_id"])
+
         attrs = ModelManage.search_model_attr(inst_info["model_id"])
         check_attr_map = dict(is_only={}, is_required={}, editable={})
         for attr in attrs:
@@ -68,8 +102,15 @@ class InstanceManage(object):
         return result
 
     @staticmethod
-    def instance_batch_delete(inst_ids: list):
+    def instance_batch_delete(token: str, inst_ids: list):
         """批量删除实例"""
+        inst_list = InstanceManage.query_entity_by_ids(inst_ids)
+
+        if not inst_list:
+            raise BaseAppException("实例不存在！")
+
+        InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
+
         with AgUtils() as ag:
             ag.batch_delete_entity(INSTANCE, inst_ids)
 
@@ -178,6 +219,13 @@ class InstanceManage(object):
         return entity
 
     @staticmethod
+    def query_entity_by_ids(inst_ids: list):
+        """根据实例ID查询实例详情"""
+        with AgUtils() as ag:
+            entity_list = ag.query_entity_by_ids(INSTANCE, inst_ids)
+        return entity_list
+
+    @staticmethod
     def download_import_template(model_id: str):
         """下载导入模板"""
         attrs = ModelManage.search_model_attr(model_id)
@@ -203,7 +251,10 @@ class InstanceManage(object):
         return Export(attrs).export_inst_list(inst_list)
 
     @staticmethod
-    def fulltext_search(search: str):
+    def fulltext_search(token: str, data: dict):
+
+        permission_params = InstanceManage.get_permission_params(token, data.get("model_id"))
+
         with AgUtils() as ag:
-            inst_list = ag.entity_fulltext_search(INSTANCE, search, [])
+            inst_list = ag.entity_fulltext_search(INSTANCE, data["search"], [], permission_params=permission_params)
         return inst_list
