@@ -34,7 +34,7 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         operation_description="查询所有用户",
     )
     @action(detail=False, methods=["get"], url_path="all")
-    @uma_permission("user_all")
+    # @uma_permission("user_all")
     def user_all(self, request):
         data = UserManage().user_all()
         return WebUtils.response_success(data)
