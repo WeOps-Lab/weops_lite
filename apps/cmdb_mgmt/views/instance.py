@@ -71,7 +71,11 @@ class InstanceViewSet(viewsets.ViewSet):
     )
     @uma_permission("instance_create")
     def create(self, request):
-        inst = InstanceManage.instance_create(request.data.get("model_id"), request.data.get("instance_info"))
+        inst = InstanceManage.instance_create(
+            request.data.get("model_id"),
+            request.data.get("instance_info"),
+            request.userinfo.get("username", ""),
+        )
         return WebUtils.response_success(inst)
 
     @swagger_auto_schema(
@@ -83,7 +87,11 @@ class InstanceViewSet(viewsets.ViewSet):
     )
     @uma_permission("instance_delete")
     def destroy(self, request, pk: int):
-        InstanceManage.instance_batch_delete(request.META.get(AUTH_TOKEN_HEADER_NAME), [int(pk)])
+        InstanceManage.instance_batch_delete(
+            request.META.get(AUTH_TOKEN_HEADER_NAME),
+            [int(pk)],
+            request.userinfo.get("username", ""),
+        )
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -110,7 +118,12 @@ class InstanceViewSet(viewsets.ViewSet):
     )
     @uma_permission("instance_update")
     def partial_update(self, request, pk: int):
-        inst = InstanceManage.instance_update(request.META.get(AUTH_TOKEN_HEADER_NAME), int(pk), request.data)
+        inst = InstanceManage.instance_update(
+            request.META.get(AUTH_TOKEN_HEADER_NAME),
+            int(pk),
+            request.data,
+            request.userinfo.get("username", ""),
+        )
         return WebUtils.response_success(inst)
 
     @swagger_auto_schema(
@@ -124,7 +137,7 @@ class InstanceViewSet(viewsets.ViewSet):
                 "dst_model_id": openapi.Schema(type=openapi.TYPE_STRING, description="目标模型ID"),
                 "src_inst_id": openapi.Schema(type=openapi.TYPE_INTEGER, description="源模型实例ID"),
                 "dst_inst_id": openapi.Schema(type=openapi.TYPE_INTEGER, description="目标模型实例ID"),
-                "asst_id": openapi.Schema(type=openapi.TYPE_INTEGER, description="目标模型实例ID"),
+                "asst_id": openapi.Schema(type=openapi.TYPE_STRING, description="目标模型实例ID"),
             },
             required=["model_asst_id", "src_model_id", "src_inst_id", "dst_model_id", "dst_inst_id", "asst_id"],
         ),
@@ -132,7 +145,7 @@ class InstanceViewSet(viewsets.ViewSet):
     @uma_permission("instance_association_create")
     @action(detail=False, methods=["post"], url_path="association")
     def instance_association_create(self, request):
-        asso = InstanceManage.instance_association_create(request.data)
+        asso = InstanceManage.instance_association_create(request.data, request.userinfo.get("username", ""))
         return WebUtils.response_success(asso)
 
     @swagger_auto_schema(
@@ -145,7 +158,7 @@ class InstanceViewSet(viewsets.ViewSet):
     @uma_permission("instance_association_delete")
     @action(detail=False, methods=["delete"], url_path="association/(?P<id>.+?)")
     def instance_association_delete(self, request, id: int):
-        InstanceManage.instance_association_delete(int(id))
+        InstanceManage.instance_association_delete(int(id), request.userinfo.get("username", ""))
         return WebUtils.response_success()
 
     @swagger_auto_schema(
@@ -226,7 +239,11 @@ class InstanceViewSet(viewsets.ViewSet):
     @uma_permission("inst_import")
     @action(methods=["post"], detail=False, url_path=r"(?P<model_id>.+?)/inst_import")
     def inst_import(self, request, model_id):
-        result = InstanceManage.inst_import(model_id, request.data.get("file").file)
+        result = InstanceManage.inst_import(
+            model_id,
+            request.data.get("file").file,
+            request.userinfo.get("username", ""),
+        )
         return WebUtils.response_success(result)
 
     @swagger_auto_schema(

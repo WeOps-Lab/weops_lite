@@ -1,7 +1,11 @@
 from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
+from apps.cmdb_mgmt.models.change_record import DELETE_INST_ASST, CREATE_INST_ASST, CREATE_INST, UPDATE_INST, \
+    DELETE_INST
 from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
+from apps.cmdb_mgmt.utils.change_record import create_change_record, create_change_record_by_asso, \
+    batch_create_change_record
 from apps.cmdb_mgmt.utils.export import Export
 from apps.cmdb_mgmt.utils.Import import Import
 from apps.cmdb_mgmt.utils.permission import PermissionManage
@@ -59,7 +63,7 @@ class InstanceManage(object):
         return inst_list, count
 
     @staticmethod
-    def instance_create(model_id: str, instance_info: dict):
+    def instance_create(model_id: str, instance_info: dict, operator: str):
         """创建实例"""
         instance_info.update(model_id=model_id)
         attrs = ModelManage.search_model_attr(model_id)
@@ -73,10 +77,19 @@ class InstanceManage(object):
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
             result = ag.create_entity(INSTANCE, instance_info, check_attr_map, exist_items)
+
+        create_change_record(
+            result["_id"],
+            result["model_id"],
+            INSTANCE,
+            CREATE_INST,
+            after_data=result,
+            operator=operator,
+        )
         return result
 
     @staticmethod
-    def instance_update(token: str, inst_id: int, update_attr: dict):
+    def instance_update(token: str, inst_id: int, update_attr: dict, operator: str):
         """修改实例属性"""
         inst_info = InstanceManage.query_entity_by_id(inst_id)
 
@@ -99,10 +112,21 @@ class InstanceManage(object):
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_info["model_id"]}])
             exist_items = [i for i in exist_items if i["_id"] != inst_id]
             result = ag.set_entity_properties(INSTANCE, inst_id, update_attr, check_attr_map, exist_items)
+
+        create_change_record(
+            inst_info["_id"],
+            inst_info["model_id"],
+            INSTANCE,
+            UPDATE_INST,
+            before_data=inst_info,
+            after_data=result,
+            operator=operator
+        )
+
         return result
 
     @staticmethod
-    def instance_batch_delete(token: str, inst_ids: list):
+    def instance_batch_delete(token: str, inst_ids: list, operator: str):
         """批量删除实例"""
         inst_list = InstanceManage.query_entity_by_ids(inst_ids)
 
@@ -113,6 +137,9 @@ class InstanceManage(object):
 
         with AgUtils() as ag:
             ag.batch_delete_entity(INSTANCE, inst_ids)
+
+        change_records = [dict(inst_id=i["_id"], model_id=i["model_id"], before_data=i) for i in inst_list]
+        batch_create_change_record(INSTANCE, DELETE_INST, change_records, operator=operator)
 
     @staticmethod
     def instance_association_instance_list(model_id: str, inst_id: int):
@@ -188,7 +215,7 @@ class InstanceManage(object):
         return edges
 
     @staticmethod
-    def instance_association_create(data: dict):
+    def instance_association_create(data: dict, operator: str):
         """创建实例关联"""
         with AgUtils() as ag:
             try:
@@ -196,13 +223,23 @@ class InstanceManage(object):
             except BaseAppException as e:
                 if e.message == EDGE_REPETITION:
                     raise BaseAppException(INSTANCE_EDGE_REPETITION)
+
+        asso_info = InstanceManage.instance_association_by_asso_id(edge["_id"])
+
+        create_change_record_by_asso(INSTANCE_ASSOCIATION, CREATE_INST_ASST, asso_info, operator=operator)
+
         return edge
 
     @staticmethod
-    def instance_association_delete(asso_id: int):
+    def instance_association_delete(asso_id: int, operator: str):
         """删除实例关联"""
+
+        asso_info = InstanceManage.instance_association_by_asso_id(asso_id)
+
         with AgUtils() as ag:
             ag.delete_edge(INSTANCE_ASSOCIATION, asso_id)
+
+        create_change_record_by_asso(INSTANCE_ASSOCIATION, DELETE_INST_ASST, asso_info, operator=operator)
 
     @staticmethod
     def instance_association_by_asso_id(asso_id: int):
@@ -232,12 +269,21 @@ class InstanceManage(object):
         return Export(attrs).export_template()
 
     @staticmethod
-    def inst_import(model_id: str, file_stream: bytes):
+    def inst_import(model_id: str, file_stream: bytes, operator: str):
         """实例导入"""
         attrs = ModelManage.search_model_attr(model_id)
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
-        return Import(model_id, attrs, exist_items).import_inst_list(file_stream)
+        results = Import(model_id, attrs, exist_items).import_inst_list(file_stream)
+
+        change_records = [
+            dict(inst_id=i["data"]["_id"], model_id=i["data"]["model_id"], before_data=i["data"])
+            for i in results
+            if i["success"]
+        ]
+        batch_create_change_record(INSTANCE, DELETE_INST, change_records, operator=operator)
+
+        return results
 
     @staticmethod
     def inst_export(model_id: str, ids: list):

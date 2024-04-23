@@ -322,6 +322,8 @@ class AgUtils(object):
 
         label_str = f":{label}" if label else ""
         properties_str = self.format_properties_set(properties)
+        if not properties_str:
+            raise BaseAppException("无可更新属性！")
         entity = self.con.execCypher(
             f"MATCH (n{label_str}) WHERE id(n) = {entity_id} SET {properties_str} RETURN n").fetchone()
         self.con.commit()
