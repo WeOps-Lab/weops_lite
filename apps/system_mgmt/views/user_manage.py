@@ -30,6 +30,16 @@ class KeycloakUserViewSet(viewsets.ViewSet):
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(
+        operation_id="user_all",
+        operation_description="查询所有用户",
+    )
+    @action(detail=False, methods=["get"], url_path="all")
+    @uma_permission("user_all")
+    def user_all(self, request):
+        data = UserManage().user_all()
+        return WebUtils.response_success(data)
+
+    @swagger_auto_schema(
         operation_id="user_info",
         operation_description="获取用户信息",
         manual_parameters=[

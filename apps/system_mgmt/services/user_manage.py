@@ -212,6 +212,11 @@ class UserManage(object):
             user_info.update(roles=roles, groups=groups)
         return {"count": len(users), "users": users}
 
+    def user_all(self):
+        """获取所有用户"""
+        users = self.keycloak_client.realm_client.get_users()
+        return users
+
     def get_user_info(self, user_id):
         """获取用户信息"""
         user_info = self.keycloak_client.realm_client.get_user(user_id)
