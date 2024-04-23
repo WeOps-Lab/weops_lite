@@ -76,6 +76,12 @@ def id_in(param):
     return f"id(n) IN {value}"
 
 
+def user_in(param):
+    field = param["field"]
+    value = param["value"]
+    return f"n.{field} IN {value}"
+
+
 # 映射参数类型和对应的转换函数
 FORMAT_TYPE = {
     "bool": format_bool,
@@ -91,5 +97,5 @@ FORMAT_TYPE = {
     "int[]": format_int_in,
     "list[]": format_list_in,
     "id[]": id_in,
-
+    "user[]": user_in,
 }
