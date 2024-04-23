@@ -21,12 +21,7 @@ router.register(r"api/role", KeycloakRoleViewSet, basename="role")
 
 router.register(r"api/menu", MenuManageModelViewSet, basename="menu")
 router.register(r"api/operation_log", OperationLogViewSet, basename="operation_log")
-router.register(r"api/operation_log", OperationLogViewSet, basename="operation_log")
-router.register(
-    r"api/operation_log/custom",
-    CustomOperationLogViewSet,
-    basename="operation_log_custom",
-)
+router.register(r"api/operation_log/custom", CustomOperationLogViewSet, basename="operation_log_custom")
 
 urlpatterns = router.urls
 
