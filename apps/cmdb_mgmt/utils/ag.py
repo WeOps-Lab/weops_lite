@@ -223,7 +223,7 @@ class AgUtils(object):
 
         return f"({params_str[:-len(param_type)]})" if params_str else params_str
 
-    def format_final_params(self, search_params: list, search_param_type: str = "AND", permission_params=None):
+    def format_final_params(self, search_params: list, search_param_type: str = "AND", permission_params=""):
         search_params_str = self.format_search_params(search_params, search_param_type)
 
         if not search_params_str:
@@ -234,7 +234,7 @@ class AgUtils(object):
 
         return f"{search_params_str} AND {permission_params}"
 
-    def query_entity(self, label: str, params: list, page: dict = None, order: str = None, param_type="AND", permission_params: str = None):
+    def query_entity(self, label: str, params: list, page: dict = None, order: str = None, param_type="AND", permission_params: str = ""):
         """
             查询实体
         """
@@ -356,7 +356,7 @@ class AgUtils(object):
         self.con.execCypher(f"MATCH ()-[n{label_str}]->() WHERE id(n) = {edge_id} DELETE n")
         self.con.commit()
 
-    def entity_fulltext_search(self, label: str, search: str, params: list, permission_params: str = None):
+    def entity_fulltext_search(self, label: str, search: str, params: list, permission_params: str = ""):
         """实体全网检索"""
 
         label_str = f":{label}" if label else ""
