@@ -1,5 +1,4 @@
 from datetime import timedelta
-from drf_yasg import openapi
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -50,12 +49,4 @@ SWAGGER_SETTINGS = {
     "OPERATIONS_SORTER": "alpha",
     "VALIDATOR_URL": None,
     "AUTO_SCHEMA_TYPE": 2,  # 分组根据url层级分，0、1 或 2 层
-    "DEFAULT_INFO": openapi.Info(
-        title="WeOps Lite API",
-        default_version="v2",
-        description="",
-        terms_of_service="",
-        contact=openapi.Contact(email=""),
-        license=openapi.License(name=""),
-    ),
 }
