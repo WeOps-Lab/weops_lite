@@ -82,6 +82,12 @@ def user_in(param):
     return f"n.{field} IN {value}"
 
 
+def user_eq(param):
+    field = param["field"]
+    value = param["value"]
+    return f"n.{field} = {value}"
+
+
 # 映射参数类型和对应的转换函数
 FORMAT_TYPE = {
     "bool": format_bool,
@@ -98,4 +104,5 @@ FORMAT_TYPE = {
     "list[]": format_list_in,
     "id[]": id_in,
     "user[]": user_in,
+    "user=": user_eq,
 }
