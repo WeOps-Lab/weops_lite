@@ -265,13 +265,13 @@ class InstanceManage(object):
     @staticmethod
     def download_import_template(model_id: str):
         """下载导入模板"""
-        attrs = ModelManage.search_model_attr(model_id)
+        attrs = ModelManage.search_model_attr_v2(model_id)
         return Export(attrs).export_template()
 
     @staticmethod
     def inst_import(model_id: str, file_stream: bytes, operator: str):
         """实例导入"""
-        attrs = ModelManage.search_model_attr(model_id)
+        attrs = ModelManage.search_model_attr_v2(model_id)
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
         results = Import(model_id, attrs, exist_items).import_inst_list(file_stream)
@@ -288,7 +288,7 @@ class InstanceManage(object):
     @staticmethod
     def inst_export(model_id: str, ids: list):
         """实例导出"""
-        attrs = ModelManage.search_model_attr(model_id)
+        attrs = ModelManage.search_model_attr_v2(model_id)
         with AgUtils() as ag:
             if ids:
                 inst_list = ag.query_entity_by_ids(INSTANCE, ids)

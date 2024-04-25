@@ -50,6 +50,7 @@ ASSOCIATION_TYPE = [
 
 # 需要进行ID与NAME转化的属性类型
 ENUM = "enum"
+USER = "user"
 ORGANIZATION = "organization"
 
 # 默认的实例名属性

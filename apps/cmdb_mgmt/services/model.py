@@ -1,12 +1,13 @@
 import json
 
 from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFOS, CREATE_MODEL_CHECK_ATTR, \
-    UPDATE_MODEL_CHECK_ATTR_MAP, ORGANIZATION
+    UPDATE_MODEL_CHECK_ATTR_MAP, ORGANIZATION, USER
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, MODEL_EDGE_REPETITION, MODEL_NOT_PRESENT, MODEL_ATTR_NOT_PRESENT, \
     MODEL_ATTR_PRESENT, EXIST_MODEL_EDGE, EXIST_MODEL_INST
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.system_mgmt.services.group_manage import GroupManage
+from apps.system_mgmt.services.user_manage import UserManage
 
 
 class ModelManage(object):
@@ -171,13 +172,36 @@ class ModelManage(object):
         """
         model_info = ModelManage.search_model_info(model_id)
         attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
+        return attrs
+
+    @staticmethod
+    def search_model_attr_v2(model_id: str):
+        """
+            查询模型属性
+        """
+        model_info = ModelManage.search_model_info(model_id)
+        attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         for attr in attrs:
             if attr["attr_type"] == ORGANIZATION:
                 group = GroupManage().group_list()
                 option = []
                 ModelManage.get_organization_option(group, option)
                 attr.update(option=option)
-                break
+                continue
+
+            if attr["attr_type"] == USER:
+                users = UserManage().user_all()
+                option = [
+                    dict(
+                        id=user["username"],
+                        name=user["lastName"],
+                        is_default=False,
+                        type="str",
+                    )
+                    for user in users]
+                attr.update(option=option)
+                continue
+
         return attrs
 
     @staticmethod

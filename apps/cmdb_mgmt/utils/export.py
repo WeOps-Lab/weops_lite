@@ -5,7 +5,7 @@ from openpyxl.styles import PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 
-from apps.cmdb_mgmt.constants import ENUM, ORGANIZATION
+from apps.cmdb_mgmt.constants import ENUM, ORGANIZATION, USER
 
 
 class Export:
@@ -31,7 +31,7 @@ class Export:
             attrs_name.append(attr_name)
             attrs_id.append(attr_info["attr_id"])
             index += 1
-            if attr_info["attr_type"] in {ENUM, ORGANIZATION}:
+            if attr_info["attr_type"] in {ENUM, ORGANIZATION, USER}:
                 sheet.add_data_validation(
                     self.set_enum_validation_by_sheet_data(workbook, attr_info["attr_name"], attr_info["option"], index)
                 )
@@ -79,12 +79,12 @@ class Export:
         enum_field_dict = {
             attr_info["attr_id"]: {i["id"]: i["name"] for i in attr_info["option"]}
             for attr_info in self.attrs
-            if attr_info["attr_type"] in {ENUM, ORGANIZATION}
+            if attr_info["attr_type"] in {ENUM, ORGANIZATION, USER}
         }
         for inst_info in inst_list:
             sheet_data = []
             for attr in self.attrs:
-                if attr["attr_type"] in {ENUM, ORGANIZATION}:
+                if attr["attr_type"] in {ENUM, ORGANIZATION, USER}:
                     sheet_data.append(
                         enum_field_dict[attr["attr_id"]].get(inst_info.get(attr["attr_id"]))
                     )

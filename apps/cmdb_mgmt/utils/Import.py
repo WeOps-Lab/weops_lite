@@ -1,5 +1,5 @@
 import openpyxl
-from apps.cmdb_mgmt.constants import NEED_CONVERSION_TYPE, INSTANCE, ENUM, ORGANIZATION
+from apps.cmdb_mgmt.constants import NEED_CONVERSION_TYPE, INSTANCE, ENUM, ORGANIZATION, USER
 from apps.cmdb_mgmt.utils.ag import AgUtils
 
 
@@ -19,7 +19,7 @@ class Import:
                 need_update_type_field_map[attr_info["attr_id"]] = attr_info["attr_type"]
                 continue
 
-            if attr_info["attr_type"] in {ENUM, ORGANIZATION}:
+            if attr_info["attr_type"] in {ENUM, ORGANIZATION, USER}:
                 need_val_to_id_field_map[attr_info["attr_id"]] = {i["name"]: i["id"] for i in attr_info["option"]}
 
         # 读取临时文件
