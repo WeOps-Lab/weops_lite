@@ -105,7 +105,11 @@ class InstanceViewSet(viewsets.ViewSet):
     @uma_permission("instance_batch_delete")
     @action(detail=False, methods=["post"], url_path="batch_delete")
     def instance_batch_delete(self, request):
-        InstanceManage.instance_batch_delete(request.META.get(AUTH_TOKEN_HEADER_NAME), request.data)
+        InstanceManage.instance_batch_delete(request.META.get(
+            AUTH_TOKEN_HEADER_NAME),
+            request.data,
+            request.userinfo.get("username", ""),
+        )
         return WebUtils.response_success()
 
     @swagger_auto_schema(
