@@ -37,9 +37,9 @@ class ModelManage(object):
         """
             更新模型
         """
-        data.pop("model_id", "")    # 不能更新model_id
+        model_id = data.pop("model_id", "")    # 不能更新model_id
         with AgUtils() as ag:
-            exist_items, _ = ag.query_entity(MODEL, [])
+            exist_items, _ = ag.query_entity(MODEL, [{"field": "model_id", "type": "str<>", "value": model_id}])
             model = ag.set_entity_properties(MODEL, id, data, UPDATE_MODEL_CHECK_ATTR_MAP, exist_items)
         return model
 
