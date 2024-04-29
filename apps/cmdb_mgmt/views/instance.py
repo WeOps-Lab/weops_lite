@@ -295,8 +295,8 @@ class InstanceViewSet(viewsets.ViewSet):
             openapi.Parameter("inst_id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_STRING),
         ],
     )
-    @uma_permission("instance_association_instance_list")
+    @uma_permission("topo_search")
     @action(detail=False, methods=["get"], url_path="topo_search/(?P<model_id>.+?)/(?P<inst_id>.+?)")
-    def instance_association_instance_list(self, request, model_id: str, inst_id: int):
+    def topo_search(self, request, model_id: str, inst_id: int):
         result = InstanceManage.topo_search(int(inst_id))
         return WebUtils.response_success(result)
