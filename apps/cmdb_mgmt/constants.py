@@ -110,3 +110,6 @@ NEED_CONVERSION_TYPE = {
     "str": str,
     "list": list,
 }
+
+EDGE_TYPE = 2
+ENTITY_TYPE = 1

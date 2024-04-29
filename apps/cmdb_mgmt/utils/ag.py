@@ -1,3 +1,4 @@
+from apps.cmdb_mgmt.constants import ENTITY_TYPE, EDGE_TYPE
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.ag_client import AgClient
 from apps.cmdb_mgmt.utils.format_type import FORMAT_TYPE
@@ -380,3 +381,66 @@ class AgUtils(object):
         ]
 
         return result
+
+    def query_topo(self, label: str, params: list):
+        """查询实例拓扑"""
+
+        label_str = f":{label}" if label else ""
+        params_str = self.format_search_params(params)
+        params_str = f"WHERE {params_str}" if params_str else params_str
+        objs = self.con.execCypher(f"MATCH p=(n{label_str})-[*]-() {params_str} RETURN p")
+
+        return self.format_topo(objs)
+
+    def format_topo(self, objs):
+        """格式化拓扑数据"""
+        edge_map = {}
+        entity_map = {}
+
+        for obj in objs:
+            for topo in obj:
+                for data in topo:
+                    data_json = dict(_id=data.id, _label=data.label, **data.properties)
+                    if data.gtype == ENTITY_TYPE:
+                        entity_map[data_json["_id"]] = data_json
+                    elif data.gtype == EDGE_TYPE:
+                        edge_map[data_json["_id"]] = data_json
+
+        edges = list(edge_map.values())
+        entities = list(entity_map.values())
+
+        src_result = self.create_node(entities[0], edges, entities, True)
+        dst_result = self.create_node(entities[0], edges, entities, False)
+
+        return dict(src_result=src_result, dst_result=dst_result)
+
+    def create_node(self, entity, edges, entities, entity_is_src=True):
+        """entity作为目标"""
+        node = {
+            '_id': entity['_id'],
+            'model_id': entity['model_id'],
+            'inst_name': entity['inst_name'],
+            'children': []
+        }
+
+        if entity_is_src:
+            entity_key, child_entity_key = "src", "dst"
+        else:
+            entity_key, child_entity_key = "dst", "src"
+
+        for edge in edges:
+            if edge[f'{entity_key}_inst_id'] == entity['_id']:
+                child_entity = self.find_entity_by_id(edge[f'{child_entity_key}_inst_id'], entities)
+                if child_entity:
+                    child_node = self.create_node(child_entity, edges, entities, entity_is_src)
+                    child_node['model_asst_id'] = edge['model_asst_id']
+                    child_node['asst_id'] = edge['asst_id']
+                    node['children'].append(child_node)
+        return node
+
+    def find_entity_by_id(self, entity_id, entities):
+        """根据ID找实体"""
+        for entity in entities:
+            if entity['_id'] == entity_id:
+                return entity
+        return None

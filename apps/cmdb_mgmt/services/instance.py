@@ -298,9 +298,16 @@ class InstanceManage(object):
 
     @staticmethod
     def fulltext_search(token: str, data: dict):
-
+        """全网检索"""
         permission_params = InstanceManage.get_permission_params(token, data.get("model_id"))
 
         with AgUtils() as ag:
             inst_list = ag.entity_fulltext_search(INSTANCE, data["search"], [], permission_params=permission_params)
         return inst_list
+
+    @staticmethod
+    def topo_search(inst_id: int):
+        """拓扑查询"""
+        with AgUtils() as ag:
+            result = ag.query_topo(INSTANCE, [{"field": "id", "type": "id=", "value": inst_id}])
+        return result

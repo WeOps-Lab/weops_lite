@@ -76,6 +76,11 @@ def id_in(param):
     return f"id(n) IN {value}"
 
 
+def id_eq(param):
+    value = param["value"]
+    return f"id(n) = {value}"
+
+
 def user_in(param):
     field = param["field"]
     value = param["value"]
@@ -102,6 +107,7 @@ FORMAT_TYPE = {
     "int<>": format_int_neq,
     "int[]": format_int_in,
     "list[]": format_list_in,
+    "id=": id_eq,
     "id[]": id_in,
     "user[]": user_in,
     "user=": user_eq,
