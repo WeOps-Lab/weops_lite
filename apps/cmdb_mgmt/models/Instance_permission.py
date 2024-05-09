@@ -20,3 +20,11 @@ class InstancePermission(TimeInfo, MaintainerInfo):
     model_id = models.CharField(max_length=100, db_index=True, verbose_name="模型ID")
     permission_type = models.CharField(max_length=100, db_index=True, choices=PERMISSION_TYPE_CHOICES, default=QUERY, verbose_name="权限类型")
     conditions = JSONField(default=list, verbose_name="条件列表")
+
+
+class UserInstancePermission(TimeInfo, MaintainerInfo):
+
+    username = models.CharField(max_length=100, db_index=True, verbose_name="用户名")
+    model_id = models.CharField(max_length=100, db_index=True, verbose_name="模型ID")
+    permission_type = models.CharField(max_length=100, db_index=True, choices=PERMISSION_TYPE_CHOICES, default=QUERY, verbose_name="权限类型")
+    conditions = JSONField(default=list, verbose_name="条件列表")

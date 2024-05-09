@@ -4,10 +4,11 @@ from apps.cmdb_mgmt.utils.ag import AgUtils
 
 
 class Import:
-    def __init__(self, model_id, attrs, exist_items):
+    def __init__(self, model_id, attrs, exist_items, operator):
         self.model_id = model_id
         self.attrs = attrs
         self.exist_items = exist_items
+        self.operator = operator
 
     def format_excel_data(self, excel_meta: bytes):
         """格式化excel"""
@@ -70,7 +71,7 @@ class Import:
                 check_attr_map["is_required"][attr["attr_id"]] = attr["attr_name"]
 
         with AgUtils() as ag:
-            result = ag.batch_create_entity(INSTANCE, inst_list, check_attr_map, self.exist_items)
+            result = ag.batch_create_entity(INSTANCE, inst_list, check_attr_map, self.exist_items, self.operator)
         return result
 
     def import_inst_list(self, file_stream: bytes):

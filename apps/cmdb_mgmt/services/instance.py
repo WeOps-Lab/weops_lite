@@ -77,7 +77,7 @@ class InstanceManage(object):
 
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
-            result = ag.create_entity(INSTANCE, instance_info, check_attr_map, exist_items)
+            result = ag.create_entity(INSTANCE, instance_info, check_attr_map, exist_items, operator)
 
         create_change_record(
             result["_id"],
@@ -275,7 +275,7 @@ class InstanceManage(object):
         attrs = ModelManage.search_model_attr_v2(model_id)
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
-        results = Import(model_id, attrs, exist_items).import_inst_list(file_stream)
+        results = Import(model_id, attrs, exist_items, operator).import_inst_list(file_stream)
 
         change_records = [
             dict(inst_id=i["data"]["_id"], model_id=i["data"]["model_id"], before_data=i["data"])

@@ -54,11 +54,11 @@ class AgUtils(object):
         properties_str += "}"
         return properties_str
 
-    def create_entity(self, label: str, properties: dict, check_attr_map: dict, exist_items: list):
+    def create_entity(self, label: str, properties: dict, check_attr_map: dict, exist_items: list, operator: str = None):
         """
             快速创建一个实体
         """
-        result = self._create_entity(label, properties, check_attr_map, exist_items)
+        result = self._create_entity(label, properties, check_attr_map, exist_items, operator)
         # 提交事务, 持久化到库
         self.con.commit()
         return result
@@ -106,7 +106,7 @@ class AgUtils(object):
         """取可编辑属性"""
         return {k: v for k, v in item.items() if k in check_attr_map}
 
-    def _create_entity(self, label: str, properties: dict, check_attr_map: dict, exist_items: list):
+    def _create_entity(self, label: str, properties: dict, check_attr_map: dict, exist_items: list, operator: str = None):
 
         # 校验必填项标签非空
         if not label:
@@ -117,6 +117,10 @@ class AgUtils(object):
 
         # 校验必填项
         self.check_required_attr(properties, check_attr_map.get("is_required", {}))
+
+        # 补充创建人
+        if operator:
+            properties.update(_creator=operator)
 
         # 创建实体
         properties_str = self.format_properties(properties)
@@ -158,13 +162,13 @@ class AgUtils(object):
 
         return self.edge_to_dict(edge)
 
-    def batch_create_entity(self, label: str, properties_list: list, check_attr_map: dict, exist_items: list):
+    def batch_create_entity(self, label: str, properties_list: list, check_attr_map: dict, exist_items: list, operator: str = None):
         """批量创建实体"""
         results = []
         for index, properties in enumerate(properties_list):
             result = {}
             try:
-                entity = self._create_entity(label, properties, check_attr_map, exist_items)
+                entity = self._create_entity(label, properties, check_attr_map, exist_items, operator)
                 result.update(data=entity, success=True)
                 exist_items.append(entity)
             except BaseAppException as e:

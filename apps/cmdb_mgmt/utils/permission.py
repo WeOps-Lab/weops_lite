@@ -1,4 +1,4 @@
-from apps.cmdb_mgmt.models.Instance_permission import InstancePermission, QUERY
+from apps.cmdb_mgmt.models.Instance_permission import InstancePermission, QUERY, UserInstancePermission, MANAGE
 from apps.cmdb_mgmt.utils.format_type import FORMAT_TYPE
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
@@ -12,18 +12,31 @@ class PermissionManage:
         self.permission_type = permission_type
         self.keycloak_client = KeyCloakClient()
 
+    def get_permission_params_by_user(self, username):
+        """根据角色获取实例权限"""
+        query_dict = dict(username=username)
+        if self.model_id:
+            query_dict.update(model_id=self.model_id)
+        if self.permission_type:
+            query_dict.update(permission_type=self.permission_type)
+
+        objs = UserInstancePermission.objects.filter(**query_dict)
+        return objs
+
     def get_permission_params_by_roles(self, roles):
         """根据角色获取实例权限"""
         query_dict = dict(role_id__in=roles)
-        if self.token:
+        if self.model_id:
             query_dict.update(model_id=self.model_id)
         if self.permission_type:
             query_dict.update(permission_type=self.permission_type)
 
         objs = InstancePermission.objects.filter(**query_dict)
+        return objs
 
+    def format_permission_params(self, param_objs):
         param_map = {}
-        for obj in objs:
+        for obj in param_objs:
             if obj.model_id not in param_map:
                 param_map[obj.model_id] = []
 
@@ -60,7 +73,28 @@ class PermissionManage:
         if ADMIN in roles:
             return ""
 
-        permission_params = self.get_permission_params_by_roles(roles)
+        # 获取用户权限
+        userinfo = self.keycloak_client.get_userinfo(self.token)
+        user_permissions = self.get_permission_params_by_user(userinfo["preferred_username"])
+
+        # 获取角色权限
+        role_permissions = self.get_permission_params_by_roles(roles)
+
+        # 合并角色与用户授权
+        permissions = list(user_permissions) + list(role_permissions)
+
+        # 将用户创建的实例条件加上
+        permissions.append(
+            UserInstancePermission(
+                username=userinfo["preferred_username"],
+                model_id=self.model_id,
+                permission_type=MANAGE,
+                conditions=[{"field": "_creator", "type": "str=", "value": userinfo["preferred_username"]}]
+            )
+        )
+
+        # 格式化权限条件
+        permission_params = self.format_permission_params(permissions)
 
         # 普通用户权限参数为空，说明用户无实例权限
         if not permission_params:
