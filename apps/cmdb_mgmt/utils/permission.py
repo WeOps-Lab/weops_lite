@@ -1,4 +1,4 @@
-from apps.cmdb_mgmt.models.Instance_permission import InstancePermission
+from apps.cmdb_mgmt.models.Instance_permission import InstancePermission, QUERY
 from apps.cmdb_mgmt.utils.format_type import FORMAT_TYPE
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
@@ -6,9 +6,10 @@ from apps.system_mgmt.constants import ADMIN
 
 
 class PermissionManage:
-    def __init__(self, token, model_id):
+    def __init__(self, token, model_id, permission_type: str = None):
         self.token = token
         self.model_id = model_id
+        self.permission_type = permission_type
         self.keycloak_client = KeyCloakClient()
 
     def get_permission_params_by_roles(self, roles):
@@ -16,6 +17,8 @@ class PermissionManage:
         query_dict = dict(role_id__in=roles)
         if self.token:
             query_dict.update(model_id=self.model_id)
+        if self.permission_type:
+            query_dict.update(permission_type=self.permission_type)
 
         objs = InstancePermission.objects.filter(**query_dict)
 

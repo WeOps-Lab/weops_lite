@@ -1,5 +1,6 @@
 from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
+from apps.cmdb_mgmt.models.Instance_permission import MANAGE, QUERY
 from apps.cmdb_mgmt.models.change_record import DELETE_INST_ASST, CREATE_INST_ASST, CREATE_INST, UPDATE_INST, \
     DELETE_INST
 from apps.cmdb_mgmt.services.model import ModelManage
@@ -16,16 +17,16 @@ from apps.system_mgmt.services.group_manage import GroupManage
 class InstanceManage(object):
 
     @staticmethod
-    def get_permission_params(token, model_id):
+    def get_permission_params(token, model_id, permission_type: str = None):
         """获取用户实例权限查询参数，用户用户查询实例"""
-        obj = PermissionManage(token, model_id)
+        obj = PermissionManage(token, model_id, permission_type)
         permission_params = obj.get_permission_params()
         return permission_params
 
     @staticmethod
-    def check_instances_permission(token: str, instances: list, model_id: str):
+    def check_instances_permission(token: str, instances: list, model_id: str, permission_type: str = MANAGE):
         """实例权限校验，用于操作之前"""
-        permission_params = InstanceManage.get_permission_params(token, model_id)
+        permission_params = InstanceManage.get_permission_params(token, model_id, permission_type)
         with AgUtils() as ag:
             inst_list, count = ag.query_entity(INSTANCE, [], permission_params=permission_params)
 
