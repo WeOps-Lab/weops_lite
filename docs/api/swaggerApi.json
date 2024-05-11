@@ -49,6 +49,10 @@
     {
       "name": "instance_permission",
       "description": "实例权限"
+    },
+    {
+      "name": "change_record",
+      "description": "变更记录"
     }
   ],
   "schemes": [
@@ -7145,6 +7149,417 @@
                     "model_id",
                     "permission_type",
                     "conditions"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/change_record/": {
+      "get": {
+        "tags": [
+          "change_record"
+        ],
+        "summary": "查询变更记录列表<change_record_list>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "description": "",
+            "type": "string"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "description": "",
+            "type": "string"
+          },
+          {
+            "name": "model_id",
+            "in": "query",
+            "required": true,
+            "description": "模型ID",
+            "type": "string"
+          },
+          {
+            "name": "inst_id",
+            "in": "query",
+            "required": true,
+            "description": "实例ID",
+            "type": "string"
+          },
+          {
+            "name": "created_at_after",
+            "in": "query",
+            "required": false,
+            "description": "xx之后时间",
+            "type": "string"
+          },
+          {
+            "name": "created_at_before",
+            "in": "query",
+            "required": false,
+            "description": "xx之前时间",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "inst_id": {
+                            "type": "number",
+                            "title": "实例ID"
+                          },
+                          "model_id": {
+                            "type": "string",
+                            "title": "模型ID"
+                          },
+                          "label": {
+                            "type": "string"
+                          },
+                          "type": {
+                            "type": "string",
+                            "title": "类型"
+                          },
+                          "before_data": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "number"
+                              },
+                              "cpu": {
+                                "type": "string"
+                              },
+                              "mac": {
+                                "type": "string"
+                              },
+                              "mem": {
+                                "type": "string"
+                              },
+                              "disk": {
+                                "type": "string"
+                              },
+                              "_label": {
+                                "type": "string"
+                              },
+                              "os_bit": {
+                                "type": "string"
+                              },
+                              "comment": {
+                                "type": "string"
+                              },
+                              "os_type": {
+                                "type": "string"
+                              },
+                              "model_id": {
+                                "type": "string"
+                              },
+                              "operator": {
+                                "type": "string"
+                              },
+                              "host_name": {
+                                "type": "string"
+                              },
+                              "inst_name": {
+                                "type": "string"
+                              },
+                              "outer_mac": {
+                                "type": "string"
+                              },
+                              "cpu_module": {
+                                "type": "string"
+                              },
+                              "os_version": {
+                                "type": "string"
+                              },
+                              "host_innerip": {
+                                "type": "string"
+                              },
+                              "host_outerip": {
+                                "type": "string"
+                              },
+                              "organization": {
+                                "type": "string"
+                              },
+                              "backups_operator": {
+                                "type": "string"
+                              },
+                              "cpu_architecture": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "cpu",
+                              "mac",
+                              "mem",
+                              "disk",
+                              "_label",
+                              "os_bit",
+                              "comment",
+                              "os_type",
+                              "model_id",
+                              "operator",
+                              "host_name",
+                              "inst_name",
+                              "outer_mac",
+                              "cpu_module",
+                              "os_version",
+                              "host_innerip",
+                              "host_outerip",
+                              "organization",
+                              "backups_operator",
+                              "cpu_architecture"
+                            ],
+                            "title": "变更前数据"
+                          },
+                          "after_data": {
+                            "type": "object",
+                            "properties": {},
+                            "required": [],
+                            "title": "变更后数据"
+                          },
+                          "operator": {
+                            "type": "string",
+                            "title": "操作人"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "title": "操作时间"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "inst_id",
+                          "model_id",
+                          "label",
+                          "type",
+                          "before_data",
+                          "after_data",
+                          "operator",
+                          "created_at"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "data"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/change_record/{id}/": {
+      "get": {
+        "tags": [
+          "change_record"
+        ],
+        "summary": "查询变更记录详情<change_record_detail>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "inst_id": {
+                      "type": "number",
+                      "title": "实例ID"
+                    },
+                    "model_id": {
+                      "type": "string",
+                      "title": "模型ID"
+                    },
+                    "label": {
+                      "type": "string",
+                      "title": "标签"
+                    },
+                    "type": {
+                      "type": "string",
+                      "title": "变更类型"
+                    },
+                    "before_data": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "number"
+                        },
+                        "cpu": {
+                          "type": "string"
+                        },
+                        "mac": {
+                          "type": "string"
+                        },
+                        "mem": {
+                          "type": "string"
+                        },
+                        "disk": {
+                          "type": "string"
+                        },
+                        "_label": {
+                          "type": "string"
+                        },
+                        "os_bit": {
+                          "type": "string"
+                        },
+                        "comment": {
+                          "type": "string"
+                        },
+                        "os_type": {
+                          "type": "string"
+                        },
+                        "model_id": {
+                          "type": "string"
+                        },
+                        "operator": {
+                          "type": "string"
+                        },
+                        "host_name": {
+                          "type": "string"
+                        },
+                        "inst_name": {
+                          "type": "string"
+                        },
+                        "outer_mac": {
+                          "type": "string"
+                        },
+                        "cpu_module": {
+                          "type": "string"
+                        },
+                        "os_version": {
+                          "type": "string"
+                        },
+                        "host_innerip": {
+                          "type": "string"
+                        },
+                        "host_outerip": {
+                          "type": "string"
+                        },
+                        "organization": {
+                          "type": "string"
+                        },
+                        "backups_operator": {
+                          "type": "string"
+                        },
+                        "cpu_architecture": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "cpu",
+                        "mac",
+                        "mem",
+                        "disk",
+                        "_label",
+                        "os_bit",
+                        "comment",
+                        "os_type",
+                        "model_id",
+                        "operator",
+                        "host_name",
+                        "inst_name",
+                        "outer_mac",
+                        "cpu_module",
+                        "os_version",
+                        "host_innerip",
+                        "host_outerip",
+                        "organization",
+                        "backups_operator",
+                        "cpu_architecture"
+                      ],
+                      "title": "变更前"
+                    },
+                    "after_data": {
+                      "type": "object",
+                      "properties": {},
+                      "required": [],
+                      "title": "变更后"
+                    },
+                    "operator": {
+                      "type": "string",
+                      "title": "操作人"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "title": "操作时间"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "inst_id",
+                    "model_id",
+                    "label",
+                    "type",
+                    "before_data",
+                    "after_data",
+                    "operator",
+                    "created_at"
                   ]
                 },
                 "result": {
