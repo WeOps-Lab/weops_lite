@@ -1,8 +1,10 @@
+from apps.cmdb_mgmt.constants import ORGANIZATION
 from apps.cmdb_mgmt.models.Instance_permission import InstancePermission, QUERY, UserInstancePermission, MANAGE
 from apps.cmdb_mgmt.utils.format_type import FORMAT_TYPE
+from apps.cmdb_mgmt.utils.subgroup import SubGroup
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
-from apps.system_mgmt.constants import ADMIN
+from apps.system_mgmt.constants import ADMIN, DEFAULT_GROUP_NAME
 
 
 class PermissionManage:
@@ -11,6 +13,7 @@ class PermissionManage:
         self.model_id = model_id
         self.permission_type = permission_type
         self.keycloak_client = KeyCloakClient()
+        self.group_list = None
 
     def get_permission_params_by_user(self, username):
         """根据角色获取实例权限"""
@@ -22,6 +25,30 @@ class PermissionManage:
 
         objs = UserInstancePermission.objects.filter(**query_dict)
         return objs
+
+    def get_group_list(self):
+        """获取组织列表"""
+        if not self.group_list:
+            groups = self.keycloak_client.realm_client.get_groups({"search": ""})
+            self.group_list = [i for i in groups if i["name"] == DEFAULT_GROUP_NAME]
+        return self.group_list
+
+    def supplementary_subgroups(self, params: list):
+        """对组织补充子组, 并将类型改为str[]"""
+        for param in params:
+            if param["field"] != ORGANIZATION:
+                continue
+            if not param.get("include_subgroups"):
+                continue
+            if type(param["value"]) == str:
+                param["value"] = [param["value"]]
+                param["type"] = "str[]"
+
+            groups = []
+            for group_id in param["value"]:
+                groups.extend(SubGroup(group_id, self.get_group_list()).get_group_id_and_subgroup_id())
+            # 去重
+            param["value"] = list(set(groups))
 
     def get_permission_params_by_roles(self, roles):
         """根据角色获取实例权限"""
@@ -42,6 +69,10 @@ class PermissionManage:
 
             for condition_group in obj.conditions:
                 _connect, _param = " AND ", ""
+
+                # 补充子组织
+                self.supplementary_subgroups(condition_group)
+
                 for condition in condition_group:
                     method = FORMAT_TYPE.get(condition["type"])
                     if not method:

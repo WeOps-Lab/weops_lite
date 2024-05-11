@@ -10,6 +10,7 @@ from apps.cmdb_mgmt.utils.change_record import create_change_record, create_chan
 from apps.cmdb_mgmt.utils.export import Export
 from apps.cmdb_mgmt.utils.Import import Import
 from apps.cmdb_mgmt.utils.permission import PermissionManage
+from apps.cmdb_mgmt.utils.subgroup import SubGroup
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.system_mgmt.services.group_manage import GroupManage
 
@@ -45,7 +46,8 @@ class InstanceManage(object):
         """对组织补充子组, 并将类型改为str[]"""
         for param in params:
             if param["field"] == ORGANIZATION and param["value"]:
-                param["value"] = GroupManage().get_group_id_and_subgroup_id(param["value"])
+                group_list = GroupManage().group_list()
+                param["value"] = SubGroup(param["value"], group_list).get_group_id_and_subgroup_id()
                 param["type"] = "str[]"
 
     @staticmethod

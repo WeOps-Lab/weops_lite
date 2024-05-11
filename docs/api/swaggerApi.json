@@ -45,6 +45,10 @@
     {
       "name": "instance",
       "description": "实例管理"
+    },
+    {
+      "name": "instance_permission",
+      "description": "实例权限"
     }
   ],
   "schemes": [
@@ -3566,13 +3570,13 @@
           {
             "name": "page",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           },
           {
             "name": "page_size",
             "in": "query",
-            "required": false,
+            "required": true,
             "type": "string"
           },
           {
@@ -3826,6 +3830,83 @@
                   "type": "object",
                   "properties": {},
                   "required": []
+                }
+              },
+              "required": [
+                "result",
+                "message",
+                "data"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/user/all/": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "查询所有用户",
+        "description": "查询用户列表",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    },
+                    "users": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "title": "用户ID"
+                          },
+                          "username": {
+                            "type": "string",
+                            "title": "用户名"
+                          },
+                          "lastName": {
+                            "type": "string",
+                            "title": "中文名称"
+                          },
+                          "email": {
+                            "type": "string",
+                            "title": "游戏"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "username",
+                          "lastName",
+                          "email"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "users"
+                  ]
                 }
               },
               "required": [
@@ -5719,6 +5800,81 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "instance_permission"
+        ],
+        "summary": "查询角色实例权限详情<r_permission_detail>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "角色权限ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "role_id": {
+                      "type": "string"
+                    },
+                    "model_id": {
+                      "type": "string"
+                    },
+                    "permission_type": {
+                      "type": "string"
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "created_at",
+                    "role_id",
+                    "model_id",
+                    "permission_type",
+                    "conditions"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
       }
     },
     "/instance/fulltext_search/": {
@@ -5742,6 +5898,10 @@
                 "search": {
                   "type": "string",
                   "title": "查询条件"
+                },
+                "model_id": {
+                  "type": "string",
+                  "title": "模型ID"
                 }
               },
               "required": [
@@ -6214,6 +6374,194 @@
         }
       }
     },
+    "/instance/topo_search/{model_id}/{inst_id}/": {
+      "get": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "查询实例拓扑<topo_search>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "inst_id",
+            "in": "path",
+            "description": "实例ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "src_result": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "number",
+                          "description": "实例ID"
+                        },
+                        "model_id": {
+                          "type": "string",
+                          "description": "模型ID"
+                        },
+                        "inst_name": {
+                          "type": "string",
+                          "description": "实例名称"
+                        },
+                        "children": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "number",
+                                "description": "实例ID"
+                              },
+                              "model_id": {
+                                "type": "string",
+                                "description": "模型ID"
+                              },
+                              "inst_name": {
+                                "type": "string",
+                                "description": "实例名称"
+                              },
+                              "children": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "description": "子节点"
+                              },
+                              "model_asst_id": {
+                                "type": "string"
+                              },
+                              "asst_id": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "model_id",
+                              "inst_name",
+                              "children",
+                              "model_asst_id",
+                              "asst_id"
+                            ]
+                          },
+                          "description": "子节点"
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "model_id",
+                        "inst_name",
+                        "children"
+                      ]
+                    },
+                    "dst_result": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "number",
+                          "description": "实例ID"
+                        },
+                        "model_id": {
+                          "type": "string",
+                          "description": "模型ID"
+                        },
+                        "inst_name": {
+                          "type": "string",
+                          "description": "实例名称"
+                        },
+                        "children": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "number",
+                                "description": "实例ID"
+                              },
+                              "model_id": {
+                                "type": "string",
+                                "description": "模型ID"
+                              },
+                              "inst_name": {
+                                "type": "string",
+                                "description": "实例名称"
+                              },
+                              "children": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "description": "子节点"
+                              },
+                              "model_asst_id": {
+                                "type": "string",
+                                "description": "模型关联关系ID"
+                              },
+                              "asst_id": {
+                                "type": "string",
+                                "description": "关联ID"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "model_id",
+                              "inst_name",
+                              "children",
+                              "model_asst_id",
+                              "asst_id"
+                            ]
+                          },
+                          "description": "子节点"
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "model_id",
+                        "inst_name",
+                        "children"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "src_result",
+                    "dst_result"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/instance/instance_association/{model_id}/{inst_id}/": {
       "get": {
         "tags": [
@@ -6387,6 +6735,417 @@
                       "asst_id"
                     ]
                   }
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance_permission/role/": {
+      "post": {
+        "tags": [
+          "instance_permission"
+        ],
+        "summary": "创建角色权限<r_permission_create>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "role_id": {
+                  "type": "string",
+                  "title": "角色"
+                },
+                "model_id": {
+                  "type": "string",
+                  "title": "模型ID"
+                },
+                "permission_type": {
+                  "type": "string",
+                  "title": "权限类型"
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {},
+                      "title": "权限条件"
+                    },
+                    "title": "条件组",
+                    "description": "组内条件关系为\"且\""
+                  },
+                  "title": "权限数据组",
+                  "description": "组内的条件组关系为\"或\""
+                }
+              },
+              "required": [
+                "role_id",
+                "model_id",
+                "permission_type",
+                "conditions"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "title": "创建时间"
+                    },
+                    "role_id": {
+                      "type": "string",
+                      "title": "角色"
+                    },
+                    "model_id": {
+                      "type": "string",
+                      "title": "模型ID"
+                    },
+                    "permission_type": {
+                      "type": "string",
+                      "title": "权限类型"
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {},
+                          "title": "权限条件"
+                        },
+                        "title": "条件组"
+                      },
+                      "title": "权限数据组"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "created_at",
+                    "role_id",
+                    "model_id",
+                    "permission_type",
+                    "conditions"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "instance_permission"
+        ],
+        "summary": "角色实例权限列表<r_permission_list>",
+        "description": "",
+        "parameters": [
+          {
+            "name": "role_id",
+            "in": "query",
+            "required": true,
+            "description": "角色",
+            "type": "string"
+          },
+          {
+            "name": "model_id",
+            "in": "query",
+            "required": true,
+            "description": "模型ID",
+            "type": "string"
+          },
+          {
+            "name": "permission_type",
+            "in": "query",
+            "required": false,
+            "description": "权限类型（查询、管理）",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "description": "",
+            "type": "string"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": true,
+            "description": "",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "number"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "description": "创建时间"
+                          },
+                          "role_id": {
+                            "type": "string",
+                            "description": "角色"
+                          },
+                          "model_id": {
+                            "type": "string",
+                            "description": "模型ID"
+                          },
+                          "permission_type": {
+                            "type": "string",
+                            "description": "权限类型"
+                          },
+                          "conditions": {
+                            "type": "array",
+                            "items": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "description": "权限"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "created_at",
+                          "role_id",
+                          "model_id",
+                          "permission_type",
+                          "conditions"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "data"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance_permission/role/{id}/": {
+      "delete": {
+        "tags": [
+          "instance_permission"
+        ],
+        "summary": "删除角色权限<r_permission_del>",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "角色权限ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {},
+                  "required": []
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "instance_permission"
+        ],
+        "summary": "更新角色实例权限<r_permission_update>",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "role_id": {
+                  "type": "string"
+                },
+                "model_id": {
+                  "type": "string"
+                },
+                "permission_type": {
+                  "type": "string"
+                },
+                "conditions": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {},
+                      "title": "权限条件"
+                    },
+                    "title": "条件组"
+                  },
+                  "title": "实例权限组"
+                }
+              },
+              "required": [
+                "role_id",
+                "model_id",
+                "permission_type",
+                "conditions"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "number"
+                    },
+                    "created_at": {
+                      "type": "string"
+                    },
+                    "role_id": {
+                      "type": "string"
+                    },
+                    "model_id": {
+                      "type": "string"
+                    },
+                    "permission_type": {
+                      "type": "string"
+                    },
+                    "conditions": {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "created_at",
+                    "role_id",
+                    "model_id",
+                    "permission_type",
+                    "conditions"
+                  ]
                 },
                 "result": {
                   "type": "boolean"
