@@ -6072,6 +6072,66 @@
         }
       }
     },
+    "/instance/{model_id}/show_field/detail/": {
+      "get": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "实例列表展示字段",
+        "description": "",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "model_id": {
+                      "type": "string",
+                      "title": "模型ID"
+                    },
+                    "show_fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "展示字段列表"
+                    }
+                  },
+                  "required": [
+                    "model_id",
+                    "show_fields"
+                  ]
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
     "/instance/{model_id}/inst_import/": {
       "post": {
         "tags": [
@@ -6739,6 +6799,81 @@
                       "asst_id"
                     ]
                   }
+                },
+                "result": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "data",
+                "result",
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "/instance/{model_id}/show_field/settings/": {
+      "post": {
+        "tags": [
+          "instance"
+        ],
+        "summary": "设置实例列表展示字段",
+        "description": "",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "description": "模型ID",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "root",
+            "in": "body",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "模型属性ID"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$schema": "http://json-schema.org/draft-04/schema#",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "model_id": {
+                      "type": "string",
+                      "title": "模型ID"
+                    },
+                    "show_fields": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "title": "展示字段列表"
+                    }
+                  },
+                  "required": [
+                    "model_id",
+                    "show_fields"
+                  ]
                 },
                 "result": {
                   "type": "boolean"
