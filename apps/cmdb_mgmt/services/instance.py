@@ -3,6 +3,7 @@ from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
 from apps.cmdb_mgmt.models.Instance_permission import MANAGE, QUERY
 from apps.cmdb_mgmt.models.change_record import DELETE_INST_ASST, CREATE_INST_ASST, CREATE_INST, UPDATE_INST, \
     DELETE_INST
+from apps.cmdb_mgmt.models.show_field import ShowField
 from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.cmdb_mgmt.utils.change_record import create_change_record, create_change_record_by_asso, \
@@ -313,4 +314,21 @@ class InstanceManage(object):
         """拓扑查询"""
         with AgUtils() as ag:
             result = ag.query_topo(INSTANCE, [{"field": "id", "type": "id=", "value": inst_id}])
+        return result
+
+    @staticmethod
+    def create_or_update(data: dict):
+        if not data["show_fields"]:
+            raise BaseAppException("展示字段不能为空！")
+        ShowField.objects.update_or_create(
+            defaults=data,
+            model_id=data["model_id"],
+            created_by=data["created_by"],
+        )
+        return data
+
+    @staticmethod
+    def get_info(model_id: str, created_by: str):
+        obj = ShowField.objects.filter(created_by=created_by, model_id=model_id).first()
+        result = dict(model_id=obj.model_id, show_fields=obj.show_fields) if obj else None
         return result

@@ -296,7 +296,30 @@ class InstanceViewSet(viewsets.ViewSet):
         ],
     )
     @uma_permission("topo_search")
-    @action(detail=False, methods=["get"], url_path="topo_search/(?P<model_id>.+?)/(?P<inst_id>.+?)")
+    @action(detail=False, methods=["get"], url_path=r"topo_search/(?P<model_id>.+?)/(?P<inst_id>.+?)")
     def topo_search(self, request, model_id: str, inst_id: int):
         result = InstanceManage.topo_search(int(inst_id))
+        return WebUtils.response_success(result)
+
+    @swagger_auto_schema(
+        operation_id="show_field_settings",
+        operation_description="展示字段设置",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(type=openapi.TYPE_STRING, description="模型属性ID")
+        ),
+    )
+    @action(methods=["post"], detail=False, url_path=r"(?P<model_id>.+?)/show_field/settings")
+    def create_or_update(self, request, model_id):
+        data = dict(
+            model_id=model_id,
+            created_by=request.userinfo.get("username", ""),
+            show_fields=request.data,
+        )
+        result = InstanceManage.create_or_update(data)
+        return WebUtils.response_success(result)
+
+    @action(methods=["get"], detail=False, url_path=r"(?P<model_id>.+?)/show_field/detail")
+    def get_info(self, request, model_id):
+        result = InstanceManage.get_info(model_id, request.userinfo.get("username", ""))
         return WebUtils.response_success(result)
