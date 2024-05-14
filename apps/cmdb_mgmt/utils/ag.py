@@ -398,6 +398,10 @@ class AgUtils(object):
 
     def format_topo(self, objs):
         """格式化拓扑数据"""
+
+        if objs.rowcount == 0:
+            return dict(src_result={}, dst_result={})
+
         edge_map = {}
         entity_map = {}
 
