@@ -249,14 +249,13 @@ class AgUtils(object):
 
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
-        count = 0
+        if order:
+            sql_str += f" ORDER BY n.{order}"
 
+        count = 0
         if page:
             count = self.con.execCypher(sql_str).rowcount
             sql_str += f" SKIP {page['skip']} LIMIT {page['limit']}"
-
-        if order:
-            sql_str += f" ORDER BY n.{order}"
 
         objs = self.con.execCypher(sql_str)
         return self.entity_to_list(objs), count or objs.rowcount
