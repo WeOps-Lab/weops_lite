@@ -90,7 +90,7 @@ class AgUtils(object):
         check_attrs = [i for i in check_attr_map.keys() if i in item] if is_update else check_attr_map.keys()
 
         for attr in check_attrs:
-            if not item[attr]:
+            if not item.get(attr):
                 not_required_attr.add(attr)
 
         if not not_required_attr:
