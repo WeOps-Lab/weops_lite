@@ -309,7 +309,7 @@ class AgUtils(object):
                 properties_str += f"n.{key}={value},"
         return properties_str if properties_str == "" else properties_str[:-1]
 
-    def set_entity_properties(self, label: str, entity_id: int, properties: dict, check_attr_map: dict,
+    def set_entity_properties(self, label: str, entity_ids: list, properties: dict, check_attr_map: dict,
                               exist_items: list, check: bool = True):
         """
             设置实体属性
@@ -328,10 +328,10 @@ class AgUtils(object):
         properties_str = self.format_properties_set(properties)
         if not properties_str:
             raise BaseAppException("无可更新属性！")
-        entity = self.con.execCypher(
-            f"MATCH (n{label_str}) WHERE id(n) = {entity_id} SET {properties_str} RETURN n").fetchone()
+        entitys = self.con.execCypher(
+            f"MATCH (n{label_str}) WHERE id(n) IN {entity_ids} SET {properties_str} RETURN n")
         self.con.commit()
-        return self.entity_to_dict(entity)
+        return self.entity_to_list(entitys)
 
     def format_properties_remove(self, attrs: list):
         """格式化properties的remove数据"""

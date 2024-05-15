@@ -115,7 +115,7 @@ class InstanceManage(object):
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_info["model_id"]}])
             exist_items = [i for i in exist_items if i["_id"] != inst_id]
-            result = ag.set_entity_properties(INSTANCE, inst_id, update_attr, check_attr_map, exist_items)
+            result = ag.set_entity_properties(INSTANCE, [inst_id], update_attr, check_attr_map, exist_items)
 
         create_change_record(
             inst_info["_id"],
@@ -123,9 +123,41 @@ class InstanceManage(object):
             INSTANCE,
             UPDATE_INST,
             before_data=inst_info,
-            after_data=result,
+            after_data=result[0],
             operator=operator
         )
+
+        return result[0]
+
+    @staticmethod
+    def batch_instance_update(token: str, inst_ids: list, update_attr: dict, operator: str):
+        """批量修改实例属性"""
+
+        inst_list = InstanceManage.query_entity_by_ids(inst_ids)
+
+        if not inst_list:
+            raise BaseAppException("实例不存在！")
+
+        InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
+
+        attrs = ModelManage.search_model_attr(inst_list[0]["model_id"])
+        check_attr_map = dict(is_only={}, is_required={}, editable={})
+        for attr in attrs:
+            if attr["is_only"]:
+                check_attr_map["is_only"][attr["attr_id"]] = attr["attr_name"]
+            if attr["is_required"]:
+                check_attr_map["is_required"][attr["attr_id"]] = attr["attr_name"]
+            if attr["editable"]:
+                check_attr_map["editable"][attr["attr_id"]] = attr["attr_name"]
+
+        with AgUtils() as ag:
+            exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_list[0]["model_id"]}])
+            exist_items = [i for i in exist_items if i["_id"] not in inst_ids]
+            result = ag.set_entity_properties(INSTANCE, inst_ids, update_attr, check_attr_map, exist_items)
+
+        after_dict = {i["_id"]: i for i in result}
+        change_records = [dict(inst_id=i["_id"], model_id=i["model_id"], before_data=i, after_data=after_dict.get(i["_id"])) for i in inst_list]
+        batch_create_change_record(INSTANCE, DELETE_INST, change_records, operator=operator)
 
         return result
 

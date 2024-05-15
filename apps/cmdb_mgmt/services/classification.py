@@ -56,8 +56,8 @@ class ClassificationManage(object):
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(CLASSIFICATION, [])
             exist_items = [i for i in exist_items if i["_id"] != id]
-            model = ag.set_entity_properties(CLASSIFICATION, id, data, UPDATE_CLASSIFICATION_check_attr_map, exist_items)
-        return model
+            model = ag.set_entity_properties(CLASSIFICATION, [id], data, UPDATE_CLASSIFICATION_check_attr_map, exist_items)
+        return model[0]
 
     @staticmethod
     def search_model_classification():

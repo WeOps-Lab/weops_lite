@@ -40,8 +40,8 @@ class ModelManage(object):
         model_id = data.pop("model_id", "")    # 不能更新model_id
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(MODEL, [{"field": "model_id", "type": "str<>", "value": model_id}])
-            model = ag.set_entity_properties(MODEL, id, data, UPDATE_MODEL_CHECK_ATTR_MAP, exist_items)
-        return model
+            model = ag.set_entity_properties(MODEL, [id], data, UPDATE_MODEL_CHECK_ATTR_MAP, exist_items)
+        return model[0]
 
     @staticmethod
     def search_model():
@@ -71,9 +71,9 @@ class ModelManage(object):
             if attr_info["attr_id"] in {i["attr_id"] for i in attrs}:
                 raise BaseAppException(MODEL_ATTR_PRESENT)
             attrs.append(attr_info)
-            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)), {}, [], False)
+            result = ag.set_entity_properties(MODEL, [model_info["_id"]], dict(attrs=json.dumps(attrs)), {}, [], False)
 
-        attrs = ModelManage.parse_attrs(result.get("attrs", "[]"))
+        attrs = ModelManage.parse_attrs(result[0].get("attrs", "[]"))
 
         attr = None
         for attr in attrs:
@@ -108,9 +108,9 @@ class ModelManage(object):
                     option=attr_info["option"],
                 )
 
-            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(attrs)), {}, [], False)
+            result = ag.set_entity_properties(MODEL, [model_info["_id"]], dict(attrs=json.dumps(attrs)), {}, [], False)
 
-        attrs = ModelManage.parse_attrs(result.get("attrs", "[]"))
+        attrs = ModelManage.parse_attrs(result[0].get("attrs", "[]"))
 
         attr = None
         for attr in attrs:
@@ -133,13 +133,13 @@ class ModelManage(object):
             model_info = models[0]
             attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
             new_attrs = [attr for attr in attrs if attr["attr_id"] != attr_id]
-            result = ag.set_entity_properties(MODEL, model_info["_id"], dict(attrs=json.dumps(new_attrs)), {}, [], False)
+            result = ag.set_entity_properties(MODEL, [model_info["_id"]], dict(attrs=json.dumps(new_attrs)), {}, [], False)
 
             # 模型属性删除后，要删除对应模型实例的属性
             model_params = [{"field": "model_id", "type": "str=", "value": model_id}]
             ag.remove_entitys_properties(INSTANCE, model_params, [attr_id])
 
-        return ModelManage.parse_attrs(result.get("attrs", "[]"))
+        return ModelManage.parse_attrs(result[0].get("attrs", "[]"))
 
     @staticmethod
     def search_model_info(model_id: str):

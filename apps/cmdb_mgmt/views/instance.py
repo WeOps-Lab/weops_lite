@@ -131,6 +131,29 @@ class InstanceViewSet(viewsets.ViewSet):
         return WebUtils.response_success(inst)
 
     @swagger_auto_schema(
+        operation_id="instance_batch_update",
+        operation_description="批量更新实例属性",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "inst_ids": openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_INTEGER, description="实例ID")),
+                "update_data": openapi.Schema(type=openapi.TYPE_OBJECT, description="要更新的数据"),
+            },
+            required=["inst_ids", "update_data"],
+        ),
+    )
+    @uma_permission("instance_batch_update")
+    @action(detail=False, methods=["post"], url_path="batch_update")
+    def instance_batch_update(self, request):
+        InstanceManage.batch_instance_update(request.META.get(
+            AUTH_TOKEN_HEADER_NAME),
+            request.data["inst_ids"],
+            request.data["update_data"],
+            request.userinfo.get("username", ""),
+        )
+        return WebUtils.response_success()
+
+    @swagger_auto_schema(
         operation_id="instance_association_create",
         operation_description="创建实例关联",
         request_body=openapi.Schema(
