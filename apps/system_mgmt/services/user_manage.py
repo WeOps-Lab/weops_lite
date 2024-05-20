@@ -500,7 +500,7 @@ class UserManage(object):
                 "policies": [],
                 "name": permission_name,
                 "description": "",
-                "decisionStrategy": "UNANIMOUS",
+                "decisionStrategy": "AFFIRMATIVE",
                 "resourceType": ""
             }
             self.keycloak_client.realm_client.create_client_authz_resource_based_permission(client_id, permission, True)
