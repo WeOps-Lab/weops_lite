@@ -87,8 +87,7 @@ class PermissionManage:
         param_list = []
 
         for model_id, _param in param_map.items():
-            mode_param = {"field": "model_id", "type": "str=", "value": model_id}
-            param_list.append(f"({mode_param} AND ({' OR '.join(_param)}))")
+            param_list.append(f"(n.model_id = '{model_id}' AND ({' OR '.join(_param)}))")
 
         param_str = " OR ".join(param_list)
 
@@ -120,7 +119,7 @@ class PermissionManage:
                 username=userinfo["preferred_username"],
                 model_id=self.model_id,
                 permission_type=MANAGE,
-                conditions=[{"field": "_creator", "type": "str=", "value": userinfo["preferred_username"]}]
+                conditions=[[{"field": "_creator", "type": "str=", "value": userinfo["preferred_username"]}]]
             )
         )
 
