@@ -10,7 +10,7 @@ ADD ./support-files/docker/supervisor/app.conf  /etc/supervisor/conf.d/app.conf
 ADD ./support-files/docker/supervisor/celery.conf  /etc/supervisor/conf.d/celery.conf
 ADD ./support-files/docker/supervisor/beat.conf  /etc/supervisor/conf.d/beat.conf
 
-RUN pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
+RUN #pip config set global.index-url https://mirrors.cloud.tencent.com/pypi/simple
 RUN pip install -r ./requirements/requirements.txt
 RUN pip install -r ./requirements/requirements-dev.txt
 RUN pip install -r ./requirements/requirements-ops.txt
