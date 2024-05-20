@@ -1,4 +1,4 @@
-from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION
+from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION, ENCRYPTION
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
 from apps.cmdb_mgmt.models.Instance_permission import MANAGE, QUERY
 from apps.cmdb_mgmt.models.change_record import DELETE_INST_ASST, CREATE_INST_ASST, CREATE_INST, UPDATE_INST, \
@@ -8,6 +8,7 @@ from apps.cmdb_mgmt.services.model import ModelManage
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.cmdb_mgmt.utils.change_record import create_change_record, create_change_record_by_asso, \
     batch_create_change_record
+from apps.cmdb_mgmt.utils.credential import Credential
 from apps.cmdb_mgmt.utils.export import Export
 from apps.cmdb_mgmt.utils.Import import Import
 from apps.cmdb_mgmt.utils.permission import PermissionManage
@@ -72,11 +73,19 @@ class InstanceManage(object):
         instance_info.update(model_id=model_id)
         attrs = ModelManage.search_model_attr(model_id)
         check_attr_map = dict(is_only={}, is_required={})
+        encryption_set = set()
         for attr in attrs:
             if attr["is_only"]:
                 check_attr_map["is_only"][attr["attr_id"]] = attr["attr_name"]
             if attr["is_required"]:
                 check_attr_map["is_required"][attr["attr_id"]] = attr["attr_name"]
+            if attr["attr_type"] == ENCRYPTION:
+                encryption_set.add(attr["attr_id"])
+
+        # 密钥类属性加密
+        for k, v in instance_info.items():
+            if k in encryption_set:
+                instance_info[k] = Credential().encrypt_data(v)
 
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
@@ -104,6 +113,7 @@ class InstanceManage(object):
 
         attrs = ModelManage.search_model_attr(inst_info["model_id"])
         check_attr_map = dict(is_only={}, is_required={}, editable={})
+        encryption_set = set()
         for attr in attrs:
             if attr["is_only"]:
                 check_attr_map["is_only"][attr["attr_id"]] = attr["attr_name"]
@@ -111,6 +121,13 @@ class InstanceManage(object):
                 check_attr_map["is_required"][attr["attr_id"]] = attr["attr_name"]
             if attr["editable"]:
                 check_attr_map["editable"][attr["attr_id"]] = attr["attr_name"]
+            if attr["attr_type"] == ENCRYPTION:
+                encryption_set.add(attr["attr_id"])
+
+        # 密钥类属性加密
+        for k, v in update_attr.items():
+            if k in encryption_set:
+                update_attr[k] = Credential().encrypt_data(v)
 
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_info["model_id"]}])
@@ -142,6 +159,7 @@ class InstanceManage(object):
 
         attrs = ModelManage.search_model_attr(inst_list[0]["model_id"])
         check_attr_map = dict(is_only={}, is_required={}, editable={})
+        encryption_set = set()
         for attr in attrs:
             if attr["is_only"]:
                 check_attr_map["is_only"][attr["attr_id"]] = attr["attr_name"]
@@ -149,6 +167,13 @@ class InstanceManage(object):
                 check_attr_map["is_required"][attr["attr_id"]] = attr["attr_name"]
             if attr["editable"]:
                 check_attr_map["editable"][attr["attr_id"]] = attr["attr_name"]
+            if attr["attr_type"] == ENCRYPTION:
+                encryption_set.add(attr["attr_id"])
+
+        # 密钥类属性加密
+        for k, v in update_attr.items():
+            if k in encryption_set:
+                update_attr[k] = Credential().encrypt_data(v)
 
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_list[0]["model_id"]}])
@@ -364,3 +389,8 @@ class InstanceManage(object):
         obj = ShowField.objects.filter(created_by=created_by, model_id=model_id).first()
         result = dict(model_id=obj.model_id, show_fields=obj.show_fields) if obj else None
         return result
+
+    @staticmethod
+    def decrypt_data(data: str):
+        """数据解密"""
+        return Credential().decrypt_data(data)

@@ -346,3 +346,19 @@ class InstanceViewSet(viewsets.ViewSet):
     def get_info(self, request, model_id):
         result = InstanceManage.get_info(model_id, request.userinfo.get("username", ""))
         return WebUtils.response_success(result)
+
+    @swagger_auto_schema(
+        operation_id="decrypt",
+        operation_description="密码解密",
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                "cipher": openapi.Schema(type=openapi.TYPE_STRING, description="密码"),
+            },
+            required=["cipher"]
+        ),
+    )
+    @action(methods=["post"], detail=False, url_path=r"decrypt")
+    def decrypt(self, request):
+        result = InstanceManage.decrypt_data(request.data.get("cipher", ""))
+        return WebUtils.response_success(result)

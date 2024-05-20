@@ -53,6 +53,9 @@ ENUM = "enum"
 USER = "user"
 ORGANIZATION = "organization"
 
+# 密钥类型属性
+ENCRYPTION = "encryption"
+
 # 默认的实例名属性
 INST_NAME_INFOS = [
     {
