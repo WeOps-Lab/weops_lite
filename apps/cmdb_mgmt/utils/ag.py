@@ -213,6 +213,9 @@ class AgUtils(object):
             int<>: {"field": "mem", "type": "int<>", "value": 200} -> "n.mem <> 200"
             int[]: {"field": "mem", "type": "int[]", "value": [200]} -> "n.mem IN [200]"
 
+            id=: {"field": "id", "type": "id=", "value": 115} -> "n(id) = 115"
+            id[]: {"field": "id", "type": "id[]", "value": [115,116]} -> "n(id) IN [115,116]"
+
             list[]: {"field": "test", "type": "list[]", "value": [1,2]} -> "n.test @> ARRAY [1,2]"
         """
 
