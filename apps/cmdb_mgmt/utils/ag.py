@@ -252,8 +252,8 @@ class AgUtils(object):
 
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
-        if order:
-            sql_str += f" ORDER BY n.{order}"
+        # order by
+        sql_str += f" ORDER BY n.{order}" if order else f" ORDER BY ID(n)"
 
         count = 0
         if page:
