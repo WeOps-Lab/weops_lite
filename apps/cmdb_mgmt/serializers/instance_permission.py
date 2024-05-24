@@ -12,6 +12,7 @@ class RoleInstancePermissionSerializer(serializers.ModelSerializer):
             'role_id',
             'model_id',
             'permission_type',
+            'resource_type',
             'conditions',
         )
         read_only_fields = ('id', 'created_at')
@@ -26,6 +27,7 @@ class UserInstancePermissionSerializer(serializers.ModelSerializer):
             'username',
             'model_id',
             'permission_type',
+            'resource_type',
             'conditions',
         )
         read_only_fields = ('id', 'created_at')
