@@ -2,6 +2,7 @@ from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import APP_MODULE, ROLE
 from apps.system_mgmt.models import OperationLog
+from apps.system_mgmt.models.graded_role import GradedRole
 from apps.system_mgmt.utils.keycloak import SupplementApi, get_realm_roles
 
 
@@ -31,8 +32,8 @@ class RoleManage(object):
 
     def role_create(self, data, operator):
         """创建角色，先创建角色再创建角色对应的策略"""
+        role_name, superior_role = data["name"], data.pop("superior_role", "")
         self.keycloak_client.realm_client.create_realm_role(data, True)
-        role_name = data["name"]
         role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
         client_id = self.keycloak_client.get_client_id()
         policy_data = {
@@ -47,6 +48,9 @@ class RoleManage(object):
             ]
         }
         self.keycloak_client.realm_client.create_client_authz_role_based_policy(client_id, policy_data, True)
+
+        if superior_role:
+            GradedRole.objects.create(role=role_name, superior_role=superior_role)
 
         OperationLog.objects.create(
             operator=operator,
@@ -66,6 +70,13 @@ class RoleManage(object):
             2.移除角色绑定的权限
             3.删除角色
         """
+
+        # 校验角色是否为其他角色的上级角色
+        superior_objs = GradedRole.objects.filter(superior_role=role_name)
+        if superior_objs.exists():
+            msg = "、".join([i.role for i in superior_objs])
+            raise BaseAppException(f"角色存在下级角色：{msg}")
+
         # 角色关联校验（校验角色是否被用户或者组织关联）
         groups = self.keycloak_client.realm_client.get_realm_role_groups(role_name)
         if groups:
@@ -100,6 +111,8 @@ class RoleManage(object):
         role_info = self.keycloak_client.realm_client.get_realm_role(role_name=role_name)
         result = self.keycloak_client.realm_client.delete_realm_role(role_name)
 
+        GradedRole.objects.filter(role=role_name).delete()
+
         OperationLog.objects.create(
             operator=operator,
             operate_type=OperationLog.DELETE,
@@ -132,13 +145,24 @@ class RoleManage(object):
         client_id = self.keycloak_client.get_client_id()
         all_resources = self.keycloak_client.realm_client.get_client_authz_resources(client_id)
         resource_mapping = {i["name"]: i["_id"] for i in all_resources}
+
+        # 获取当前角色的子角色
+        superior_objs = GradedRole.objects.filter(superior_role=role_name)
+        superior_roles = {i.role for i in superior_objs}
+        superior_role_policies = set()
+
         # 获取角色映射的policy_id（角色与policy一对一映射）
         policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)
         policy_id = None
         for policy in policies:
+
+            # 取出当前角色的子角色对应的policy_id
+            if policy["name"] in superior_roles:
+                superior_role_policies.add(policy["id"])
+
+            # 取角色的policy_id
             if policy["name"] == role_name:
                 policy_id = policy["id"]
-                break
 
         permission_name_set = set(data)
 
@@ -185,6 +209,14 @@ class RoleManage(object):
 
             # 需求解绑权限与角色的
             else:
+
+                # 当前角色的子角色解除权限
+                for s_policy_id in superior_role_policies:
+                    if s_policy_id not in permission_policy_ids:
+                        continue
+                    permission_policy_ids.remove(s_policy_id)
+
+                # 当前角色解除权限绑定
                 if policy_id not in permission_policy_ids:
                     continue
                 permission_policy_ids.remove(policy_id)

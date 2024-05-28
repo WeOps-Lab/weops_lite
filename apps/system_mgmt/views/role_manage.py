@@ -44,9 +44,10 @@ class KeycloakRoleViewSet(viewsets.ViewSet):
             type=openapi.TYPE_OBJECT,
             properties={
                 "name": openapi.Schema(type=openapi.TYPE_STRING, description="角色名称"),
+                "superior_role": openapi.Schema(type=openapi.TYPE_STRING, description="上级角色"),
                 "description": openapi.Schema(type=openapi.TYPE_STRING, description="描述"),
             },
-            required=["name"]
+            required=["name", "superior_role"]
         ),
         responses=role_create_responses,
     )
