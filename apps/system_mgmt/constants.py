@@ -8,6 +8,9 @@ from apps.core.models.vtype_mixin import VtypeMixin
 # 普通用户角色
 NORMAL = "normal"
 
+# 分级管理角色
+GRADE_ADMIN = "grade_admin"
+
 # 超管用户角色
 ADMIN = "admin"
 

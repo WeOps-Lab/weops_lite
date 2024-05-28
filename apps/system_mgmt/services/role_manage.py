@@ -1,6 +1,6 @@
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
-from apps.system_mgmt.constants import APP_MODULE, ROLE
+from apps.system_mgmt.constants import APP_MODULE, ROLE, ADMIN, NORMAL, GRADE_ADMIN
 from apps.system_mgmt.models import OperationLog
 from apps.system_mgmt.models.graded_role import GradedRole
 from apps.system_mgmt.utils.keycloak import SupplementApi, get_realm_roles
@@ -70,6 +70,10 @@ class RoleManage(object):
             2.移除角色绑定的权限
             3.删除角色
         """
+
+        # 禁止删除内置角色
+        if role_name in {ADMIN, GRADE_ADMIN, NORMAL}:
+            raise BaseAppException(f"内置角色禁止删除！")
 
         # 校验角色是否为其他角色的上级角色
         superior_objs = GradedRole.objects.filter(superior_role=role_name)
@@ -142,6 +146,10 @@ class RoleManage(object):
 
     def role_set_permissions(self, data, role_name, operator):
         """设置角色权限"""
+
+        if role_name == ADMIN:
+            raise BaseAppException(f"超管角色拥有全部权限，无需设置！")
+
         client_id = self.keycloak_client.get_client_id()
         all_resources = self.keycloak_client.realm_client.get_client_authz_resources(client_id)
         resource_mapping = {i["name"]: i["_id"] for i in all_resources}
