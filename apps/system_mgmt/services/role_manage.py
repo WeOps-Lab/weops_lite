@@ -3,6 +3,7 @@ from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import APP_MODULE, ROLE, ADMIN, NORMAL, GRADE_ADMIN
 from apps.system_mgmt.models import OperationLog
 from apps.system_mgmt.models.graded_role import GradedRole
+from apps.system_mgmt.utils.graded_role import get_role_all_child_role
 from apps.system_mgmt.utils.keycloak import SupplementApi, get_realm_roles
 
 
@@ -13,6 +14,11 @@ class RoleManage(object):
     def role_list(self):
         """角色列表"""
         result = get_realm_roles(self.keycloak_client.realm_client)
+        role_objs = GradedRole.objects.all()
+        role_dict = {i.role: i.superior_role for i in role_objs}
+        for role_info in result:
+            if role_info["name"] in role_dict:
+                role_info.update(superior_role=role_dict[role_info["name"]])
         return result
 
     def role_permissions(self, role_name):
@@ -155,9 +161,8 @@ class RoleManage(object):
         resource_mapping = {i["name"]: i["_id"] for i in all_resources}
 
         # 获取当前角色的子角色
-        superior_objs = GradedRole.objects.filter(superior_role=role_name)
-        superior_roles = {i.role for i in superior_objs}
-        superior_role_policies = set()
+        child_roles = get_role_all_child_role(role_name)
+        child_roles_policies = set()
 
         # 获取角色映射的policy_id（角色与policy一对一映射）
         policies = self.keycloak_client.realm_client.get_client_authz_policies(client_id)
@@ -165,8 +170,8 @@ class RoleManage(object):
         for policy in policies:
 
             # 取出当前角色的子角色对应的policy_id
-            if policy["name"] in superior_roles:
-                superior_role_policies.add(policy["id"])
+            if policy["name"] in child_roles:
+                child_roles_policies.add(policy["id"])
 
             # 取角色的policy_id
             if policy["name"] == role_name:
@@ -219,7 +224,7 @@ class RoleManage(object):
             else:
 
                 # 当前角色的子角色解除权限
-                for s_policy_id in superior_role_policies:
+                for s_policy_id in child_roles_policies:
                     if s_policy_id not in permission_policy_ids:
                         continue
                     permission_policy_ids.remove(s_policy_id)
