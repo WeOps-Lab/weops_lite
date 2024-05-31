@@ -365,8 +365,8 @@ class AgUtils(object):
         self.con.execCypher(f"MATCH ()-[n{label_str}]->() WHERE id(n) = {edge_id} DELETE n")
         self.con.commit()
 
-    def entity_fulltext_search(self, label: str, search: str, params: list, permission_params: str = ""):
-        """实体全网检索"""
+    def entity_objs(self, label: str, params: list, permission_params: str = ""):
+        """实体对象查询"""
 
         label_str = f":{label}" if label else ""
         params_str = self.format_final_params(params, permission_params=permission_params)
@@ -375,18 +375,7 @@ class AgUtils(object):
         sql_str = f"MATCH (n{label_str}) {params_str} RETURN n"
 
         inst_objs = self.con.execCypher(sql_str)
-
-        result = [
-            {
-                '_id': inst[0].id,
-                '_label': inst[0].label,
-                **inst[0].properties
-            }
-            for inst in inst_objs
-            if search in " ".join(map(str, inst[0].properties.values()))
-        ]
-
-        return result
+        return inst_objs
 
     def query_topo(self, label: str, params: list):
         """查询实例拓扑"""

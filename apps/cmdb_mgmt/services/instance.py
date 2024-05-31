@@ -1,4 +1,4 @@
-from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION, ENCRYPTION
+from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION, ENCRYPTION, ENUM, USER
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
 from apps.cmdb_mgmt.models.Instance_permission import MANAGE, QUERY
 from apps.cmdb_mgmt.models.change_record import DELETE_INST_ASST, CREATE_INST_ASST, CREATE_INST, UPDATE_INST, \
@@ -15,6 +15,7 @@ from apps.cmdb_mgmt.utils.permission import PermissionManage
 from apps.cmdb_mgmt.utils.subgroup import SubGroup
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.system_mgmt.services.group_manage import GroupManage
+from apps.system_mgmt.services.user_manage import UserManage
 
 
 class InstanceManage(object):
@@ -358,15 +359,6 @@ class InstanceManage(object):
         return Export(attrs).export_inst_list(inst_list)
 
     @staticmethod
-    def fulltext_search(token: str, data: dict):
-        """全网检索"""
-        permission_params = InstanceManage.get_permission_params(token, data.get("model_id"))
-
-        with AgUtils() as ag:
-            inst_list = ag.entity_fulltext_search(INSTANCE, data["search"], [], permission_params=permission_params)
-        return inst_list
-
-    @staticmethod
     def topo_search(inst_id: int):
         """拓扑查询"""
         with AgUtils() as ag:
@@ -394,3 +386,69 @@ class InstanceManage(object):
     def decrypt_data(data: str):
         """数据解密"""
         return Credential().decrypt_data(data)
+
+
+class FullText:
+    def __init__(self):
+        self.user_map = self.get_user_map()
+        self.group_map = self.get_group_map()
+        self.model_enum_map = self.get_model_enum_map()
+
+    def get_model_enum_map(self):
+        """获取所有模型的枚举"""
+        model_list = ModelManage.search_model()
+        model_map = {}
+        for model_info in model_list:
+            model_attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
+            enum_attr_map = {}
+            for attr in model_attrs:
+                if attr["attr_type"] == ENUM:
+                    enum_attr_map[attr["attr_id"]] = {i["id"]: i["name"] for i in attr["option"]}
+                elif attr["attr_type"] == USER:
+                    enum_attr_map[attr["attr_id"]] = self.user_map
+                elif attr["attr_type"] == ORGANIZATION:
+                    enum_attr_map[attr["attr_id"]] = self.group_map
+
+            if not enum_attr_map:
+                continue
+            model_map[model_info["model_id"]] = enum_attr_map
+        return model_map
+
+    def get_user_map(self):
+        users = UserManage().user_all()
+        return {user["username"]: user["lastName"] for user in users}
+
+    def get_group_map(self):
+        group = GroupManage().group_list()
+        option = []
+        ModelManage.get_organization_option(group, option)
+        return {i["id"]: i["name"] for i in option}
+
+    def matching(self, search, data):
+        model_id = data.pop("model_id", "")
+        values = []
+        for k, v in data.items():
+            if k not in self.model_enum_map.get(model_id, {}):
+                values.append(str(v))
+            else:
+                value = self.model_enum_map.get(model_id, {}).get(k, {}).get(v, "")
+                values.append(str(value))
+
+        return search in " ".join(values)
+
+    def search(self, token: str, data: dict):
+
+        permission_params = InstanceManage.get_permission_params(token, data.get("model_id"))
+        with AgUtils() as ag:
+            inst_objs = ag.entity_objs(INSTANCE, [], permission_params=permission_params)
+
+            items = []
+            for inst_obj in inst_objs:
+                item = {
+                    '_id': inst_obj[0].id,
+                    '_label': inst_obj[0].label,
+                    **inst_obj[0].properties
+                }
+                if self.matching(data["search"], inst_obj[0].properties):
+                    items.append(item)
+        return items

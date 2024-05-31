@@ -4,7 +4,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.decorators import action
 
-from apps.cmdb_mgmt.services.instance import InstanceManage
+from apps.cmdb_mgmt.services.instance import InstanceManage, FullText
 from apps.core.constants import AUTH_TOKEN_HEADER_NAME
 from apps.core.decorators.uma_permission import uma_permission
 from apps.core.utils.web_utils import WebUtils
@@ -298,7 +298,7 @@ class InstanceViewSet(viewsets.ViewSet):
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
-                "search": openapi.Schema(type=openapi.TYPE_STRING, description="排序"),
+                "search": openapi.Schema(type=openapi.TYPE_STRING, description="检索内容"),
                 "model_id": openapi.Schema(type=openapi.TYPE_STRING, description="模型ID"),
             },
             required=["search"]
@@ -307,7 +307,7 @@ class InstanceViewSet(viewsets.ViewSet):
     @uma_permission("instance_fulltext_search")
     @action(methods=["post"], detail=False)
     def fulltext_search(self, request):
-        result = InstanceManage.fulltext_search(request.META.get(AUTH_TOKEN_HEADER_NAME), request.data)
+        result = FullText().search(request.META.get(AUTH_TOKEN_HEADER_NAME), request.data)
         return WebUtils.response_success(result)
 
     @swagger_auto_schema(
