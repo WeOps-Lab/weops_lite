@@ -362,3 +362,12 @@ class InstanceViewSet(viewsets.ViewSet):
     def decrypt(self, request):
         result = InstanceManage.decrypt_data(request.data.get("cipher", ""))
         return WebUtils.response_success(result)
+
+    @swagger_auto_schema(
+        operation_id="model_inst_count",
+        operation_description="模型实例数量",
+    )
+    @action(methods=["get"], detail=False, url_path=r"model_inst_count")
+    def model_inst_count(self, request):
+        result = InstanceManage.model_inst_count(request.META.get(AUTH_TOKEN_HEADER_NAME))
+        return WebUtils.response_success(result)

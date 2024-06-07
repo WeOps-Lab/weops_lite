@@ -387,6 +387,21 @@ class InstanceManage(object):
         """数据解密"""
         return Credential().decrypt_data(data)
 
+    @staticmethod
+    def model_inst_count(token):
+        permission_params = InstanceManage.get_permission_params(token, None)
+        model_inst_count = {}
+        with AgUtils() as ag:
+            inst_objs = ag.entity_objs(INSTANCE, [], permission_params=permission_params)
+            for inst_obj in inst_objs:
+                model_id = inst_obj[0].properties.get("model_id")
+                if not model_id:
+                    continue
+                if model_id not in model_inst_count:
+                    model_inst_count[model_id] = 0
+                model_inst_count[model_id] += 1
+        return model_inst_count
+
 
 class FullText:
     def __init__(self):
