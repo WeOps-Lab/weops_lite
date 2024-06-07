@@ -87,7 +87,10 @@ class PermissionManage:
         param_list = []
 
         for model_id, _param in param_map.items():
-            param_list.append(f"(n.model_id = '{model_id}' AND ({' OR '.join(_param)}))")
+            if not model_id:
+                param_list.append(f"({' OR '.join(_param)})")
+            else:
+                param_list.append(f"(n.model_id = '{model_id}' AND ({' OR '.join(_param)}))")
 
         param_str = " OR ".join(param_list)
 
