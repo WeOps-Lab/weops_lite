@@ -134,3 +134,29 @@ class PermissionManage:
             raise BaseAppException("无实例权限！")
 
         return permission_params
+
+
+class RolePermissionManage(PermissionManage):
+
+    def __init__(self, roles,  model_id,  permission_type: str = None, token: str = None):
+        super().__init__(token, model_id, permission_type)
+        self.roles = roles
+
+    def get_permission_params(self):
+        """获取条件，用于列表页查询"""
+
+        # 判断是否为超管, 超管返回空条件
+        if ADMIN in self.roles:
+            return ""
+
+        # 获取角色权限
+        permissions = self.get_permission_params_by_roles(self.roles)
+
+        # 格式化权限条件
+        permission_params = self.format_permission_params(permissions)
+
+        # 普通用户权限参数为空，说明用户无实例权限
+        if not permission_params:
+            raise BaseAppException("无实例权限！")
+
+        return permission_params

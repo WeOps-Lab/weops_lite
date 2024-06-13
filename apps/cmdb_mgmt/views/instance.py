@@ -27,6 +27,7 @@ class InstanceViewSet(viewsets.ViewSet):
                 "page_size": openapi.Schema(type=openapi.TYPE_INTEGER, description="每页条目数"),
                 "order": openapi.Schema(type=openapi.TYPE_STRING, description="排序"),
                 "model_id": openapi.Schema(type=openapi.TYPE_STRING, description="模型ID"),
+                "role": openapi.Schema(type=openapi.TYPE_STRING, description="角色"),
             },
             required=["model_id"]
         ),
@@ -35,14 +36,25 @@ class InstanceViewSet(viewsets.ViewSet):
     @action(methods=["post"], detail=False)
     def search(self, request):
         page, page_size = int(request.data.get('page', 1)), int(request.data.get('page_size', 10))
-        insts, count = InstanceManage.instance_list(
-            request.META.get(AUTH_TOKEN_HEADER_NAME),
-            request.data["model_id"],
-            request.data.get("query_list", []),
-            page,
-            page_size,
-            request.data.get("order", ""),
-        )
+        role = request.data.get("role")
+        if role:
+            insts, count = InstanceManage.instance_list_by_role(
+                [role],
+                request.data["model_id"],
+                request.data.get("query_list", []),
+                page,
+                page_size,
+                request.data.get("order", ""),
+            )
+        else:
+            insts, count = InstanceManage.instance_list(
+                request.META.get(AUTH_TOKEN_HEADER_NAME),
+                request.data["model_id"],
+                request.data.get("query_list", []),
+                page,
+                page_size,
+                request.data.get("order", ""),
+            )
         return WebUtils.response_success(dict(insts=insts, count=count))
 
     @swagger_auto_schema(

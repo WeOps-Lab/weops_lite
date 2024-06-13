@@ -11,7 +11,7 @@ from apps.cmdb_mgmt.utils.change_record import create_change_record, create_chan
 from apps.cmdb_mgmt.utils.credential import Credential
 from apps.cmdb_mgmt.utils.export import Export
 from apps.cmdb_mgmt.utils.Import import Import
-from apps.cmdb_mgmt.utils.permission import PermissionManage
+from apps.cmdb_mgmt.utils.permission import PermissionManage, RolePermissionManage
 from apps.cmdb_mgmt.utils.subgroup import SubGroup
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.system_mgmt.services.group_manage import GroupManage
@@ -63,6 +63,21 @@ class InstanceManage(object):
             order = f"{order.replace('-', '')} DESC"
 
         permission_params = InstanceManage.get_permission_params(token, model_id)
+
+        with AgUtils() as ag:
+            inst_list, count = ag.query_entity(INSTANCE, params, page=_page, order=order, permission_params=permission_params)
+        return inst_list, count
+
+    @staticmethod
+    def instance_list_by_role(roles: list, model_id: str, params: list, page: int, page_size: int, order: str):
+        """实例列表，根据角色查询，用于分级管理员授权"""
+        InstanceManage.supplementary_subgroups(params)
+        params.append({"field": "model_id", "type": "str=", "value": model_id})
+        _page = dict(skip=(page - 1) * page_size, limit=page_size)
+        if order and order.startswith("-"):
+            order = f"{order.replace('-', '')} DESC"
+
+        permission_params = RolePermissionManage(roles, model_id).get_permission_params()
 
         with AgUtils() as ag:
             inst_list, count = ag.query_entity(INSTANCE, params, page=_page, order=order, permission_params=permission_params)
