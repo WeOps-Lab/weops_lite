@@ -198,7 +198,7 @@ class InstanceManage(object):
 
         after_dict = {i["_id"]: i for i in result}
         change_records = [dict(inst_id=i["_id"], model_id=i["model_id"], before_data=i, after_data=after_dict.get(i["_id"])) for i in inst_list]
-        batch_create_change_record(INSTANCE, DELETE_INST, change_records, operator=operator)
+        batch_create_change_record(INSTANCE, UPDATE_INST, change_records, operator=operator)
 
         return result
 
@@ -358,7 +358,7 @@ class InstanceManage(object):
             for i in results
             if i["success"]
         ]
-        batch_create_change_record(INSTANCE, DELETE_INST, change_records, operator=operator)
+        batch_create_change_record(INSTANCE, CREATE_INST, change_records, operator=operator)
 
         return results
 
