@@ -1,6 +1,7 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
-from apps.cmdb_mgmt.models.change_record import ChangeRecord
+from apps.cmdb_mgmt.models.change_record import ChangeRecord, OPERATE_TYPE_CHOICES
 from apps.cmdb_mgmt.serializers.change_record import ChangeRecordSerializer
 from apps.cmdb_mgmt.filters.change_record import ChangeRecordFilter
 from apps.core.decorators.uma_permission import uma_permission
@@ -23,3 +24,7 @@ class ChangeRecordViewSet(viewsets.ReadOnlyModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return WebUtils.response_success(serializer.data)
+
+    @action(methods=["get"], detail=False)
+    def enum_data(self, request, *args, **kwargs):
+        return WebUtils.response_success(dict(OPERATE_TYPE_CHOICES))
