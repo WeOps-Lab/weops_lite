@@ -29,7 +29,7 @@ class ClassificationViewSet(viewsets.ViewSet):
         operation_id="classification_search",
         operation_description="查询模型分类",
     )
-    @uma_permission("classification_search")
+    # @uma_permission("classification_search")
     def list(self, request):
         result = ClassificationManage.search_model_classification()
         return WebUtils.response_success(result)
