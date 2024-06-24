@@ -374,7 +374,7 @@ class UserManage(object):
         policy_data = {
             "type": "role",
             "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
+            "decisionStrategy": "AFFIRMATIVE",
             "name": role_name,
             "roles": [
                 {

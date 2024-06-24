@@ -1183,7 +1183,7 @@
             "description": "",
             "type": "role",
             "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
+            "decisionStrategy": "AFFIRMATIVE",
             "config": {
               "roles": "[{\"id\":\"admin\",\"required\":false}]"
             }
@@ -1194,7 +1194,7 @@
             "description": "",
             "type": "role",
             "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
+            "decisionStrategy": "AFFIRMATIVE",
             "config": {
               "roles": "[{\"id\":\"normal\",\"required\":false}]"
             }
@@ -1205,14 +1205,14 @@
             "description": "",
             "type": "role",
             "logic": "POSITIVE",
-            "decisionStrategy": "UNANIMOUS",
+            "decisionStrategy": "AFFIRMATIVE",
             "config": {
               "roles": "[{\"id\":\"grade_admin\",\"required\":false}]"
             }
           }
         ],
         "scopes": [],
-        "decisionStrategy": "UNANIMOUS"
+        "decisionStrategy": "AFFIRMATIVE"
       }
     },
     {
