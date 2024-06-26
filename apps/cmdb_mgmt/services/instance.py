@@ -1,4 +1,5 @@
-from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION, ENCRYPTION, ENUM, USER
+from apps.cmdb_mgmt.constants import INSTANCE, INSTANCE_ASSOCIATION, ORGANIZATION, ENCRYPTION, ENUM, USER, BASE, \
+    CREDENTIAL, CREDENTIAL_INSTANCE, CREDENTIAL_INSTANCE_ASSOCIATION
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, INSTANCE_EDGE_REPETITION
 from apps.cmdb_mgmt.models.Instance_permission import MANAGE, QUERY
 from apps.cmdb_mgmt.models.change_record import DELETE_INST_ASST, CREATE_INST_ASST, CREATE_INST, UPDATE_INST, \
@@ -84,6 +85,12 @@ class InstanceManage(object):
         return inst_list, count
 
     @staticmethod
+    def get_inst_label_by_model_id(model_id: str):
+        """获取模型实例标签"""
+        model_info = ModelManage.search_model_info(model_id)
+        return CREDENTIAL_INSTANCE if model_info.get("model_type", BASE) == CREDENTIAL else INSTANCE
+
+    @staticmethod
     def instance_create(model_id: str, instance_info: dict, operator: str):
         """创建实例"""
         instance_info.update(model_id=model_id)
@@ -103,14 +110,16 @@ class InstanceManage(object):
             if k in encryption_set:
                 instance_info[k] = Credential().encrypt_data(v)
 
+        inst_label = InstanceManage.get_inst_label_by_model_id(model_id)
+
         with AgUtils() as ag:
-            exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": model_id}])
-            result = ag.create_entity(INSTANCE, instance_info, check_attr_map, exist_items, operator)
+            exist_items, _ = ag.query_entity(inst_label, [{"field": "model_id", "type": "str=", "value": model_id}])
+            result = ag.create_entity(inst_label, instance_info, check_attr_map, exist_items, operator)
 
         create_change_record(
             result["_id"],
             result["model_id"],
-            INSTANCE,
+            inst_label,
             CREATE_INST,
             after_data=result,
             operator=operator,
@@ -127,7 +136,8 @@ class InstanceManage(object):
 
         InstanceManage.check_instances_permission(token, [inst_info], inst_info["model_id"])
 
-        attrs = ModelManage.search_model_attr(inst_info["model_id"])
+        model_info = ModelManage.search_model_info(inst_info["model_id"])
+        attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         check_attr_map = dict(is_only={}, is_required={}, editable={})
         encryption_set = set()
         for attr in attrs:
@@ -145,15 +155,17 @@ class InstanceManage(object):
             if k in encryption_set:
                 update_attr[k] = Credential().encrypt_data(v)
 
+        inst_label = CREDENTIAL_INSTANCE if model_info.get("model_type", BASE) == CREDENTIAL else INSTANCE
+
         with AgUtils() as ag:
-            exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_info["model_id"]}])
+            exist_items, _ = ag.query_entity(inst_label, [{"field": "model_id", "type": "str=", "value": inst_info["model_id"]}])
             exist_items = [i for i in exist_items if i["_id"] != inst_id]
-            result = ag.set_entity_properties(INSTANCE, [inst_id], update_attr, check_attr_map, exist_items)
+            result = ag.set_entity_properties(inst_label, [inst_id], update_attr, check_attr_map, exist_items)
 
         create_change_record(
             inst_info["_id"],
             inst_info["model_id"],
-            INSTANCE,
+            inst_label,
             UPDATE_INST,
             before_data=inst_info,
             after_data=result[0],
@@ -173,7 +185,8 @@ class InstanceManage(object):
 
         InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
 
-        attrs = ModelManage.search_model_attr(inst_list[0]["model_id"])
+        model_info = ModelManage.search_model_info(inst_list[0]["model_id"])
+        attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         check_attr_map = dict(is_only={}, is_required={}, editable={})
         encryption_set = set()
         for attr in attrs:
@@ -191,14 +204,16 @@ class InstanceManage(object):
             if k in encryption_set:
                 update_attr[k] = Credential().encrypt_data(v)
 
+        inst_label = CREDENTIAL_INSTANCE if model_info.get("model_type", BASE) == CREDENTIAL else INSTANCE
+
         with AgUtils() as ag:
-            exist_items, _ = ag.query_entity(INSTANCE, [{"field": "model_id", "type": "str=", "value": inst_list[0]["model_id"]}])
+            exist_items, _ = ag.query_entity(inst_label, [{"field": "model_id", "type": "str=", "value": inst_list[0]["model_id"]}])
             exist_items = [i for i in exist_items if i["_id"] not in inst_ids]
-            result = ag.set_entity_properties(INSTANCE, inst_ids, update_attr, check_attr_map, exist_items)
+            result = ag.set_entity_properties(inst_label, inst_ids, update_attr, check_attr_map, exist_items)
 
         after_dict = {i["_id"]: i for i in result}
         change_records = [dict(inst_id=i["_id"], model_id=i["model_id"], before_data=i, after_data=after_dict.get(i["_id"])) for i in inst_list]
-        batch_create_change_record(INSTANCE, UPDATE_INST, change_records, operator=operator)
+        batch_create_change_record(inst_label, UPDATE_INST, change_records, operator=operator)
 
         return result
 
@@ -212,15 +227,20 @@ class InstanceManage(object):
 
         InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
 
+        inst_label = InstanceManage.get_inst_label_by_model_id(inst_list[0]["model_id"])
+
         with AgUtils() as ag:
-            ag.batch_delete_entity(INSTANCE, inst_ids)
+            ag.batch_delete_entity(inst_label, inst_ids)
 
         change_records = [dict(inst_id=i["_id"], model_id=i["model_id"], before_data=i) for i in inst_list]
-        batch_create_change_record(INSTANCE, DELETE_INST, change_records, operator=operator)
+        batch_create_change_record(inst_label, DELETE_INST, change_records, operator=operator)
 
     @staticmethod
-    def instance_association_instance_list(model_id: str, inst_id: int):
+    def instance_association_instance_list(model_id: str, inst_id: int, model_type=None):
         """查询模型实例关联的实例列表"""
+
+        edge_label = CREDENTIAL_INSTANCE_ASSOCIATION if model_type == CREDENTIAL else INSTANCE_ASSOCIATION
+
         with AgUtils() as ag:
 
             # 作为源模型实例
@@ -228,14 +248,14 @@ class InstanceManage(object):
                 {"field": "src_inst_id", "type": "int=", "value": inst_id},
                 {"field": "src_model_id", "type": "str=", "value": model_id},
             ]
-            src_edge, _ = ag.query_edge(INSTANCE_ASSOCIATION, INSTANCE, INSTANCE, src_query_data, return_entity=True)
+            src_edge, _ = ag.query_edge(edge_label, src_query_data, return_entity=True)
 
             # 作为目标模型实例
             dst_query_data = [
                 {"field": "dst_inst_id", "type": "int=", "value": inst_id},
                 {"field": "dst_model_id", "type": "str=", "value": model_id},
             ]
-            dst_edge, _ = ag.query_edge(INSTANCE_ASSOCIATION, INSTANCE, INSTANCE, dst_query_data, return_entity=True)
+            dst_edge, _ = ag.query_edge(edge_label, dst_query_data, return_entity=True)
 
         result = {}
         for item in src_edge + dst_edge:
@@ -255,8 +275,11 @@ class InstanceManage(object):
         return list(result.values())
 
     @staticmethod
-    def instance_association(model_id: str, inst_id: int):
+    def instance_association(model_id: str, inst_id: int, model_type=None):
         """查询模型实例关联的实例列表"""
+
+        edge_label = CREDENTIAL_INSTANCE_ASSOCIATION if model_type == CREDENTIAL else INSTANCE_ASSOCIATION
+
         with AgUtils() as ag:
 
             # 作为源模型实例
@@ -264,46 +287,39 @@ class InstanceManage(object):
                 {"field": "src_inst_id", "type": "int=", "value": inst_id},
                 {"field": "src_model_id", "type": "str=", "value": model_id},
             ]
-            src_edge, _ = ag.query_edge(INSTANCE_ASSOCIATION, INSTANCE, INSTANCE, src_query_data)
+            src_edge, _ = ag.query_edge(edge_label, src_query_data)
 
             # 作为目标模型实例
             dst_query_data = [
                 {"field": "dst_inst_id", "type": "int=", "value": inst_id},
                 {"field": "dst_model_id", "type": "str=", "value": model_id},
             ]
-            dst_edge, _ = ag.query_edge(INSTANCE_ASSOCIATION, INSTANCE, INSTANCE, dst_query_data)
+            dst_edge, _ = ag.query_edge(edge_label, dst_query_data)
 
         return src_edge + dst_edge
 
     @staticmethod
-    def instance_association_list(params: dict):
-        """查询实例与某个模型的关联"""
-        if not params:
-            raise BaseAppException("缺少查询条件！")
-
-        query_list = []
-        for k, v in params.items():
-            _type = "int=" if k in {"src_inst_id", "dst_inst_id"} else "str="
-            query_list.append({"field": k, "type": _type, "value": v})
-
-        with AgUtils() as ag:
-            edges, _ = ag.query_edge(INSTANCE_ASSOCIATION, INSTANCE, INSTANCE, query_list)
-
-        return edges
-
-    @staticmethod
     def instance_association_create(data: dict, operator: str):
         """创建实例关联"""
+
+        models = ModelManage.search_model(CREDENTIAL)
+        models_set = {i["model_id"] for i in models}
+
+        src_label = CREDENTIAL_INSTANCE if data["src_model_id"] in models_set else INSTANCE
+        dst_label = CREDENTIAL_INSTANCE if data["dst_model_id"] in models_set else INSTANCE
+
+        edge_label = CREDENTIAL_INSTANCE_ASSOCIATION if CREDENTIAL_INSTANCE in {src_label, dst_label} else INSTANCE_ASSOCIATION
+
         with AgUtils() as ag:
             try:
-                edge = ag.create_edge(INSTANCE_ASSOCIATION, data["src_inst_id"], INSTANCE, data["dst_inst_id"], INSTANCE, data, "model_asst_id")
+                edge = ag.create_edge(edge_label, data["src_inst_id"], src_label, data["dst_inst_id"], dst_label, data, "model_asst_id")
             except BaseAppException as e:
                 if e.message == EDGE_REPETITION:
                     raise BaseAppException(INSTANCE_EDGE_REPETITION)
 
         asso_info = InstanceManage.instance_association_by_asso_id(edge["_id"])
 
-        create_change_record_by_asso(INSTANCE_ASSOCIATION, CREATE_INST_ASST, asso_info, operator=operator)
+        create_change_record_by_asso(edge_label, CREATE_INST_ASST, asso_info, operator=operator)
 
         return edge
 

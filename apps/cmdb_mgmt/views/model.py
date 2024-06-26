@@ -33,10 +33,14 @@ class ModelViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         operation_id="model_list",
         operation_description="查询模型",
+        manual_parameters=[
+            openapi.Parameter("model_type", openapi.IN_QUERY, description="模型类型", type=openapi.TYPE_STRING)
+        ],
     )
     @uma_permission("model_list")
     def list(self, request):
-        result = ModelManage.search_model()
+        model_type = request.GET.get("model_type")
+        result = ModelManage.search_model(model_type)
         return WebUtils.response_success(result)
 
     @swagger_auto_schema(
@@ -119,13 +123,14 @@ class ModelViewSet(viewsets.ViewSet):
         operation_id="model_association_list",
         operation_description="查询模型关联",
         manual_parameters=[
-            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING),
+            openapi.Parameter("model_type", openapi.IN_QUERY, description="模型类型", type=openapi.TYPE_STRING),
         ],
     )
     @uma_permission("model_association_list")
     @action(detail=False, methods=["get"], url_path="(?P<model_id>.+?)/association")
     def model_association_list(self, request, model_id: str):
-        result = ModelManage.model_association_search(model_id)
+        result = ModelManage.model_association_search(model_id, request.GET.get("model_type"))
         return WebUtils.response_success(result)
 
     @swagger_auto_schema(

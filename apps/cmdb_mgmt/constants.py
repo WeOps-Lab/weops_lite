@@ -116,3 +116,13 @@ NEED_CONVERSION_TYPE = {
 
 EDGE_TYPE = 2
 ENTITY_TYPE = 1
+
+# 模型类型
+CREDENTIAL = "credential"
+BASE = "base"
+
+# 凭据实例标签
+CREDENTIAL_INSTANCE = "credential_instance"
+
+# 凭据实例关联标签
+CREDENTIAL_INSTANCE_ASSOCIATION = "credential_instance_association"

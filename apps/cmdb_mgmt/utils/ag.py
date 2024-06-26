@@ -279,18 +279,16 @@ class AgUtils(object):
         objs = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) IN {ids} RETURN n")
         return self.entity_to_list(objs)
 
-    def query_edge(self, label: str, a_label: str, b_label: str, params: list, param_type: str = "AND",
+    def query_edge(self, label: str, params: list, param_type: str = "AND",
                    return_entity: bool = False):
         """
             查询边
         """
         label_str = f":{label}" if label else ""
-        a_label_str = f":{a_label}" if a_label else ""
-        b_label_str = f":{b_label}" if b_label else ""
         params_str = self.format_search_params(params, param_type)
         params_str = f"WHERE {params_str}" if params_str else params_str
 
-        objs = self.con.execCypher(f"MATCH p=((a{a_label_str})-[n{label_str}]->(b{b_label_str})) {params_str} RETURN p")
+        objs = self.con.execCypher(f"MATCH p=((a)-[n{label_str}]->(b)) {params_str} RETURN p")
         return self.edge_to_list(objs, return_entity), objs.rowcount
 
     def query_edge_by_id(self, label: str, id: int, return_entity: bool = False):

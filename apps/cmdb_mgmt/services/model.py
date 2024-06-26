@@ -1,7 +1,7 @@
 import json
 
 from apps.cmdb_mgmt.constants import MODEL, MODEL_ASSOCIATION, INSTANCE, INST_NAME_INFOS, CREATE_MODEL_CHECK_ATTR, \
-    UPDATE_MODEL_CHECK_ATTR_MAP, ORGANIZATION, USER
+    UPDATE_MODEL_CHECK_ATTR_MAP, ORGANIZATION, USER, BASE, CREDENTIAL
 from apps.cmdb_mgmt.messages import EDGE_REPETITION, MODEL_EDGE_REPETITION, MODEL_NOT_PRESENT, MODEL_ATTR_NOT_PRESENT, \
     MODEL_ATTR_PRESENT, EXIST_MODEL_EDGE, EXIST_MODEL_INST
 from apps.cmdb_mgmt.utils.ag import AgUtils
@@ -44,12 +44,14 @@ class ModelManage(object):
         return model[0]
 
     @staticmethod
-    def search_model():
+    def search_model(model_type=None):
         """
             查询模型分类
         """
         with AgUtils() as ag:
             models, _ = ag.query_entity(MODEL, [])
+        if model_type:
+            return [i for i in models if i.get("model_type", BASE) == model_type]
         return models
 
     @staticmethod
@@ -234,13 +236,13 @@ class ModelManage(object):
         """
         with AgUtils() as ag:
             query_data = {"field": "model_asst_id", "type": "str=", "value": model_asst_id}
-            edges, _ = ag.query_edge(MODEL_ASSOCIATION, MODEL, MODEL, [query_data])
+            edges, _ = ag.query_edge(MODEL_ASSOCIATION, [query_data])
         if len(edges) == 0:
             return {}
         return edges[0]
 
     @staticmethod
-    def model_association_search(model_id: str):
+    def model_association_search(model_id: str, model_type=None):
         """
             查询模型所有的关联
         """
@@ -249,7 +251,17 @@ class ModelManage(object):
             {"field": "dst_model_id", "type": "str=", "value": model_id}
         ]
         with AgUtils() as ag:
-            edges, _ = ag.query_edge(MODEL_ASSOCIATION, MODEL, MODEL, query_list, param_type="OR")
+            edges, _ = ag.query_edge(MODEL_ASSOCIATION, query_list, param_type="OR")
+
+        # 根据模型类型过滤模型关联
+        if model_type:
+            models = ModelManage.search_model(CREDENTIAL)
+            models_set = {i["model_id"] for i in models}
+            if model_type == CREDENTIAL:
+                edges = [i for i in edges if i["src_model_id"] in models_set or i["dst_model_id"] in models_set]
+            else:
+                edges = [i for i in edges if i["src_model_id"] in models_set and i["dst_model_id"] in models_set]
+
         return edges
 
     @staticmethod

@@ -201,49 +201,32 @@ class InstanceViewSet(viewsets.ViewSet):
         return WebUtils.response_success()
 
     @swagger_auto_schema(
-        operation_id="instance_association_list",
-        operation_description="查询实例关联关系",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                "model_asst_id": openapi.Schema(type=openapi.TYPE_STRING, description="模型关联关系"),
-                "src_model_id": openapi.Schema(type=openapi.TYPE_STRING, description="源模型ID"),
-                "dst_model_id": openapi.Schema(type=openapi.TYPE_STRING, description="目标模型ID"),
-                "src_inst_id": openapi.Schema(type=openapi.TYPE_INTEGER, description="源模型实例ID"),
-                "dst_inst_id": openapi.Schema(type=openapi.TYPE_INTEGER, description="目标模型实例ID"),
-            },
-        ),
-    )
-    @uma_permission("instance_association_list")
-    @action(detail=False, methods=["post"], url_path="association_list")
-    def instance_association_list(self, request):
-        assos = InstanceManage.instance_association_list(request.data)
-        return WebUtils.response_success(assos)
-
-    @swagger_auto_schema(
         operation_id="instance_association_instance_list",
         operation_description="查询某个实例的所有关联实例",
         manual_parameters=[
-            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING),
+            openapi.Parameter("inst_id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_STRING),
+            openapi.Parameter("model_type", openapi.IN_QUERY, description="模型类型", type=openapi.TYPE_STRING),
         ],
     )
     @uma_permission("instance_association_instance_list")
     @action(detail=False, methods=["get"], url_path="association_instance_list/(?P<model_id>.+?)/(?P<inst_id>.+?)")
     def instance_association_instance_list(self, request, model_id: str, inst_id: int):
-        asso_insts = InstanceManage.instance_association_instance_list(model_id, int(inst_id))
+        asso_insts = InstanceManage.instance_association_instance_list(model_id, int(inst_id), request.GET.get("model_type"))
         return WebUtils.response_success(asso_insts)
 
     @swagger_auto_schema(
         operation_id="instance_association",
         operation_description="查询某个实例的所有关联",
         manual_parameters=[
-            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING)
+            openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING),
+            openapi.Parameter("model_type", openapi.IN_QUERY, description="模型类型", type=openapi.TYPE_STRING),
         ],
     )
     @uma_permission("instance_association")
     @action(detail=False, methods=["get"], url_path="instance_association/(?P<model_id>.+?)/(?P<inst_id>.+?)")
     def instance_association(self, request, model_id: str, inst_id: int):
-        asso_insts = InstanceManage.instance_association(model_id, int(inst_id))
+        asso_insts = InstanceManage.instance_association(model_id, int(inst_id), request.GET.get("model_type"))
         return WebUtils.response_success(asso_insts)
 
     @swagger_auto_schema(
