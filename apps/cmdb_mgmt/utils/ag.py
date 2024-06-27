@@ -263,20 +263,18 @@ class AgUtils(object):
         objs = self.con.execCypher(sql_str)
         return self.entity_to_list(objs), count or objs.rowcount
 
-    def query_entity_by_id(self, label: str, id: int):
+    def query_entity_by_id(self, id: int):
         """
             查询实体详情
         """
-        label_str = f":{label}" if label else ""
-        obj = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) = {id} RETURN n").fetchone()
+        obj = self.con.execCypher(f"MATCH (n) WHERE id(n) = {id} RETURN n").fetchone()
         return self.entity_to_dict(obj)
 
-    def query_entity_by_ids(self, label: str, ids: list):
+    def query_entity_by_ids(self, ids: list):
         """
             查询实体列表
         """
-        label_str = f":{label}" if label else ""
-        objs = self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) IN {ids} RETURN n")
+        objs = self.con.execCypher(f"MATCH (n) WHERE id(n) IN {ids} RETURN n")
         return self.entity_to_list(objs)
 
     def query_edge(self, label: str, params: list, param_type: str = "AND",
@@ -291,12 +289,11 @@ class AgUtils(object):
         objs = self.con.execCypher(f"MATCH p=((a)-[n{label_str}]->(b)) {params_str} RETURN p")
         return self.edge_to_list(objs, return_entity), objs.rowcount
 
-    def query_edge_by_id(self, label: str, id: int, return_entity: bool = False):
+    def query_edge_by_id(self, id: int, return_entity: bool = False):
         """
             查询边详情
         """
-        label_str = f":{label}" if label else ""
-        objs = self.con.execCypher(f"MATCH p=((a)-[n{label_str}]->(b)) WHERE id(n) = {id} RETURN p")
+        objs = self.con.execCypher(f"MATCH p=((a)-[n]->(b)) WHERE id(n) = {id} RETURN p")
         edges = self.edge_to_list(objs, return_entity)
         return edges[0]
 

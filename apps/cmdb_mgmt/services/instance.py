@@ -12,7 +12,7 @@ from apps.cmdb_mgmt.utils.change_record import create_change_record, create_chan
 from apps.cmdb_mgmt.utils.credential import Credential
 from apps.cmdb_mgmt.utils.export import Export
 from apps.cmdb_mgmt.utils.Import import Import
-from apps.cmdb_mgmt.utils.permission import PermissionManage, RolePermissionManage
+from apps.cmdb_mgmt.utils.permission import PermissionManage, RolePermissionManage, CredentialPermissionManage
 from apps.cmdb_mgmt.utils.subgroup import SubGroup
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.system_mgmt.services.group_manage import GroupManage
@@ -29,11 +29,35 @@ class InstanceManage(object):
         return permission_params
 
     @staticmethod
+    def get_permission_params_cre(token, model_id, permission_type: str = None):
+        """获取用户实例权限查询参数，用户用户查询实例"""
+        obj = CredentialPermissionManage(token, model_id, permission_type)
+        permission_params = obj.get_permission_params()
+        return permission_params
+
+    @staticmethod
     def check_instances_permission(token: str, instances: list, model_id: str, permission_type: str = MANAGE):
         """实例权限校验，用于操作之前"""
         permission_params = InstanceManage.get_permission_params(token, model_id, permission_type)
         with AgUtils() as ag:
             inst_list, count = ag.query_entity(INSTANCE, [], permission_params=permission_params)
+
+        permission_map = {i["_id"]: i for i in inst_list}
+        instances_map = {i["_id"]: i for i in instances}
+
+        non_permission_set = set(instances_map.keys()) - set(permission_map.keys())
+
+        if not non_permission_set:
+            return
+        message = f"实例：{'、'.join([instances_map[i]['inst_name'] for i in non_permission_set])}，无权限！"
+        raise BaseAppException(message)
+
+    @staticmethod
+    def check_instances_permission_cre(token: str, instances: list, model_id: str, permission_type: str = MANAGE):
+        """实例权限校验，用于操作之前"""
+        permission_params = InstanceManage.get_permission_params_cre(token, model_id, permission_type)
+        with AgUtils() as ag:
+            inst_list, count = ag.query_entity(CREDENTIAL_INSTANCE, [], permission_params=permission_params)
 
         permission_map = {i["_id"]: i for i in inst_list}
         instances_map = {i["_id"]: i for i in instances}
@@ -57,16 +81,25 @@ class InstanceManage(object):
     @staticmethod
     def instance_list(token: str, model_id: str, params: list, page: int, page_size: int, order: str):
         """实例列表"""
+
+        inst_label = InstanceManage.get_inst_label_by_model_id(model_id)
+
         InstanceManage.supplementary_subgroups(params)
         params.append({"field": "model_id", "type": "str=", "value": model_id})
         _page = dict(skip=(page - 1) * page_size, limit=page_size)
         if order and order.startswith("-"):
             order = f"{order.replace('-', '')} DESC"
 
-        permission_params = InstanceManage.get_permission_params(token, model_id)
+        # 区分凭据类鉴权与非凭据类鉴权
+        if inst_label == CREDENTIAL_INSTANCE:
+            permission_params = InstanceManage.get_permission_params_cre(token, model_id)
+
+        else:
+            permission_params = InstanceManage.get_permission_params(token, model_id)
 
         with AgUtils() as ag:
-            inst_list, count = ag.query_entity(INSTANCE, params, page=_page, order=order, permission_params=permission_params)
+            inst_list, count = ag.query_entity(inst_label, params, page=_page, order=order, permission_params=permission_params)
+
         return inst_list, count
 
     @staticmethod
@@ -134,9 +167,15 @@ class InstanceManage(object):
         if not inst_info:
             raise BaseAppException("实例不存在！")
 
-        InstanceManage.check_instances_permission(token, [inst_info], inst_info["model_id"])
-
         model_info = ModelManage.search_model_info(inst_info["model_id"])
+        inst_label = CREDENTIAL_INSTANCE if model_info.get("model_type", BASE) == CREDENTIAL else INSTANCE
+
+        # 区分凭据类鉴权与非凭据类鉴权
+        if inst_label == CREDENTIAL_INSTANCE:
+            InstanceManage.check_instances_permission_cre(token, [inst_info], inst_info["model_id"])
+        else:
+            InstanceManage.check_instances_permission(token, [inst_info], inst_info["model_id"])
+
         attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         check_attr_map = dict(is_only={}, is_required={}, editable={})
         encryption_set = set()
@@ -154,8 +193,6 @@ class InstanceManage(object):
         for k, v in update_attr.items():
             if k in encryption_set:
                 update_attr[k] = Credential().encrypt_data(v)
-
-        inst_label = CREDENTIAL_INSTANCE if model_info.get("model_type", BASE) == CREDENTIAL else INSTANCE
 
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(inst_label, [{"field": "model_id", "type": "str=", "value": inst_info["model_id"]}])
@@ -183,9 +220,15 @@ class InstanceManage(object):
         if not inst_list:
             raise BaseAppException("实例不存在！")
 
-        InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
-
         model_info = ModelManage.search_model_info(inst_list[0]["model_id"])
+        inst_label = CREDENTIAL_INSTANCE if model_info.get("model_type", BASE) == CREDENTIAL else INSTANCE
+
+        # 区分凭据类鉴权与非凭据类鉴权
+        if inst_label == CREDENTIAL_INSTANCE:
+            InstanceManage.check_instances_permission_cre(token, inst_list, inst_list[0]["model_id"])
+        else:
+            InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
+
         attrs = ModelManage.parse_attrs(model_info.get("attrs", "[]"))
         check_attr_map = dict(is_only={}, is_required={}, editable={})
         encryption_set = set()
@@ -203,8 +246,6 @@ class InstanceManage(object):
         for k, v in update_attr.items():
             if k in encryption_set:
                 update_attr[k] = Credential().encrypt_data(v)
-
-        inst_label = CREDENTIAL_INSTANCE if model_info.get("model_type", BASE) == CREDENTIAL else INSTANCE
 
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(inst_label, [{"field": "model_id", "type": "str=", "value": inst_list[0]["model_id"]}])
@@ -225,9 +266,13 @@ class InstanceManage(object):
         if not inst_list:
             raise BaseAppException("实例不存在！")
 
-        InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
-
         inst_label = InstanceManage.get_inst_label_by_model_id(inst_list[0]["model_id"])
+
+        # 区分凭据类鉴权与非凭据类鉴权
+        if inst_label == CREDENTIAL_INSTANCE:
+            InstanceManage.check_instances_permission_cre(token, inst_list, inst_list[0]["model_id"])
+        else:
+            InstanceManage.check_instances_permission(token, inst_list, inst_list[0]["model_id"])
 
         with AgUtils() as ag:
             ag.batch_delete_entity(inst_label, inst_ids)
@@ -338,21 +383,21 @@ class InstanceManage(object):
     def instance_association_by_asso_id(asso_id: int):
         """根据关联ID查询实例关联"""
         with AgUtils() as ag:
-            edge = ag.query_edge_by_id(INSTANCE_ASSOCIATION, asso_id, return_entity=True)
+            edge = ag.query_edge_by_id(asso_id, return_entity=True)
         return edge
 
     @staticmethod
     def query_entity_by_id(inst_id: int):
         """根据实例ID查询实例详情"""
         with AgUtils() as ag:
-            entity = ag.query_entity_by_id(INSTANCE, inst_id)
+            entity = ag.query_entity_by_id(inst_id)
         return entity
 
     @staticmethod
     def query_entity_by_ids(inst_ids: list):
         """根据实例ID查询实例详情"""
         with AgUtils() as ag:
-            entity_list = ag.query_entity_by_ids(INSTANCE, inst_ids)
+            entity_list = ag.query_entity_by_ids(inst_ids)
         return entity_list
 
     @staticmethod

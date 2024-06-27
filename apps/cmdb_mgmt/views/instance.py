@@ -205,7 +205,7 @@ class InstanceViewSet(viewsets.ViewSet):
         operation_description="查询某个实例的所有关联实例",
         manual_parameters=[
             openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING),
-            openapi.Parameter("inst_id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_STRING),
+            openapi.Parameter("inst_id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_NUMBER),
             openapi.Parameter("model_type", openapi.IN_QUERY, description="模型类型", type=openapi.TYPE_STRING),
         ],
     )
@@ -310,7 +310,7 @@ class InstanceViewSet(viewsets.ViewSet):
         operation_description="实例拓扑查询",
         manual_parameters=[
             openapi.Parameter("model_id", openapi.IN_PATH, description="模型ID", type=openapi.TYPE_STRING),
-            openapi.Parameter("inst_id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_STRING),
+            openapi.Parameter("inst_id", openapi.IN_PATH, description="实例ID", type=openapi.TYPE_NUMBER),
         ],
     )
     @uma_permission("topo_search")

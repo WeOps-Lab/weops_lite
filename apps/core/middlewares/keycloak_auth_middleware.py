@@ -25,9 +25,9 @@ class KeyCloakAuthMiddleware(MiddlewareMixin):
 
     def process_view(self, request, view, args, kwargs):
         # 开发模式，默认放行
-        if DEBUG is True:
-            self.set_userinfo(request, DEBUG_USERINFO)
-            return None
+        # if DEBUG is True:
+        #     self.set_userinfo(request, DEBUG_USERINFO)
+        #     return None
 
         # 只对/api的路径进行处理，其他路径默认放行
         if not request.path.startswith('/api') or request.path.startswith('/api/public/'):

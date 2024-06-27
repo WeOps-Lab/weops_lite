@@ -1,5 +1,6 @@
 from apps.cmdb_mgmt.constants import ORGANIZATION
 from apps.cmdb_mgmt.models.Instance_permission import InstancePermission, QUERY, UserInstancePermission, MANAGE
+from apps.cmdb_mgmt.models.credential import UserCredentialPermission, RoleCredentialPermission
 from apps.cmdb_mgmt.utils.format_type import FORMAT_TYPE
 from apps.cmdb_mgmt.utils.subgroup import SubGroup
 from apps.core.exceptions.base_app_exception import BaseAppException
@@ -160,3 +161,46 @@ class RolePermissionManage(PermissionManage):
             raise BaseAppException("无实例权限！")
 
         return permission_params
+
+
+class CredentialPermissionManage(PermissionManage):
+    def get_permission_params(self):
+        """获取条件，用于列表页查询"""
+
+        # 管理类型，必须是用户自己创建的才有管理权限
+        if self.permission_type == MANAGE:
+            userinfo = self.keycloak_client.get_userinfo(self.token)
+            username = userinfo["preferred_username"]
+            if self.model_id:
+                permission_str = f"(n._creator = '{username}' AND n.model_id = '{self.model_id}')"
+            else:
+                permission_str = f"n._creator = '{username}'"
+            return permission_str
+
+        # 获取用户权限实例
+        userinfo = self.keycloak_client.get_userinfo(self.token)
+        username = userinfo["preferred_username"]
+        qs = UserCredentialPermission.objects.filter(user=username)
+        if self.model_id:
+            qs = qs.filter(model_id=self.model_id)
+        user_inst_set = {i.inst_id for i in qs}
+
+        # 获取角色权限实例
+        roles = self.keycloak_client.get_roles(self.token)
+        qs = RoleCredentialPermission.objects.filter(role__in=roles)
+        if self.model_id:
+            qs = qs.filter(model_id=self.model_id)
+        role_inst_set = {i.inst_id for i in qs}
+
+        inst_list = list(user_inst_set | role_inst_set)
+
+        if self.model_id:
+
+            _creator_str = f"(n._creator = '{username}' AND n.model_id = '{self.model_id}')"
+
+        else:
+            _creator_str = f"n._creator = '{username}'"
+
+        permission_str = f"{_creator_str} OR id(n) IN {inst_list}" if inst_list else _creator_str
+
+        return permission_str
