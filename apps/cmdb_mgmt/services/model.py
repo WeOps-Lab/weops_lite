@@ -260,7 +260,7 @@ class ModelManage(object):
             if model_type == CREDENTIAL:
                 edges = [i for i in edges if i["src_model_id"] in models_set or i["dst_model_id"] in models_set]
             else:
-                edges = [i for i in edges if i["src_model_id"] in models_set and i["dst_model_id"] in models_set]
+                edges = [i for i in edges if i["src_model_id"] not in models_set and i["dst_model_id"] not in models_set]
 
         return edges
 
