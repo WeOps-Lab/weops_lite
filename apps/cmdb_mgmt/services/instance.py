@@ -375,7 +375,7 @@ class InstanceManage(object):
         asso_info = InstanceManage.instance_association_by_asso_id(asso_id)
 
         with AgUtils() as ag:
-            ag.delete_edge(INSTANCE_ASSOCIATION, asso_id)
+            ag.delete_edge(asso_id)
 
         create_change_record_by_asso(INSTANCE_ASSOCIATION, DELETE_INST_ASST, asso_info, operator=operator)
 

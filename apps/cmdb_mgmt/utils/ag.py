@@ -354,10 +354,9 @@ class AgUtils(object):
         self.con.execCypher(f"MATCH (n{label_str}) WHERE id(n) IN {entity_ids} DELETE n")
         self.con.commit()
 
-    def delete_edge(self, label: str, edge_id: int):
+    def delete_edge(self, edge_id: int):
         """删除边"""
-        label_str = f":{label}" if label else ""
-        self.con.execCypher(f"MATCH ()-[n{label_str}]->() WHERE id(n) = {edge_id} DELETE n")
+        self.con.execCypher(f"MATCH ()-[n]->() WHERE id(n) = {edge_id} DELETE n")
         self.con.commit()
 
     def entity_objs(self, label: str, params: list, permission_params: str = ""):

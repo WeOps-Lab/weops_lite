@@ -227,7 +227,7 @@ class ModelManage(object):
             删除模型关联
         """
         with AgUtils() as ag:
-            ag.delete_edge(MODEL_ASSOCIATION, id)
+            ag.delete_edge(id)
 
     @staticmethod
     def model_association_info_search(model_asst_id: str):
