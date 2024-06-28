@@ -21,7 +21,7 @@ OPERATE_TYPE_CHOICES = [
 class ChangeRecord(models.Model):
     inst_id = models.BigIntegerField(db_index=True, verbose_name="实例ID")
     model_id = models.CharField(max_length=100, verbose_name="模型ID")
-    label = models.CharField(max_length=20, verbose_name="标签ID")
+    label = models.CharField(max_length=50, verbose_name="标签ID")
     type = models.CharField(max_length=30, choices=OPERATE_TYPE_CHOICES, verbose_name="变更类型")
     before_data = JSONField(default=dict, verbose_name="变更前实例信息")
     after_data = JSONField(default=dict, verbose_name="变更后实例信息")
