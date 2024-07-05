@@ -1,0 +1,93 @@
+.auth-white-list {
+    height: 100%;
+    display: flex;
+
+    .list-container {
+        width: 60%;
+
+        .header {
+            display: flex;
+            align-items: center;
+
+            .menu-type-ul {
+                flex: 1;
+                //margin-top: 5px;
+            }
+        }
+    }
+
+    .selection-container {
+        border: 1px solid #dcdee5;
+        border-bottom: none;
+        background-color: #f5f7fa;
+        padding: 12px 24px;
+        height: 100%;
+        flex: 1;
+        margin-left: 10px;
+        overflow-y: scroll;
+
+        >p {
+            justify-content: space-between;
+            font-size: 12px;
+            margin: 0 0 10px 0;
+            color: #63656e;
+
+            span {
+                display: inline-block;
+                color: $cw-color-primary;
+            }
+
+            .clear {
+                float: right;
+                cursor: pointer;
+            }
+        }
+
+        ul {
+            margin-top: 15px;
+
+            li {
+                background: #fff;
+                padding: 10px;
+                position: relative;
+                border-bottom: 1px solid $cw-color-border-0;
+
+                &:last-child {
+                    border: none;
+                }
+
+                span {
+                    float: right;
+                    font-size: 12px;
+                    color: $cw-color-text-3;
+                    padding-right: 10px;
+                }
+
+                .cw-icon {
+                    float: left;
+                    font-size: 16px;
+                }
+
+                >i {
+                    display: none;
+                    position: absolute;
+                    right: 5px;
+                    top: 12px;
+                    font-size: 18px;
+                }
+
+                &:hover {
+                    cursor: pointer;
+
+                    i {
+                        display: inline-block;
+
+                        &:hover {
+                            color: $cw-color-primary;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

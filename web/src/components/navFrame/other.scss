@@ -1,0 +1,12 @@
+/* stylelint-disable selector-class-pattern */
+.header-popper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    min-width: 100px !important;
+    margin-top: 7px !important;
+
+    .popper__arrow {
+        display: none !important;
+    }
+}

@@ -1,0 +1,58 @@
+.breadcrumb-container {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: $cw-color-text-3;
+    width: calc(100% + 48px);
+    margin: -20px 0 20px -24px;
+    padding: 10px 14px;
+    background: #fff;
+    position: sticky;
+    top: -20px;
+    z-index: 99;
+
+    .icon-arrows-left {
+        font-size: 20px !important;
+        margin-right: 5px !important;
+        color: #3A84FF;
+        cursor: pointer;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: inline-block;
+        vertical-align: top;
+
+        li {
+            display: inline-block;
+            height: 28px;
+            line-height: 28px;
+
+            i {
+                font-size: 14px !important;
+            }
+
+            &:last-child {
+                color: $cw-color-text-0;
+            }
+
+            .breadcrumb-active {
+                cursor: pointer;
+
+                &:hover {
+                    color: $cw-color-primary-hover;
+                }
+            }
+        }
+    }
+
+    .sub-title {
+        display: inline-block;
+        font-size: 12px;
+        vertical-align: top;
+        line-height: 28px;
+    }
+}

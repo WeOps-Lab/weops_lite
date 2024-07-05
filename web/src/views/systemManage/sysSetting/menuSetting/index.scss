@@ -1,0 +1,96 @@
+.menu-setting-wrapper {
+    .custom-menu-wrapper {
+        padding: 10px 20px;
+        background: #FFFFFF;
+        display: flex;
+        align-items: center;
+    }
+
+    .custom-menu-content {
+        display: flex;
+        height: calc(100vh - 204px);
+
+        .container-col {
+            .title {
+                font-size: 16px;
+                height: 40px;
+                line-height: 40px;
+                font-weight: bold;
+                border-bottom: 1px solid $cw-color-border-0;
+                margin: 0;
+                padding-left: 20px;
+            }
+
+            .col-content {
+                min-height: calc(100% - 40px);
+                overflow: scroll;
+                max-height: calc(100% - 40px);
+                padding: 10px 15px;
+            }
+        }
+
+        .built-in-menu {
+            width: 300px;
+            height: 100%;
+            background: #FFFFFF;
+
+            .bt-menu-content {
+                .tip-section {
+                    font-size: 12px;
+                    color: $cw-color-text-2;
+                }
+
+                .tree-row {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+
+                    &.disabled {
+                        color: #b1b2b6;
+
+                        /* stylelint-disable selector-class-pattern */
+                        /deep/.el-checkbox__input .el-checkbox__inner {
+                            border-color: #dcdee5 !important;
+                            background-color: #dcdee5 !important;
+                        }
+                    }
+
+                    /deep/.el-checkbox__input {
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+
+        .configuration-menu {
+            flex: 1;
+            margin-left: 10px;
+            background: #FFFFFF;
+
+            .title {
+                display: flex;
+                align-items: center;
+
+                p {
+                    flex: 1;
+                    margin: 0;
+                }
+            }
+
+            i {
+                cursor: pointer;
+                color: $cw-color-text-2;
+            }
+
+            .col-content {
+                min-height: calc(100% - 80px);
+                max-height: calc(100% - 80px);
+            }
+
+            .col-button-wrapper {
+                height: 40px;
+                text-align: right;
+            }
+        }
+    }
+}

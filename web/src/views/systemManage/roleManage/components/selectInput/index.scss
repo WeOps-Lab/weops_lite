@@ -1,0 +1,40 @@
+/* stylelint-disable selector-class-pattern */
+.select-input {
+    .select-input-main {
+        display: flex;
+        align-items: center;
+
+        .field {
+            width: 100px;
+            min-width: 100px;
+
+            /deep/ .el-input__inner {
+                border-radius: 4px 0 0 4px;
+            }
+        }
+
+        .value {
+            flex: 1;
+            border-radius: 0 4px 4px 0;
+
+            /deep/ .el-input__inner {
+                border-radius: 0 4px 4px 0;
+            }
+        }
+
+        .condition {
+            width: 100px;
+            margin: 0 10px;
+        }
+
+        .radius {
+            /deep/ .el-input__inner {
+                border-radius: 4px;
+            }
+
+            /deep/ .el-input__inner {
+                border-radius: 4px;
+            }
+        }
+    }
+}

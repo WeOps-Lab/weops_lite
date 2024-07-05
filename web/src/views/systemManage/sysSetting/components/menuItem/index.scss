@@ -1,0 +1,79 @@
+.menu-item {
+    .menu-item {
+        padding-left: 30px !important;
+
+        .menu-item {
+            padding-left: 30px !important;
+        }
+    }
+
+    .menu-item-row {
+        cursor: move;
+        padding: 10px;
+        background: $cw-color-bg-1;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+
+        i,
+        .cw-icon {
+            display: inline-block;
+            font-size: 16px !important;
+            color: $cw-color-text-2;
+            cursor: pointer;
+        }
+
+        .icon {
+            cursor: inherit;
+            margin-right: 10px;
+            color: $cw-color-text-1;
+        }
+
+        .page-icon {
+            color: $cw-color-text-2;
+            font-size: 12px;
+            margin-left: auto;
+
+            .delete {
+                display: inline-block;
+                margin-left: 20px;
+            }
+
+            &.sys-page-icon {
+                margin-right: 40px;
+            }
+        }
+
+        .weops-edit {
+            display: none;
+            margin-left: 10px;
+        }
+
+        &:hover {
+            .weops-edit {
+                display: inline-block;
+            }
+        }
+    }
+
+    .menu-name-input {
+        position: relative;
+        display: inline-block;
+
+        >span {
+            position: absolute;
+            right: 5px;
+            top: 7px;
+
+            i {
+                color: #ff5656 !important;
+            }
+        }
+    }
+
+    .error-tip {
+        /deep/input {
+            border: 1px solid #ff5656 !important;
+        }
+    }
+}

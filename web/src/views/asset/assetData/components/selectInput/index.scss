@@ -1,0 +1,38 @@
+/* stylelint-disable selector-class-pattern */
+.select-input {
+    .select-input-main {
+        display: flex;
+        align-items: center;
+
+        .field {
+            width: 100px;
+            min-width: 100px;
+
+            /deep/ .el-input__inner {
+                border-radius: 4px 0 0 4px;
+            }
+        }
+
+        .value {
+            flex: 1;
+            border-radius: 0;
+
+            /deep/ .el-input__inner {
+                border-radius: 0;
+            }
+        }
+
+        .exact-search-box {
+            display: inline-block;
+            border: 1px solid #DCDFE6;
+            padding: 5px 10px;
+            height: 32px;
+            border-left: none;
+            line-height: 16px;
+            border-radius: 0 4px 4px 0;
+            /deep/ .el-checkbox__label {
+                font-size: 12px;
+            }
+        }
+    }
+}

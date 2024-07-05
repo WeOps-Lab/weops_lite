@@ -1,0 +1,124 @@
+.width100 {
+    width: 100%;
+}
+
+.content-header {
+    .ip {
+        color: #c4c6cc;
+        font-size: 13px;
+    }
+}
+
+.content-box {
+    .tip-text {
+        color: #868b97;
+        font-size: 12px;
+        margin-top: 8px;
+        text-align: center;
+    }
+
+    .effect-representation {
+        padding: 10px 68px;
+        background-color: #f3f8ff;
+        display: flex;
+        justify-content: space-between;
+
+        .model-edge {
+            flex: 1;
+            margin: 0 3px;
+
+            .connection {
+                height: 46px;
+                position: relative;
+
+                .name {
+                    background: #fff;
+                    color: #868b97;
+                    font-size: 12px;
+                    left: 50%;
+                    max-width: 150px;
+                    overflow: hidden;
+                    padding: 2px 8px;
+                    position: absolute;
+                    text-align: center;
+                    text-overflow: ellipsis;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    white-space: nowrap;
+                }
+
+                &::before {
+                    background: #c4c6cc;
+                    content: "";
+                    height: 1px;
+                    left: 0;
+                    margin-top: -0.5px;
+                    position: absolute;
+                    top: 50%;
+                    width: 100%;
+                }
+
+                &::after {
+                    border: 4px solid transparent;
+                    border-left: 8px solid #c4c6cc;
+                    content: "";
+                    height: 0;
+                    position: absolute;
+                    right: -5px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 0;
+                }
+            }
+        }
+
+        .model-item {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+
+            .model-icon {
+                width: 46px;
+                height: 46px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #fff;
+                border-radius: 50%;
+
+                img {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .model-name {
+                color: #868b97;
+                font-size: 12px;
+                margin-top: 2px;
+            }
+        }
+    }
+
+    .sort {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+
+        .exchange-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #3a84ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+
+            .el-icon-sort {
+                font-size: 14px !important;
+                color: #3a84ff;
+            }
+        }
+    }
+}

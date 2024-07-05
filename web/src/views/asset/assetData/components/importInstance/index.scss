@@ -1,0 +1,66 @@
+.upload-area {
+    width: 100%;
+
+    /deep/.el-upload-dragger {
+        width: 600px;
+    }
+
+    .template-file {
+        cursor: pointer;
+        color: #3A84FF;
+        display: flex;
+        align-items: center;
+        margin: 10px 0 0 0;
+
+        .file-download {
+            font-size: 14px;
+            margin-right: 4px;
+        }
+    }
+
+    .file-list {
+        padding: 10px 0;
+        line-height: 25px;
+        font-size: 14px;
+        color: #475468;
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            line-height: 36px;
+            border-radius: 2px;
+
+            &:hover {
+                background-color: #F4F5F8;
+
+                .show-delete {
+                    display: flex;
+                }
+            }
+
+            .file-list-name {
+                display: flex;
+                align-items: center;
+
+                .file-success {
+                    color: #2DCB56;
+                    font-size: 14px;
+                    margin-right: 4px;
+                }
+
+                .name {
+                    max-width: 520px;
+                }
+            }
+
+            .file-delete {
+                display: none;
+                font-size: 20px;
+                color: #3A84FF;
+                cursor: pointer;
+            }
+        }
+    }
+}

@@ -1,0 +1,703 @@
+@font-face {
+	font-family: "cw-icon";
+	src: url("fonts/cw-icon.svg#cw-icon") format("svg"),
+url("fonts/cw-icon.ttf") format("truetype"),
+url("fonts/cw-icon.woff") format("woff"),
+url("fonts/cw-icon.eot?#iefix") format("embedded-opentype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.cw-icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'cw-icon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  text-align: center;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.cw-icon.weops-monitor-fill:before {
+	content: "\e687";
+}
+.cw-icon.weops-monitor:before {
+	content: "\e688";
+}
+.cw-icon.weops-monitor-fill-1:before {
+	content: "\e689";
+}
+.cw-icon.weops-monitor-1:before {
+	content: "\e68a";
+}
+.cw-icon.weops-angle-right:before {
+	content: "\e68b";
+}
+.cw-icon.weops-application:before {
+	content: "\e68c";
+}
+.cw-icon.weops-dashboard-fill:before {
+	content: "\e732";
+}
+.cw-icon.weops-refresh:before {
+	content: "\e733";
+}
+.cw-icon.weops-start-fill:before {
+	content: "\e734";
+}
+.cw-icon.weops-star:before {
+	content: "\e735";
+}
+.cw-icon.weops-download:before {
+	content: "\e797";
+}
+.cw-icon.weops-sao-yi-sao:before {
+	content: "\e7a4";
+}
+.cw-icon.weops-remind:before {
+	content: "\e7ab";
+}
+.cw-icon.weops-danger:before {
+	content: "\e7ac";
+}
+.cw-icon.weops-early-warning:before {
+	content: "\e7ad";
+}
+.cw-icon.weops-database:before {
+	content: "\e7ae";
+}
+.cw-icon.weops-middleware:before {
+	content: "\e7b0";
+}
+.cw-icon.weops-host:before {
+	content: "\e7b1";
+}
+.cw-icon.weops-edit:before {
+	content: "\e7b2";
+}
+.cw-icon.weops-cloud-platform-fill:before {
+	content: "\e7b3";
+}
+.cw-icon.weops-container:before {
+	content: "\e7b5";
+}
+.cw-icon.weops-subscribe:before {
+	content: "\e7b6";
+}
+.cw-icon.weops-user-permission:before {
+	content: "\e7b7";
+}
+.cw-icon.weops-template:before {
+	content: "\e7b8";
+}
+.cw-icon.weops-patch:before {
+	content: "\e7b9";
+}
+.cw-icon.weops-tool-kit:before {
+	content: "\e7ba";
+}
+.cw-icon.weops-health:before {
+	content: "\e7bb";
+}
+.cw-icon.weops-order:before {
+	content: "\e7bc";
+}
+.cw-icon.weops-duty-fill:before {
+	content: "\e7bd";
+}
+.cw-icon.weops-big-screen:before {
+	content: "\e7be";
+}
+.cw-icon.weops-knowledge-base:before {
+	content: "\e7bf";
+}
+.cw-icon.weops-system:before {
+	content: "\e7c0";
+}
+.cw-icon.weops-delete:before {
+	content: "\e7c1";
+}
+.cw-icon.weops-add-view:before {
+	content: "\e7c2";
+}
+.cw-icon.weops-info:before {
+	content: "\e7c4";
+}
+.cw-icon.weops-complete-fill:before {
+	content: "\e7c5";
+}
+.cw-icon.weops-triangle-down:before {
+	content: "\e7c6";
+}
+.cw-icon.weops-link:before {
+	content: "\e7c7";
+}
+.cw-icon.weops-markdown:before {
+	content: "\e7c8";
+}
+.cw-icon.weops-code-fill:before {
+	content: "\e7c9";
+}
+.cw-icon.weops-image-fill:before {
+	content: "\e7ca";
+}
+.cw-icon.weops-log-fill:before {
+	content: "\e7cb";
+}
+.cw-icon.weops-copy:before {
+	content: "\e7cc";
+}
+.cw-icon.weops-revoke:before {
+	content: "\e7cd";
+}
+.cw-icon.weops-redo:before {
+	content: "\e7ce";
+}
+.cw-icon.weops-narrow:before {
+	content: "\e7cf";
+}
+.cw-icon.weops-enlarge:before {
+	content: "\e7d0";
+}
+.cw-icon.weops-drag-drop:before {
+	content: "\e7d1";
+}
+.cw-icon.weops-full-view:before {
+	content: "\e7d2";
+}
+.cw-icon.weops-exit-full-screen:before {
+	content: "\e7d3";
+}
+.cw-icon.weops-website:before {
+	content: "\e7d4";
+}
+.cw-icon.weops-circle-plus:before {
+	content: "\e7d5";
+}
+.cw-icon.weops-linux:before {
+	content: "\e7d6";
+}
+.cw-icon.weops-windows:before {
+	content: "\e7d7";
+}
+.cw-icon.weops-aix:before {
+	content: "\e7d8";
+}
+.cw-icon.weops-unix:before {
+	content: "\e7d9";
+}
+.cw-icon.weops-close:before {
+	content: "\e7da";
+}
+.cw-icon.weops-add:before {
+	content: "\e7dc";
+}
+.cw-icon.weops-reduce:before {
+	content: "\e7df";
+}
+.cw-icon.weops-complete:before {
+	content: "\e7e0";
+}
+.cw-icon.weops-directions-fill:before {
+	content: "\e7e1";
+}
+.cw-icon.weops-app-health:before {
+	content: "\e7e6";
+}
+.cw-icon.weops-app-screen:before {
+	content: "\e7e7";
+}
+.cw-icon.weops-app-list:before {
+	content: "\e7e8";
+}
+.cw-icon.weops-write-article:before {
+	content: "\e7e9";
+}
+.cw-icon.weops-cloud-monitor:before {
+	content: "\e7ea";
+}
+.cw-icon.weops-database-assets:before {
+	content: "\e7eb";
+}
+.cw-icon.weops-database-monitor:before {
+	content: "\e7ec";
+}
+.cw-icon.weops-data-screen:before {
+	content: "\e7ed";
+}
+.cw-icon.weops-data-storage:before {
+	content: "\e7ee";
+}
+.cw-icon.weops-devOps-tool:before {
+	content: "\e7ef";
+}
+.cw-icon.weops-esxi:before {
+	content: "\e7f0";
+}
+.cw-icon.weops-health-scan:before {
+	content: "\e7f1";
+}
+.cw-icon.weops-host-monitor:before {
+	content: "\e7f3";
+}
+.cw-icon.weops-it-service:before {
+	content: "\e7f4";
+}
+.cw-icon.weops-lore:before {
+	content: "\e7f5";
+}
+.cw-icon.weops-reception:before {
+	content: "\e7f6";
+}
+.cw-icon.weops-other-monitor:before {
+	content: "\e7f8";
+}
+.cw-icon.weops-website-monitor:before {
+	content: "\e7fa";
+}
+.cw-icon.weops-angle-up:before {
+	content: "\e7fb";
+}
+.cw-icon.weops-angle-down:before {
+	content: "\e7fc";
+}
+.cw-icon.weops-host-1:before {
+	content: "\e800";
+}
+.cw-icon.weops-folder:before {
+	content: "\e801";
+}
+.cw-icon.weops-circle-up:before {
+	content: "\e802";
+}
+.cw-icon.weops-circle-down:before {
+	content: "\e803";
+}
+.cw-icon.weops-host-capital:before {
+	content: "\e804";
+}
+.cw-icon.weops-other-capital:before {
+	content: "\e805";
+}
+.cw-icon.weops-alarm:before {
+	content: "\e806";
+}
+.cw-icon.weops-panel:before {
+	content: "\e808";
+}
+.cw-icon.weops-window-narrow:before {
+	content: "\e837";
+}
+.cw-icon.weops-font:before {
+	content: "\e855";
+}
+.cw-icon.weops-date:before {
+	content: "\e856";
+}
+.cw-icon.weops-line-chart:before {
+	content: "\e857";
+}
+.cw-icon.weops-long-str:before {
+	content: "\e8ef";
+}
+.cw-icon.weops-deng-pao:before {
+	content: "\e8f3";
+}
+.cw-icon.weops-kai-guan:before {
+	content: "\e8f5";
+}
+.cw-icon.weops-descending-order:before {
+	content: "\e8f6";
+}
+.cw-icon.weops-ascending-order:before {
+	content: "\e8f7";
+}
+.cw-icon.weops-you-jian:before {
+	content: "\e8f8";
+}
+.cw-icon.weops-test-apply:before {
+	content: "\e93e";
+}
+.cw-icon.weops-filter-fill:before {
+	content: "\e93f";
+}
+.cw-icon.weops-home-fill:before {
+	content: "\e940";
+}
+.cw-icon.weops-custom-monitor:before {
+	content: "\e941";
+}
+.cw-icon.weops-cloud-host-fill:before {
+	content: "\e942";
+}
+.cw-icon.weops-resource-fill:before {
+	content: "\e943";
+}
+.cw-icon.weops-ops-process:before {
+	content: "\e947";
+}
+.cw-icon.weops-service-management-fill:before {
+	content: "\e951";
+}
+.cw-icon.weops-sla-management-fill:before {
+	content: "\e95d";
+}
+.cw-icon.weops-information:before {
+	content: "\e95e";
+}
+.cw-icon.weops-portal-operation-fill:before {
+	content: "\e95f";
+}
+.cw-icon.weops-operation:before {
+	content: "\e960";
+}
+.cw-icon.weops-role:before {
+	content: "\e961";
+}
+.cw-icon.weops-user:before {
+	content: "\e962";
+}
+.cw-icon.weops-operation-log-fill:before {
+	content: "\e963";
+}
+.cw-icon.weops-data-fill:before {
+	content: "\e964";
+}
+.cw-icon.weops-line-chart-fill:before {
+	content: "\e965";
+}
+.cw-icon.weops-setting:before {
+	content: "\e966";
+}
+.cw-icon.weops-inspection-fill:before {
+	content: "\e967";
+}
+.cw-icon.weops-service-directory:before {
+	content: "\e981";
+}
+.cw-icon.weops-network-device:before {
+	content: "\e982";
+}
+.cw-icon.weops-sign-receiver:before {
+	content: "\e983";
+}
+.cw-icon.weops-policy-execution-configuration:before {
+	content: "\e984";
+}
+.cw-icon.weops-work:before {
+	content: "\e985";
+}
+.cw-icon.weops-operations-analysis:before {
+	content: "\e986";
+}
+.cw-icon.weops-notify:before {
+	content: "\e987";
+}
+.cw-icon.weops-license:before {
+	content: "\e988";
+}
+.cw-icon.weops-monitor-setting-fill:before {
+	content: "\ea9f";
+}
+.cw-icon.weops-property-object:before {
+	content: "\eaa0";
+}
+.cw-icon.weops-dynamic-grouping:before {
+	content: "\eaa1";
+}
+.cw-icon.weops-data-gather:before {
+	content: "\eaa2";
+}
+.cw-icon.weops-index-manage:before {
+	content: "\eaa3";
+}
+.cw-icon.weops-alarm-info:before {
+	content: "\eaa5";
+}
+.cw-icon.weops-dealing-alarm:before {
+	content: "\eaa6";
+}
+.cw-icon.weops-info-1:before {
+	content: "\eaa7";
+}
+.cw-icon.weops-data-source:before {
+	content: "\eaa8";
+}
+.cw-icon.weops-node-manage:before {
+	content: "\eaa9";
+}
+.cw-icon.weops-tag-manage:before {
+	content: "\eaaa";
+}
+.cw-icon.weops-temp-manage:before {
+	content: "\eaab";
+}
+.cw-icon.weops-model-manage:before {
+	content: "\eaac";
+}
+.cw-icon.weops-discover:before {
+	content: "\eaad";
+}
+.cw-icon.weops-gather:before {
+	content: "\eaae";
+}
+.cw-icon.weops-oid-group:before {
+	content: "\eaaf";
+}
+.cw-icon.weops-log-node:before {
+	content: "\eab0";
+}
+.cw-icon.weops-lian-jie:before {
+	content: "\eab2";
+}
+.cw-icon.weops-text:before {
+	content: "\eb48";
+}
+.cw-icon.weops-box-selection:before {
+	content: "\eb49";
+}
+.cw-icon.weops-image-1:before {
+	content: "\eb4a";
+}
+.cw-icon.weops-align-right:before {
+	content: "\eb5a";
+}
+.cw-icon.weops-align:before {
+	content: "\eb5b";
+}
+.cw-icon.weops-align-center:before {
+	content: "\eb5c";
+}
+.cw-icon.weops-align-left:before {
+	content: "\eb5d";
+}
+.cw-icon.weops-topology-landscape-fill:before {
+	content: "\eb74";
+}
+.cw-icon.weops-linkto:before {
+	content: "\ebfe";
+}
+.cw-icon.weops-shang-yi-ceng:before {
+	content: "\ebff";
+}
+.cw-icon.weops-xia-yi-ceng:before {
+	content: "\ec00";
+}
+.cw-icon.weops-zhi-di-ceng:before {
+	content: "\ec01";
+}
+.cw-icon.weops-zhi-ding-ceng:before {
+	content: "\ec02";
+}
+.cw-icon.weops-praise:before {
+	content: "\ec64";
+}
+.cw-icon.weops-praise-fill:before {
+	content: "\ec65";
+}
+.cw-icon.weops-show:before {
+	content: "\ec66";
+}
+.cw-icon.weops-fail-fill:before {
+	content: "\ec69";
+}
+.cw-icon.weops-ren-qi:before {
+	content: "\ec6a";
+}
+.cw-icon.weops-triangle-up:before {
+	content: "\ec7a";
+}
+.cw-icon.weops-auto-fit-view:before {
+	content: "\ec7d";
+}
+.cw-icon.weops-nav-down:before {
+	content: "\ec88";
+}
+.cw-icon.weops-nav-up:before {
+	content: "\ec89";
+}
+.cw-icon.weops-performance-observation:before {
+	content: "\ec93";
+}
+.cw-icon.weops-application-observation:before {
+	content: "\ec94";
+}
+.cw-icon.weops-chain-analysis:before {
+	content: "\ec95";
+}
+.cw-icon.weops-mu-lu:before {
+	content: "\eca6";
+}
+.cw-icon.weops-wen-ben:before {
+	content: "\eca7";
+}
+.cw-icon.weops-qie-huan:before {
+	content: "\ece6";
+}
+.cw-icon.weops-incident-fill:before {
+	content: "\ece7";
+}
+.cw-icon.weops-auto-refresh:before {
+	content: "\ece8";
+}
+.cw-icon.weops-topo-hor:before {
+	content: "\ece9";
+}
+.cw-icon.weops-cloud-platform-fill-1:before {
+	content: "\ecea";
+}
+.cw-icon.weops-yun-ping-tai:before {
+	content: "\eceb";
+}
+.cw-icon.weops-monitor-fill-1-1:before {
+	content: "\ecec";
+}
+.cw-icon.weops-monitor-1-1:before {
+	content: "\eced";
+}
+.cw-icon.weops-zi-ding-yi-jian-kong-tian-chong:before {
+	content: "\ecee";
+}
+.cw-icon.weops-zi-ding-yi-chang-jing:before {
+	content: "\ecef";
+}
+.cw-icon.weops-k-8-s---1:before {
+	content: "\ecf1";
+}
+.cw-icon.weops-k-8-s:before {
+	content: "\ecf2";
+}
+.cw-icon.weops-apps:before {
+	content: "\ecf3";
+}
+.cw-icon.weops-bao-cun:before {
+	content: "\ecf5";
+}
+.cw-icon.weops-tian-jia-gao-jing-ce-lüe:before {
+	content: "\ecf7";
+}
+.cw-icon.weops-camera:before {
+	content: "\ecf8";
+}
+.cw-icon.weops-zhe-xian-tu-mian:before {
+	content: "\ecf9";
+}
+.cw-icon.weops-linux-colours:before {
+	content: "\ecfa";
+}
+.cw-icon.weops-linux-1:before {
+	content: "\ecfb";
+}
+.cw-icon.weops-windows-colours:before {
+	content: "\ecfc";
+}
+.cw-icon.weops-windows-1:before {
+	content: "\ecfd";
+}
+.cw-icon.weops-dan-jian-tou:before {
+	content: "\ecfe";
+}
+.cw-icon.weops-shuang-jian-tou:before {
+	content: "\ecff";
+}
+.cw-icon.weops-wu-jian-tou:before {
+	content: "\ed00";
+}
+.cw-icon.weops-chui-zhi-fen-bu:before {
+	content: "\ed01";
+}
+.cw-icon.weops-chui-zhi-ju-zhong:before {
+	content: "\ed02";
+}
+.cw-icon.weops-di-dui-qi:before {
+	content: "\ed03";
+}
+.cw-icon.weops-ding-dui-qi:before {
+	content: "\ed04";
+}
+.cw-icon.weops-shui-ping-fen-bu:before {
+	content: "\ed05";
+}
+.cw-icon.weops-shui-ping-ju-zhong:before {
+	content: "\ed06";
+}
+.cw-icon.weops-you-dui-qi:before {
+	content: "\ed07";
+}
+.cw-icon.weops-zuo-dui-qi:before {
+	content: "\ed08";
+}
+.cw-icon.weops-pi-liang-ren-wu:before {
+	content: "\ed09";
+}
+.cw-icon.weops-notice:before {
+	content: "\ed0a";
+}
+.cw-icon.weops-more-horizontal:before {
+	content: "\ed0b";
+}
+.cw-icon.weops-ge-ren-jue-se:before {
+	content: "\ed22";
+}
+.cw-icon.weops-zu-zhi-jue-se:before {
+	content: "\ed23";
+}
+.cw-icon.weops-zhe-xian-lian-xian:before {
+	content: "\ed31";
+}
+.cw-icon.weops-qu-xian-lian-xian:before {
+	content: "\ed32";
+}
+.cw-icon.weops-zhi-xian-lian-xian:before {
+	content: "\ed33";
+}
+.cw-icon.weops-wen-jian-fen-fa:before {
+	content: "\ed3b";
+}
+.cw-icon.weops-zi-chan-mu-lu:before {
+	content: "\ed3c";
+}
+.cw-icon.weops-dong-tai-fen-zu:before {
+	content: "\ed3d";
+}
+.cw-icon.weops-navigation-expand:before {
+	content: "\ef4f";
+}
+.cw-icon.weops-navigation-indent:before {
+	content: "\ef50";
+}
+.cw-icon.weops-apply:before {
+	content: "\ef5d";
+}
+.cw-icon.weops-module:before {
+	content: "\ef5e";
+}
+.cw-icon.weops-set:before {
+	content: "\ef5f";
+}
+.cw-icon.weops-dian-bo-xin-dian-tu:before {
+	content: "\ef9b";
+}
+.cw-icon.weops-yuan-cheng-lian-jie:before {
+	content: "\ef9c";
+}
+.cw-icon.weops-triangle-left:before {
+	content: "\efa7";
+}
+.cw-icon.weops-triangle-right:before {
+	content: "\efa8";
+}
+.cw-icon.weops-more-vertical:before {
+	content: "\efa9";
+}
+.cw-icon.weops-refresh-off:before {
+	content: "\efaf";
+}
+.cw-icon.weops-filter-linear:before {
+	content: "\efb0";
+}

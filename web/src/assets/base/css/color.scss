@@ -1,0 +1,42 @@
+$border-color: #DADEE2; //边框
+// 主要颜色
+$cw-color-primary: #1272FF; // 强调
+$cw-color-primary-hover: #3D91FF; // 强调-悬浮
+$cw-color-primary-active: #0B54D2; // 强调-点击
+$cw-color-primary-disabled: #92C9FF; // 强调-禁用
+$cw-color-primary-light: #e8f5ff; // 强调-禁用
+// 文字/图标颜色
+$cw-color-text-0: #1E252E; // 文字/图标颜色-最主要
+$cw-color-text-1: #475468; // 文字/图标颜色-稍次要
+$cw-color-text-2: #96A1B2; // 文字/图标颜色-次要
+$cw-color-text-3: #C9CDD4; // 文字/图标颜色-最次要
+
+// 背景颜色
+$cw-color-bg-0:	#FFFFFF; //	白色
+$cw-color-bg-1:	#F6F8F9; //	用于页面需内容区分背景色-浅灰色/白色背景下，可点击内容激活态
+$cw-color-bg-2:	#F2F4F8; // 最下层-页面背景色
+$cw-color-bg-3: #e9e9e9; // 用于浅灰色激活态，或需较深背景 深灰色
+
+// 描边/分割线颜色
+$cw-color-border-0:	#E6E9EE; //	用于页面内容分割
+$cw-color-border-1: #CED5DB; //	用于输入框、按钮等描边
+
+// 成功/正常颜色
+$cw-color-success: #27C274; // 用于表示成功或正常状态颜色
+$cw-color-success-light: #E8FFF2; // 用于正常状态标签背景
+
+// 警告/预警颜色
+$cw-color-warning: #FF9326; // 用于表示警告或预警状态颜色
+$cw-color-warning-light: #FFEECC; // 用于预警状态标签背景
+
+// 失败/危险颜色
+$cw-color-danger: #F43B2C; // 用于表示失f#F5F7FA败或危险状态颜色
+$cw-color-danger-light: #FFDBD1; //	用于危险状态标签背景
+
+// 告警提醒颜色
+$cw-color-tips: #FFEA03; // 用于表示告警提醒状态颜色
+$cw-color-tips-light: #fffbec; // 用于表示告警提醒状态标签背景
+
+// 其它
+$cw-border-color: #CFD4D9; // 常规按钮border色
+$cw-label-color: #606C80; // 文本常规label色

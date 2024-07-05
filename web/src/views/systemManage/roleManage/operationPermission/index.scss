@@ -1,0 +1,98 @@
+.operation-permission {
+    height: 100%;
+    padding: 10px 10px 0 10px;
+    display: flex;
+    flex-direction: column;
+
+    .table-header {
+        display: flex;
+        height: 50px;
+        align-items: center;
+        background-color: #FAFAFA;
+        border: 1px solid #dcdee5;
+
+        .menu-box,
+        .operate-auth {
+            padding-left: 15px;
+        }
+        .menu-box {
+            width: 325px;
+        }
+    }
+
+    .table-body {
+        flex: 1;
+        height: 0;
+        overflow: auto;
+
+        .menu-list {
+
+            .first-level-box,
+            .second-level-box,
+            .third-level-box {
+                display: flex;
+                height: 50px;
+                align-items: center;
+                border-bottom: 1px solid #c4c6cc;
+            }
+
+            .menu-name,
+            .menu-operate {
+                padding-left: 15px;
+            }
+
+            .menu-name {
+                display: flex;
+                align-items: center;
+                width: 30%;
+
+                .expand-icon {
+                    font-size: 18px !important;
+                    cursor: pointer;
+                    margin-right: 5px;
+                }
+
+                span {
+                    font-size: 13px;
+                    display: inline-block;
+                    height: 18px;
+                    line-height: 18px;
+                }
+            }
+
+            .menu-operate {
+                display: flex;
+                justify-content: flex-start;
+                width: 70%;
+
+                div {
+                    font-size: 0;
+                    display: flex;
+                    align-items: center;
+                    margin-right: 10px;
+                    width: 80px;
+
+                    span {
+                        flex: 1;
+                        width: 0;
+                        font-size: 13px;
+                        display: inline-block;
+                        height: 18px;
+                        line-height: 18px;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+
+        .check-box {
+            margin-right: 5px;
+        }
+
+        .check-box-left {
+            margin-left: 23px;
+        }
+    }
+}

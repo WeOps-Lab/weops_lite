@@ -1,0 +1,17 @@
+.content-box {
+
+    .info-box {
+        flex: 1;
+        height: 0;
+        overflow: auto;
+    }
+
+    .btn-box {
+        margin: 20px;
+    }
+
+    .form-btn {
+        display: flex;
+        flex-direction: row-reverse;
+    }
+}

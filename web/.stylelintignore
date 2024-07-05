@@ -1,0 +1,9 @@
+/build/
+/config/
+/dist/
+/*.js
+/node_modules/
+/src/assets/icon/
+/src/assets/base/
+/src/assets/custom/
+/src/assets/jsFlow/

@@ -1,0 +1,32 @@
+.icon-show-list {
+    max-height: 300px;
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+
+    .icon-item {
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        img {
+            width: 24px;
+            height: 24px;
+        }
+
+        &:hover {
+            background-color: rgb(235, 244, 255);
+            border: 1px dashed rgb(58, 132, 255);
+            color: rgb(58, 132, 255);
+        }
+    }
+
+    .active-icon {
+        background-color: rgb(235, 244, 255);
+        border: 1px dashed rgb(58, 132, 255);
+        color: rgb(58, 132, 255);
+    }
+}

@@ -1,0 +1,21 @@
+.common-dialog-wrapper-main {
+    .icon-box {
+        .icon {
+            border: 1px solid #c3cdd7;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 50px;
+            height: 85px;
+            margin: 0 auto;
+            width: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    }
+}

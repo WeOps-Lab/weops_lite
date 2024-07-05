@@ -1,0 +1,21 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+          "modules": false,
+          "useBuiltIns": "usage"
+      }
+    ]
+  ],
+  "plugins": [
+      "transform-vue-jsx",
+      [
+          "@babel/plugin-transform-runtime",
+          {
+              "corejs": false
+          }
+      ],
+      "@babel/plugin-proposal-object-rest-spread"
+  ]
+}

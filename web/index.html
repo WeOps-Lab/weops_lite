@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WeOps</title>
+    <link href="{{ STATIC_URL }}img/logo.png" rel="shortcut icon" type="image/x-icon">
+</head>
+<body>
+<script>
+    if ('{{ RUN_MODE }}' === 'DEVELOP') {
+        window.siteUrl = window.location.origin
+    } else if ('{{ RUN_MODE }}' === 'STAGING') {
+        window.static_url = window.location.origin + '/t/' + '{{ APP_CODE }}' + '/static/'
+    } else {
+        window.static_url = window.location.origin + '/t/' + '{{ APP_CODE }}' + '/static/'
+    }
+    window.CSRF_COOKIE_NAME = '{{ CSRF_COOKIE_NAME }}';
+    window.STATIC_URL = '{{ STATIC_URL }}'
+    window.KEYCLOAK_URL = '{{ KEYCLOAK_URL }}'
+    window.KEYCLOAK_REALM = '{{ KEYCLOAK_REALM }}'
+    window.KEYCLOAK_UI_CLIENT_ID = '{{ KEYCLOAK_UI_CLIENT_ID }}'
+</script>
+<div id="app"></div>
+<script type=text/javascript
+        src="{{ STATIC_URL }}dist/dll/vendors.dll.<%= htmlWebpackPlugin.options.timeStamp %>.js"></script>
+<script type=text/javascript
+        src="{{ STATIC_URL }}dist/dll/jquery.dll.<%= htmlWebpackPlugin.options.timeStamp %>.js"></script>
+<script type=text/javascript
+        src="{{ STATIC_URL }}dist/dll/antv.dll.<%= htmlWebpackPlugin.options.timeStamp %>.js"></script>
+<script type=text/javascript
+        src="{{ STATIC_URL }}dist/dll/echarts.dll.<%= htmlWebpackPlugin.options.timeStamp %>.js"></script>
+</body>
+</html>

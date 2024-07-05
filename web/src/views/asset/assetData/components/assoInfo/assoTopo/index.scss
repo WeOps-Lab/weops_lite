@@ -1,0 +1,23 @@
+.asso-topo {
+    width: 100%;
+    height: calc(100vh - 246px);
+    position: relative;
+
+    /deep/ .minimap {
+        position: absolute !important;
+        right: 0;
+        bottom: 0;
+        border: 1px solid #ddd !important;
+        border-right: none;
+        background-color: #fff;
+    }
+
+    /deep/ .g6-grid-container {
+        z-index: 0 !important;
+    }
+
+    /deep/ canvas {
+        position: relative;
+        z-index: 0 !important;
+    }
+}

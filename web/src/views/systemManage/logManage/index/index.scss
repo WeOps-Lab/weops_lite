@@ -1,0 +1,25 @@
+.sys-log {
+    .search-box {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        margin-bottom: 20px;
+
+        .mr16 {
+            margin-right: 16px;
+        }
+
+        .mr8 {
+            margin-right: 8px;
+        }
+
+        & > span {
+            display: inline-block;
+            margin: 0 8px 0 16px;
+        }
+
+        & > span:nth-of-type(1) {
+            margin-left: 0;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+.DS_Store
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+deploy.sh
+# Editor directories and filesgit
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# 忽略不提交static下的dist文件
+/static/dist
+
+# 忽略不提交projects和.gitmodules
+/src/projects/*
+.gitmodules

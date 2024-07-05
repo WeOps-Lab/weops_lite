@@ -1,0 +1,53 @@
+/* stylelint-disable selector-class-pattern */
+/deep/.el-drawer__close-btn {
+    display: none;
+}
+
+/deep/.el-drawer__header {
+    height: 60px;
+    padding: 0;
+    margin-bottom: 0;
+    border-bottom: 1px solid #dcdee5;
+
+    .title-slot {
+        display: flex;
+        align-items: center;
+
+        .back-icon {
+            display: inline-block;
+            margin-right: 20px;
+            width: 30px;
+            height: 60px;
+            background-color: #3a84ff;
+            text-align: center;
+
+            i {
+                cursor: pointer;
+                line-height: 60px;
+                font-size: 20px;
+                color: #fff;
+            }
+        }
+
+        .title-text {
+            font-size: 16px;
+            color: #313238;
+        }
+    }
+}
+
+.footer-slot {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    align-items: center;
+    height: 54px;
+    padding-right: 20px;
+    background-color: rgb(250, 251, 253);
+}
+
+/deep/ .el-drawer__body {
+    margin-bottom: 40px;
+}
