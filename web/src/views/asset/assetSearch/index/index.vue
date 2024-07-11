@@ -387,14 +387,13 @@ export default class Relation extends Vue {
         align-items: center;
         width: 100%;
         height: 100%;
-        background: url(~@/assets/img/search_bg.png) no-repeat;
-        background-size: contain;
-        background-position: 50% 200px;
+        background: url(~@/assets/svg/search_bg.svg) no-repeat;
+        background-position: 50% 50%;
         background-color: #f5f7fa;
         .asset-search-input {
             width: 800px;
             align-self: flex-start;
-            margin-top: 120px;
+            margin-top: 20%;
         }
     }
     .asset-search-result {
