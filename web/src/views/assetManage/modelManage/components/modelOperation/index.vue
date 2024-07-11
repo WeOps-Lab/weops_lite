@@ -2,7 +2,7 @@
     <div>
         <drawer-component
             :title="`${isAdd ? '新建' : '编辑'}模型`"
-            :size="500"
+            :size="600"
             :visible="isShow"
             destroy-on-close
             custom-class="common-dialog-wrapper"
@@ -34,13 +34,19 @@
                     <el-form-item
                         label="模型类型"
                         prop="model_type">
-                        <el-select v-model="formData.model_type" size="small" style="width: 100%;" :disabled="!isAdd">
-                            <el-option v-for="option in typeList"
+                        <ul class="type-list">
+                            <li
+                                :class="['type-list-item', formData.model_type === option.id && 'active-item', !isAdd && 'disabled-item']"
+                                v-for="option in typeList"
                                 :key="option.id"
-                                :label="option.name"
-                                :value="option.id">
-                            </el-option>
-                        </el-select>
+                                @click="chooseType(option)">
+                                <div class="header">
+                                    <img :src="getTypeIcon(option.id)" alt="加载失败" class="header-icon">
+                                    <span class="header-name">{{ option.name }}</span>
+                                </div>
+                                <span class="desc">{{ option.desc }}</span>
+                            </li>
+                        </ul>
                     </el-form-item>
                     <el-form-item
                         label="唯一标识"
