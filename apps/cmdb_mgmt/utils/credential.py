@@ -1,5 +1,5 @@
 import base64
-import os
+from weops_lite.components.base import SECRET_KEY
 
 from cryptography.fernet import Fernet
 
@@ -12,7 +12,7 @@ class Credential:
     def get_key(self):
         """获取fernet需要的密钥key"""
         # 获取环境变量中的密钥
-        credential_key = os.getenv("CREDENTIAL_KEY")
+        credential_key = SECRET_KEY
         # 将字符串转换为字节类型
         custom_key_bytes = credential_key.encode('utf-8')
         # 将自定义密钥编码为 URL 安全的 Base64 格式
