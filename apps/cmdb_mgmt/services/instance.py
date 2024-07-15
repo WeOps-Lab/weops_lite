@@ -515,10 +515,15 @@ class FullText:
         ModelManage.get_organization_option(group, option)
         return {i["id"]: i["name"] for i in option}
 
-    def matching(self, search, data):
-        model_id = data.pop("model_id", "")
+    def matching(self, search, data, exclude=["model_id", "_creator"]):
+        model_id = data.get("model_id", "")
         values = []
         for k, v in data.items():
+
+            # 排除某些key不进行检索
+            if k in exclude:
+                continue
+
             if k not in self.model_enum_map.get(model_id, {}):
                 values.append(str(v))
             else:
