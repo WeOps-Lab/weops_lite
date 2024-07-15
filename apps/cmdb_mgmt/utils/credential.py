@@ -1,4 +1,6 @@
 import base64
+import hashlib
+
 from weops_lite.components.base import SECRET_KEY
 
 from cryptography.fernet import Fernet
@@ -15,8 +17,10 @@ class Credential:
         credential_key = SECRET_KEY
         # 将字符串转换为字节类型
         custom_key_bytes = credential_key.encode('utf-8')
+        # 使用SHA-256哈希函数将其转换为32字节的哈希值
+        custom_key_bytes_32 = hashlib.sha256(custom_key_bytes).digest()
         # 将自定义密钥编码为 URL 安全的 Base64 格式
-        encoded_key = base64.urlsafe_b64encode(custom_key_bytes)
+        encoded_key = base64.urlsafe_b64encode(custom_key_bytes_32)
         return encoded_key
 
     def get_fernet(self):
