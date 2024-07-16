@@ -27,6 +27,10 @@
         }
     }
 
+    /deep/ .el-input--suffix .el-input__inner {
+        padding-right: 50px;
+    }
+
     .custom-label {
         display: inline-block !important;
     }

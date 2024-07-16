@@ -75,17 +75,25 @@
                                     </el-cascader>
                                     <el-input
                                         v-else
-                                        :disabled="!canEdit(tex)"
+                                        :disabled="tex['attr_type'] === 'pwd' && !tex.editPassword"
                                         v-model="formData[tex.attr_id]"
                                         size="small"
                                         clearable
                                         :type="tex['attr_type'] === 'pwd' ? 'password' : 'text'">
-                                        <i
-                                            v-if="tex['attr_type'] === 'pwd'"
-                                            class="el-icon-document-copy el-input__icon"
-                                            slot="suffix"
-                                            v-copy="formData[tex.attr_id]">
-                                        </i>
+                                        <template v-if="tex['attr_type'] === 'pwd'">
+                                            <i
+                                                v-if="canEdit(tex) && !tex.editPassword"
+                                                class="el-icon-edit el-input__icon"
+                                                slot="suffix"
+                                                @click="editPassword(tex)">
+                                            </i>
+                                            <i
+                                                v-if="!tex.editPassword && !!formData[tex.attr_id]"
+                                                class="el-icon-document-copy el-input__icon"
+                                                slot="suffix"
+                                                @click="copyPassword(formData[tex.attr_id])">
+                                            </i>
+                                        </template>
                                     </el-input>
                                 </el-form-item>
                             </div>
