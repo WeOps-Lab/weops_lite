@@ -246,8 +246,15 @@ class InstanceManage(object):
             if attr["attr_type"] == ENCRYPTION:
                 encryption_set.add(attr["attr_id"])
 
-        # 密钥类属性加密
+        is_one_inst = len(inst_list) == 1
+
         for k, v in update_attr.items():
+
+            # 当单实例更新是，属性值一致的避免密码重复加密
+            if is_one_inst and v == inst_list[0].get(k):
+                continue
+
+            # 密钥类属性加密
             if k in encryption_set:
                 update_attr[k] = Credential().encrypt_data(v)
 
