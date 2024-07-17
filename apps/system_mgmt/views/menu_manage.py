@@ -140,7 +140,7 @@ class MenuManageModelViewSet(ModelViewSet):
         return WebUtils.response_success()
 
     @swagger_auto_schema(operation_id="get_menu_use", operation_description="查询启用的菜单")
-    @uma_permission("get_menu_use")
+    # @uma_permission("get_menu_use")
     @action(methods=["GET"], detail=False)
     def get_use_menu(self, request, *args, **kwargs):
         instance = self.queryset.get(use=True)
