@@ -1,6 +1,6 @@
 from apps.core.constants import AUTH_TOKEN_HEADER_NAME
 from apps.core.utils.keycloak_client import KeyCloakClient
-from apps.system_mgmt.constants import ADMIN
+from apps.system_mgmt.constants import ADMIN, GRADE_ADMIN
 from apps.system_mgmt.utils.keycloak import SupplementApi
 
 
@@ -21,6 +21,9 @@ class LoginInfo(object):
         # 判断是否为超管
         is_super = True if ADMIN in user_roles else False
 
+        # 判断是否为分级管理员
+        is_grade_admin = True if GRADE_ADMIN in user_roles else False
+
         permissions = set()
 
         # 若用户非超管，就获取用户的权限列表
@@ -40,5 +43,5 @@ class LoginInfo(object):
 
         # TODO 过滤权限，只返回菜单权限
         menus_permissions = list(permissions)
-        result = {"user_info": user_info, "is_super": is_super, "menus_permissions": menus_permissions}
+        result = {"user_info": user_info, "is_super": is_super, "is_grade_admin": is_grade_admin, "menus_permissions": menus_permissions}
         return result
