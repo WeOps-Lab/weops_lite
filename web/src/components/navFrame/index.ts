@@ -105,8 +105,8 @@ export default class NavFrame extends Vue {
         deep: true
     })
     onLeftNavListChanged(val) {
-        // 超管或者分级管理员才能展示系统管理的界面[角色管理]
-        if (!this.user.is_super && this.user.user_info?.preferred_username !== 'grade_admin') {
+        /// / 超管或者分级管理员才能展示系统管理的界面[角色管理]
+        if (!this.user.is_super && !this.user.is_grade_admin) {
             const ONLY_ADMIN_HAS_MENUS = ['SysRole']
             removeItemsWithId(val, ONLY_ADMIN_HAS_MENUS)
         }
