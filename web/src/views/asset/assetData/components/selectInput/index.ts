@@ -28,6 +28,7 @@ export default class SelectInput extends Vue {
     fieldValue: any = ''
     exactSearch: boolean = true
     isExactSearch: number = 0
+    attrList: Array<any> = []
 
     get currentFeildInfo() {
         return this.propertyList.find(item => item.attr_id === this.fieldKey) || {}
@@ -36,6 +37,7 @@ export default class SelectInput extends Vue {
     @Watch('propertyList', { immediate: true, deep: true })
     onPropertyListChange(newVal: any) {
         if (newVal?.length) {
+            this.attrList = this.propertyList.filter(item => item.attr_type !== 'pwd')
             this.fieldKey = newVal[0].attr_id
         }
     }
