@@ -20,11 +20,9 @@ export default class OperationPermission extends Vue {
     }
     mounted() {
         this.menuList = JSON.parse(JSON.stringify(this.$store.state.permission.menuList))
-        // 超管或者分级管理员才能展示系统管理的界面[角色管理],其它角色操作权限不予展示
-        if (!this.user.is_super && this.user.user_info?.preferred_username !== 'grade_admin') {
-            const ONLY_ADMIN_HAS_MENUS = ['SysRole']
-            removeItemsWithId(this.menuList, ONLY_ADMIN_HAS_MENUS)
-        }
+        // 隐藏角色管理菜单
+        const ONLY_ADMIN_HAS_MENUS = ['SysRole']
+        removeItemsWithId(this.menuList, ONLY_ADMIN_HAS_MENUS)
         this.handleMenus(this.menuList)
         this.getRoleMenus()
     }
