@@ -46,7 +46,7 @@ class ModelManage(object):
     @staticmethod
     def search_model(model_type=None):
         """
-            查询模型分类
+            查询模型
         """
         with AgUtils() as ag:
             models, _ = ag.query_entity(MODEL, [])

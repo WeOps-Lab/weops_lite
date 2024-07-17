@@ -1,5 +1,5 @@
 from apps.cmdb_mgmt.constants import CLASSIFICATION, MODEL, CREATE_CLASSIFICATION_CHECK_ATTR_MAP, \
-    UPDATE_CLASSIFICATION_check_attr_map
+    UPDATE_CLASSIFICATION_check_attr_map, BASE
 from apps.cmdb_mgmt.messages import CLASSIFICATION_USED
 from apps.cmdb_mgmt.utils.ag import AgUtils
 from apps.core.exceptions.base_app_exception import BaseAppException
@@ -51,8 +51,9 @@ class ClassificationManage(object):
         """
             更新模型分类
         """
-        # 不能更新classification_id
+        # 不能更新classification_id、exist_base_model
         data.pop("classification_id", "")
+        data.pop("exist_base_model", "")
         with AgUtils() as ag:
             exist_items, _ = ag.query_entity(CLASSIFICATION, [])
             exist_items = [i for i in exist_items if i["_id"] != id]
@@ -66,4 +67,13 @@ class ClassificationManage(object):
         """
         with AgUtils() as ag:
             classifications, _ = ag.query_entity(CLASSIFICATION, [])
+            models, _ = ag.query_entity(MODEL, [])
+
+        # 判断模型分类下是否存在基础模型
+        exist_model_classifications = {i["classification_id"] for i in models if i.get("model_type", BASE) == BASE}
+        for classification in classifications:
+            if classification["classification_id"] in exist_model_classifications:
+                classification["exist_base_model"] = True
+            else:
+                classification["exist_base_model"] = False
         return classifications
