@@ -98,10 +98,11 @@ const actions = {
         const promise = new Promise((resolve, reject) => {
             api.ModelManage.getClassification().then(res => {
                 if (res.result) {
+                    const data = (res.data || []).filter(item => !!item.exist_base_model)
                     commit('setDynamicRoute', true)
-                    commit('setDynamicMenus', res.data)
-                    handleOtherMenus(res.data, commit, state)
-                    resolve(res.data)
+                    commit('setDynamicMenus', data)
+                    handleOtherMenus(data, commit, state)
+                    resolve(data)
                 } else {
                     reject(res.message)
                 }

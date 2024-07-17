@@ -162,54 +162,52 @@ const mutations = {
 
 // actions
 const actions = {
-    async GenerateNavLists1({commit}) {
+    async GenerateNavLists1({ commit, dispatch }) {
         setTimeout(() => {
             vue.prototype.$bus.$emit('setAppLoading', true)
         }, 0)
+        const getHomeInfo = api.User.homeInfo()
+        const getCustomMenu = api.User.getUsedMenu()
         const promise = new Promise((resolve, reject) => {
-            api.User.homeInfo().then(async res => {
-                if (res.result) {
-                    const { data: userData } = res
-                    if (userData.user_info?.preferred_username !== 'grade_admin' && !userData.is_super) {
-                        // 非超管，或者非grade_admin不能看到角色管理菜单
-                        if (userData?.menus_permissions) {
-                            const targetIndex = userData.menus_permissions.findIndex(item => item === 'SysRole_view')
-                            userData.menus_permissions.splice(targetIndex, 1)
-                        }
-                    }
-                    const homeInfo = getMenuIdsAndOperateIds(userData?.menus_permissions || [])
-                    userData.menus = homeInfo.menus_ids // 查看权限的菜单id
-                    // 处理只有查看权限，没操作权限的菜单
-                    const operateSet = new Set(homeInfo.operate_ids.map(item => item.menuId))
-                    const operateIds = []
-                    userData.menus.forEach(item => {
-                        if (!operateSet.has(item)) {
-                            operateIds.push({
-                                menuId: item,
-                                operate_ids: []
-                            })
-                        }
-                    })
-                    userData.operate_ids = [...homeInfo.operate_ids, ...operateIds] // 操作权限的id
-                    userData.applications = []
-                    userData.chname = userData.user_info?.name || '--'
-                    sessionStorage.setItem('loginInfo', JSON.stringify(userData))
-                    window['$store'].commit('setLoginInfo', userData)
-                    commit('setUser', { ...userData })
-                    commit('setMenuList', handleMenuList(userData))
-                    commit('setActivationMenu', handleActivationMenu(userData, ''))
-                    if (userData.applications.includes('chat_ops') && hasCommonFolder('common')) {
-                        // @ts-ignore
-                        const commonFiles = require.context('@/projects', true, /\.ts$/)
-                        const module = commonFiles('./common/common/loadBot.ts')
-                        if (module?.default) {
-                            await module.default.loadChatBot()
-                        }
-                    }
-                    resolve(userData)
-                } else {
-                    reject(res.message)
+            Promise.all([getHomeInfo, getCustomMenu]).then(res => {
+                const [homeInfoRes, customMenuRes] = res
+                if (!homeInfoRes.result) {
+                    return reject(homeInfoRes.message)
                 }
+                if (!customMenuRes.result) {
+                    return reject(customMenuRes.message)
+                }
+                const { data: userData } = homeInfoRes
+                if (userData.user_info?.preferred_username !== 'grade_admin' && !userData.is_super) {
+                    // 非超管，或者非grade_admin不能看到角色管理菜单
+                    if (userData?.menus_permissions) {
+                        const targetIndex = userData.menus_permissions.findIndex(item => item === 'SysRole_view')
+                        userData.menus_permissions.splice(targetIndex, 1)
+                    }
+                }
+                const homeInfo = getMenuIdsAndOperateIds(userData?.menus_permissions || [])
+                userData.menus = homeInfo.menus_ids // 查看权限的菜单id
+                // 处理只有查看权限，没操作权限的菜单
+                const operateSet = new Set(homeInfo.operate_ids.map(item => item.menuId))
+                const operateIds = []
+                userData.menus.forEach(item => {
+                    if (!operateSet.has(item)) {
+                        operateIds.push({
+                            menuId: item,
+                            operate_ids: []
+                        })
+                    }
+                })
+                userData.operate_ids = [...homeInfo.operate_ids, ...operateIds] // 操作权限的id
+                userData.applications = []
+                userData.chname = userData.user_info?.name || '--'
+                userData.weops_menu = customMenuRes.data || []
+                sessionStorage.setItem('loginInfo', JSON.stringify(userData))
+                window['$store'].commit('setLoginInfo', userData)
+                commit('setUser', { ...userData })
+                commit('setMenuList', handleMenuList(userData))
+                commit('setActivationMenu', handleActivationMenu(userData, ''))
+                resolve(userData)
             }).finally(() => {
                 setTimeout(() => {
                     vue.prototype.$bus.$emit('setAppLoading', false)
