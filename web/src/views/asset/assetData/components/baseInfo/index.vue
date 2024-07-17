@@ -78,7 +78,8 @@
                                                 v-permission="operatePower"
                                                 class="cw-icon weops-edit operate-icon-edit"
                                                 @click="editInfo(tex)"></span>
-                                            <span class="cw-icon weops-copy operate-icon-copy" v-copy="getShowValue(tex)"></span>
+                                            <span v-if="tex.attr_type !== 'pwd'" class="cw-icon weops-copy operate-icon-copy" v-copy="getShowValue(tex)"></span>
+                                            <span v-else class="cw-icon weops-copy operate-icon-copy" @click="copyPassword(tex)"></span>
                                         </span>
                                     </span>
                                 </div>

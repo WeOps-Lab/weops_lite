@@ -154,5 +154,12 @@ export default {
      */
     getAuthorizationList(params = {}) {
         return get(`${reUrl}/credential/authorization_list/${params.model_id}/${params.inst_id}/`)
+    },
+    /**
+     * 密码解密
+     * @param {Object} params 请求参数
+     */
+    decryPassword(params = {}) {
+        return post(`${reUrl}/instance/decrypt/`, params)
     }
 }

@@ -9,7 +9,7 @@
                 placeholder="请选择"
                 @change="changeFieldKey">
                 <el-option
-                    v-for="(item,index) in propertyList"
+                    v-for="(item,index) in attrList"
                     :key="index"
                     :label="item.attr_name"
                     :value="item.attr_id">

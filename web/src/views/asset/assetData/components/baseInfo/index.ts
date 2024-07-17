@@ -115,6 +115,33 @@ export default class AddResource extends Vue {
             return false
         }
         this.$set(tex, 'isEdit', true)
+        if (tex.attr_type === 'pwd') {
+            this.formData[tex.attr_id] = ''
+        }
+    }
+    async copyPassword(tex) {
+        if (!this.formData[tex.attr_id]) {
+            this.handleCopy('--')
+            return
+        }
+        const { result, message, data } = await this.$api.AssetData.decryPassword({ cipher: this.formData[tex.attr_id] })
+        if (!result) {
+            return this.$error(message)
+        }
+        this.handleCopy(data)
+    }
+    handleCopy(text) {
+        try {
+            const oInput = document.createElement('input')
+            oInput.value = text
+            document.body.appendChild(oInput)
+            oInput.select() // 选择对象
+            document.execCommand('Copy') // 执行浏览器复制命令
+            oInput.remove()
+            this.$success('复制成功！')
+        } catch (error) {
+            this.$error('无法复制内容')
+        }
     }
     getShowValue(field) {
         field.key = field.attr_id
@@ -165,8 +192,11 @@ export default class AddResource extends Vue {
                     this.$success('修改成功！')
                     this.formDataV2[tex.attr_id] = this.formData[tex.attr_id]
                     tex.isEdit = false
+                    if (tex.attr_type === 'pwd') {
+                        this.getInstDetial()
+                    }
                 } finally {
-                    this.loading = false
+                    this.loading = tex.attr_type === 'pwd'
                 }
             }
         })

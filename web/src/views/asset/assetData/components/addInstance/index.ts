@@ -42,6 +42,7 @@ export default class AddResource extends Vue {
     })
     modelInfoList: Array<any>
 
+    disablePassword: Boolean = true
     instInfo: any = {
         instId: '',
         modelId: '',
@@ -90,6 +91,27 @@ export default class AddResource extends Vue {
         return false
     }
 
+    async copyPassword(cipher) {
+        try {
+            const { result, message, data } = await this.$api.AssetData.decryPassword({ cipher })
+            if (!result) {
+                return this.$error(message)
+            }
+            const oInput = document.createElement('input')
+            oInput.value = data
+            document.body.appendChild(oInput)
+            oInput.select() // 选择对象
+            document.execCommand('Copy') // 执行浏览器复制命令
+            oInput.remove()
+            this.$success('复制成功！')
+        } catch (error) {
+            this.$error('无法复制内容')
+        }
+    }
+    editPassword(tex) {
+        this.$set(tex, 'editPassword', true)
+        this.formData[tex.attr_id] = ''
+    }
     canEdit(tex) {
         if (this.isAdd) {
             return true
@@ -104,6 +126,7 @@ export default class AddResource extends Vue {
         addRelation.beforeCloseDialog()
     }
     showDialog(configInfo) {
+        Object.assign(this.$data, this.$options.data.call(this))
         this.visible = true
         this.configInfo = configInfo
         this.initData()
