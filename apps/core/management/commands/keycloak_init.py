@@ -45,6 +45,17 @@ class Command(BaseCommand):
             traceback.print_exception(e)
             return False
 
+    def init_grade_admin(self):
+
+        try:
+            from apps.system_mgmt.services.role_manage import RoleManage
+            grade_admin_default_permissions = ['SysRole_view', 'SysRole_create', 'SysRole_edit', 'SysRole_delete', 'SysRole_users_manage', 'SysRole_permissions', 'role_list', 'role_create', 'role_update', 'role_delete', 'user_list_by_role', 'role_groups', 'user_list', 'group_list', 'role_remove_user', 'role_add_user', 'role_add_groups', 'role_remove_groups', 'role_permissions', 'role_set_permissions', 'r_permission_list', 'r_permission_create', 'r_permission_del', 'r_permission_update']
+            RoleManage().role_set_permissions(grade_admin_default_permissions, "grade_admin", "system")
+            return True
+        except Exception as e:
+            traceback.print_exception(e)
+            return False
+
     def handle(self, *args, **options):
         load_dotenv()
         logger = logging.getLogger(__name__)
@@ -68,3 +79,13 @@ class Command(BaseCommand):
             logger.info(f'初始化域admin用户 完成')
         else:
             logger.error(f'初始化域admin用户 失败')
+
+        # 分级管理员默认权限初始化
+        logger.info(f'分级管理员默认权限初始化！')
+
+        result = self.init_grade_admin()
+
+        if result is True:
+            logger.info(f'分级管理员默认权限初始化 完成')
+        else:
+            logger.error(f'分级管理员默认权限初始化 失败')
