@@ -41,8 +41,8 @@ export default class ModelOperation extends Vue {
     modelDetail: any = ''
     formDataV2 = {}
     typeList: Array<any> = [
-        { id: 'base', name: '基础模型', desc: '基础模型用于管理主机、数据库等基础资产，可在“资产-资产数据”中管理和查看' },
-        { id: 'credential', name: '凭据模型', desc: '凭据模型用于管理资产凭据，可在“资产-资产数据”中管理和使用，并且有单独的授权体系' }
+        { id: 'base', name: '基础模型', desc: '基础模型用于管理主机、数据库等基础资产，可在“资产-资产数据”中使用和查看' },
+        { id: 'credential', name: '凭据模型', desc: '凭据模型用于管理资产凭据，可在“资产-资产数据”中使用和管理，并且有单独的授权体系' }
     ]
     get isAdd() {
         return this.currentType === 'add'

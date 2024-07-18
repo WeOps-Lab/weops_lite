@@ -29,6 +29,9 @@ export default class RoleManage extends Vue {
         limit: 20
     }
     search: string = ''
+    get user() {
+        return this.$store.state.permission.user
+    }
     created() {
         this.getRoleList()
     }
@@ -111,9 +114,16 @@ export default class RoleManage extends Vue {
             return false
         }
     }
+    getParams() {
+        return this.user.is_grade_admin ? {
+            search_type: 'subordinate_role',
+            sub: this.user.user_info.sub
+        } : {}
+    }
     getRoleList() {
         this.tableLoading = true
-        this.$api.RoleManageMain.getRoleList().then(res => {
+        const params = this.getParams()
+        this.$api.RoleManageMain.getRoleList(params).then(res => {
             if (!res.result) {
                 return false
             }
