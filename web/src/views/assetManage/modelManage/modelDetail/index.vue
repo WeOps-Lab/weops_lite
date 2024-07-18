@@ -17,7 +17,7 @@
             <div class="header-operate">
                 <el-button
                     v-permission="{
-                        id: $route.name,
+                        id: 'ModelManage',
                         type: 'ModelManage_edit'
                     }"
                     type="text"
@@ -28,7 +28,7 @@
                 </el-button>
                 <el-button
                     v-permission="{
-                        id: $route.name,
+                        id: 'ModelManage',
                         type: 'ModelManage_delete'
                     }"
                     type="text"
@@ -44,7 +44,7 @@
             <div v-if="active === 'property'">
                 <el-button
                     v-permission="{
-                        id: $route.name,
+                        id: 'ModelManage',
                         type: 'ModelManage_create'
                     }"
                     class="mt20 mb15"
@@ -62,7 +62,7 @@
                     <template slot="operation" slot-scope="{ row }">
                         <el-button
                             v-permission="{
-                                id: $route.name,
+                                id: 'ModelManage',
                                 type: 'ModelManage_edit'
                             }"
                             type="text"
@@ -72,7 +72,7 @@
                         </el-button>
                         <el-button
                             v-permission="{
-                                id: $route.name,
+                                id: 'ModelManage',
                                 type: 'ModelManage_delete'
                             }"
                             type="text"
@@ -98,7 +98,7 @@
             <template v-else>
                 <el-button
                     v-permission="{
-                        id: $route.name,
+                        id: 'ModelManage',
                         type: 'ModelManage_create'
                     }"
                     class="mt20 mb15"
@@ -130,7 +130,7 @@
                     <template slot="operation" slot-scope="{ row }">
                         <el-button
                             v-permission="{
-                                id: $route.name,
+                                id: 'ModelManage',
                                 type: 'ModelManage_edit'
                             }"
                             type="text"
@@ -140,7 +140,7 @@
                         </el-button>
                         <el-button
                             v-permission="{
-                                id: $route.name,
+                                id: 'ModelManage',
                                 type: 'ModelManage_delete'
                             }"
                             type="text"
