@@ -1,5 +1,5 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { removeItemsWithId, getMenuIdsAndOperateIds } from '@/common/dealMenu'
+import { removeItemsWithId, getMenuIdsAndOperateIds, getMenuListByAllowedKeys } from '@/common/dealMenu'
 @Component
 export default class OperationPermission extends Vue {
     @Prop({
@@ -20,11 +20,15 @@ export default class OperationPermission extends Vue {
     }
     mounted() {
         this.menuList = JSON.parse(JSON.stringify(this.$store.state.permission.menuList))
+        this.getMenusList()
+        this.getRoleMenus()
+    }
+    getMenusList() {
+        this.menuList = JSON.parse(JSON.stringify(this.$store.state.permission.menuList))
         // 隐藏角色管理菜单
         const ONLY_ADMIN_HAS_MENUS = ['SysRole']
         removeItemsWithId(this.menuList, ONLY_ADMIN_HAS_MENUS)
         this.handleMenus(this.menuList)
-        this.getRoleMenus()
     }
     getLatestMenu() {
         this.checkAuthMenusIds = []
@@ -219,39 +223,58 @@ export default class OperationPermission extends Vue {
     getRoleMenus() {
         this.menuLoading = true
         this.$emit('getMenuLoading', this.menuLoading)
-        this.$api.RoleManageMain.getRoleMenus({ roleId: this.role.name }).then(res => {
-            if (res.result) {
-                this.permissions = res.data
-                const result = getMenuIdsAndOperateIds(res.data)
-                // 计算一开始有权限的id
-                const rawIds = res.data
-                // 传给父组件保存
-                this.$emit('getRawIds', rawIds)
-                for (const k in result) {
-                    result[k].forEach(item => {
-                        const target = this.findItemById(k === 'operate_ids' ? item.menuId : item, this.menuList)
-                        if (target) {
-                            if (k === 'operate_ids') {
-                                item[k].forEach(tex => {
-                                    const flag = target.auth.find(nev => nev.key === tex)
-                                    flag.value = true
-                                    this.handleOperateChecked(target, flag.type, true)
-                                })
-                            } else {
-                                if (target.children && target.children.length) {
-                                    return false
-                                }
-                                const flag = target.auth.find(nev => nev.key.includes(item))
-                                flag.value = true
-                                this.handleOperateChecked(target, flag.type)
-                            }
-                        }
-                    })
-                }
-            }
-        }).finally(() => {
+        const { superior_role: superiorRole, name } = this.role
+        const superiorIsAdmin = superiorRole === 'admin'
+        Promise.all([this.getCurrentRoleMenus(name), !superiorIsAdmin && this.getSuperiorMenus(superiorRole)]).finally(() => {
             this.menuLoading = false
             this.$emit('getMenuLoading', this.menuLoading)
         })
+    }
+    async getCurrentRoleMenus(roleId) {
+        const res = await this.$api.RoleManageMain.getRoleMenus({ roleId })
+        if (!res.result) {
+            return this.$error(res.message)
+        }
+        this.permissions = res.data
+        const result = getMenuIdsAndOperateIds(res.data)
+        // 计算一开始有权限的id
+        const rawIds = res.data
+        // 传给父组件保存
+        this.$emit('getRawIds', rawIds)
+        for (const k in result) {
+            result[k].forEach(item => {
+                const target = this.findItemById(k === 'operate_ids' ? item.menuId : item, this.menuList)
+                if (target) {
+                    if (k === 'operate_ids') {
+                        item[k].forEach(tex => {
+                            const flag = target.auth.find(nev => nev.key === tex)
+                            flag.value = true
+                            this.handleOperateChecked(target, flag.type, true)
+                        })
+                    } else {
+                        if (target.children && target.children.length) {
+                            return false
+                        }
+                        const flag = target.auth.find(nev => nev.key.includes(item))
+                        flag.value = true
+                        this.handleOperateChecked(target, flag.type)
+                    }
+                }
+            })
+        }
+    }
+    async getSuperiorMenus(roleId) {
+        const res = await this.$api.RoleManageMain.getRoleMenus({ roleId })
+        if (!res.result) {
+            return this.$error(res.message)
+        }
+        const keys = res.data.map(item => {
+            if (item.endsWith('_view')) {
+                item = item.replace('_view', '')
+            }
+            return item
+        })
+        this.menuList = getMenuListByAllowedKeys(this.menuList, keys)
+        removeItemsWithId(this.menuList, ['SysRole'])
     }
 }

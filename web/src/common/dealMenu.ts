@@ -154,3 +154,33 @@ export const camelCaseToUnderscore = (str) => {
         return '_' + match.toLowerCase()
     })
 }
+
+// 根据权限id去更改操作权限中的菜单结构
+export const getMenuListByAllowedKeys = (nodes, allowedKeys) => {
+    // 递归处理节点的方法
+    function recursiveFilter(node) {
+        if (!node) return null
+        // 检查当前节点的id是否在allowedKeys中
+        const hasAllowedID = allowedKeys.includes(node.id)
+        // 处理auth数组，只保留key值在allowedKeys中的项
+        const filteredAuth = node.auth ? node.auth.filter(auth => allowedKeys.includes(auth.key)) : []
+        const wantedAuth = node.auth ? node.auth.filter(auth => allowedKeys.includes(auth.key) || auth.key.endsWith('_view')) : []
+        // 判断auth数组中是否有需要保留的项
+        const hasAllowedAuth = filteredAuth.length > 0
+        // 递归处理子节点
+        const filteredChildren = node.children
+            ? node.children.map(child => recursiveFilter(child)).filter(Boolean)
+            : []
+        // 如果当前节点的id或auth中有需要保留的项，或存在处理过的子节点
+        if (hasAllowedID || hasAllowedAuth || filteredChildren.length > 0) {
+            return {
+                ...node,
+                auth: hasAllowedAuth ? wantedAuth : node.auth, // 如果有处理过的auth，使用wantedAuth
+                children: filteredChildren.length > 0 ? filteredChildren : undefined
+            }
+        }
+        return null
+    }
+    // 从顶层节点开始筛选
+    return nodes.map(node => recursiveFilter(node)).filter(Boolean)
+}
