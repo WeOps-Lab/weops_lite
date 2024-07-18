@@ -1,47 +1,55 @@
 CLASSIFICATIONS = [
     {
         "classification_id": "biz_manage",
-        "classification_name": "应用管理"
+        "classification_name": "应用管理",
     },
     {
         "classification_id": "host_manage",
-        "classification_name": "主机管理"
+        "classification_name": "主机管理",
     },
     {
         "classification_id": "database",
-        "classification_name": "数据库"
+        "classification_name": "数据库",
     },
     {
         "classification_id": "middleware",
-        "classification_name": "中间件"
+        "classification_name": "中间件",
     },
     {
         "classification_id": "device",
-        "classification_name": "网络设备"
+        "classification_name": "网络设备",
     },
     {
         "classification_id": "k8s",
-        "classification_name": "K8S"
+        "classification_name": "K8S",
     },
     {
         "classification_id": "qcloud",
-        "classification_name": "腾讯云"
+        "classification_name": "腾讯云",
     },
     {
         "classification_id": "vmware",
-        "classification_name": "VMware"
+        "classification_name": "VMware",
     },
     {
         "classification_id": "aliyun",
-        "classification_name": "阿里云"
+        "classification_name": "阿里云",
     },
     {
         "classification_id": "huaweicloud",
-        "classification_name": "华为云"
+        "classification_name": "华为云",
     },
     {
         "classification_id": "system_service",
-        "classification_name": "系统服务"
+        "classification_name": "系统服务",
+    },
+    {
+        "classification_id": "docker",
+        "classification_name": "Docker",
+    },
+    {
+        "classification_id": "credential_manage",
+        "classification_name": "凭据管理",
     }
 ]
 
@@ -54,6 +62,13 @@ MODELS = [
         "classification_id": "database"
     },
     {
+        "icn": "cc-host_主机",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"实例名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\"}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"内网IP\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"host_outerip\\\", \\\"attr_name\\\": \\\"外网IP\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"host_name\\\", \\\"attr_name\\\": \\\"主机名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"os_type\\\", \\\"attr_name\\\": \\\"操作系统类型\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"os_version\\\", \\\"attr_name\\\": \\\"操作系统版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"os_bit\\\", \\\"attr_name\\\": \\\"操作系统位数\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"cpu\\\", \\\"attr_name\\\": \\\"CPU逻辑核心数\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"cpu_module\\\", \\\"attr_name\\\": \\\"CPU型号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"cpu_architecture\\\", \\\"attr_name\\\": \\\"CPU架构\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"disk\\\", \\\"attr_name\\\": \\\"磁盘容量\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"mem\\\", \\\"attr_name\\\": \\\"内存容量\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"mac\\\", \\\"attr_name\\\": \\\"内网MAC地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"outer_mac\\\", \\\"attr_name\\\": \\\"外网MAC\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"operator\\\", \\\"attr_name\\\": \\\"维护人\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"comment\\\", \\\"attr_name\\\": \\\"备注\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}]",
+        "model_id": "host",
+        "model_name": "主机",
+        "classification_id": "host_manage"
+    },
+    {
         "icn": "cc-router_路由器",
         "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"实例名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\"}, {\\\"id\\\": \\\"router\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"管理IP\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"router\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"管理端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"router\\\", \\\"attr_id\\\": \\\"snmp_version\\\", \\\"attr_name\\\": \\\"SNMP版本\\\", \\\"attr_type\\\": \\\"enum\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": [{\\\"id\\\": \\\"1\\\", \\\"is_default\\\": true, \\\"name\\\": \\\"v1\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"2\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"v2c\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"3\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"v3\\\", \\\"type\\\": \\\"text\\\"}]}, {\\\"id\\\": \\\"router\\\", \\\"attr_id\\\": \\\"model\\\", \\\"attr_name\\\": \\\"型号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"router\\\", \\\"attr_id\\\": \\\"brand\\\", \\\"attr_name\\\": \\\"品牌\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}]",
         "model_id": "router",
@@ -62,7 +77,7 @@ MODELS = [
     },
     {
         "icn": "cc-pod_Pod",
-        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"Pod名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Limit_CPU\\\", \\\"attr_name\\\": \\\"CPU Limit\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Limit_Memory\\\", \\\"attr_name\\\": \\\"Memory Limit\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Request_CPU\\\", \\\"attr_name\\\": \\\"CPU Request\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Request_Memory\\\", \\\"attr_name\\\": \\\"Memory Request\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}]",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"Pod名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Limit_CPU\\\", \\\"attr_name\\\": \\\"CPU（limit）\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Limit_Memory\\\", \\\"attr_name\\\": \\\"内存（limit）\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Request_CPU\\\", \\\"attr_name\\\": \\\"CPU （request）\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"pod\\\", \\\"attr_id\\\": \\\"Request_Memory\\\", \\\"attr_name\\\": \\\"内存（request）\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}]",
         "model_id": "pod",
         "model_name": "Pod",
         "classification_id": "k8s"
@@ -76,7 +91,7 @@ MODELS = [
     },
     {
         "icn": "cc-business_业务",
-        "attrs": "[{\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"应用名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": true, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"status\\\", \\\"attr_name\\\": \\\"应用状态\\\", \\\"attr_type\\\": \\\"enum\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": [{\\\"id\\\": \\\"1\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"测试中\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"2\\\", \\\"is_default\\\": true, \\\"name\\\": \\\"已上线\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"3\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"停运\\\", \\\"type\\\": \\\"text\\\"}]}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"maintainer\\\", \\\"attr_name\\\": \\\"运维人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"developer\\\", \\\"attr_name\\\": \\\"开发人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"productor\\\", \\\"attr_name\\\": \\\"产品人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"tester\\\", \\\"attr_name\\\": \\\"测试人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"description\\\", \\\"attr_name\\\": \\\"应用描述\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}]",
+        "attrs": "[{\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"应用名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": true, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"status\\\", \\\"attr_name\\\": \\\"应用状态\\\", \\\"attr_type\\\": \\\"enum\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": false, \\\"option\\\": [{\\\"id\\\": \\\"1\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"测试中\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"2\\\", \\\"is_default\\\": true, \\\"name\\\": \\\"已上线\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"3\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"停运\\\", \\\"type\\\": \\\"text\\\"}]}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"maintainer\\\", \\\"attr_name\\\": \\\"运维人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"developer\\\", \\\"attr_name\\\": \\\"开发人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"productor\\\", \\\"attr_name\\\": \\\"产品人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"tester\\\", \\\"attr_name\\\": \\\"测试人员\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"biz\\\", \\\"attr_id\\\": \\\"description\\\", \\\"attr_name\\\": \\\"应用描述\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}]",
         "model_id": "biz",
         "model_name": "应用",
         "classification_id": "biz_manage"
@@ -136,6 +151,13 @@ MODELS = [
         "model_id": "oracle",
         "model_name": "Oracle",
         "classification_id": "database"
+    },
+    {
+        "icn": "cc-module_模块",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"模块名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"module\\\", \\\"attr_id\\\": \\\"module_type\\\", \\\"attr_name\\\": \\\"模块类型\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"module\\\", \\\"attr_id\\\": \\\"operator\\\", \\\"attr_name\\\": \\\"主要维护人\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"module\\\", \\\"attr_id\\\": \\\"bak_operator\\\", \\\"attr_name\\\": \\\"备份维护人\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
+        "model_id": "module",
+        "model_name": "模块",
+        "classification_id": "biz_manage"
     },
     {
         "icn": "cc-cloud-plat_云平台",
@@ -243,25 +265,11 @@ MODELS = [
         "classification_id": "device"
     },
     {
-        "icn": "cc-iis_IIS",
-        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"实例名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"iis\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"iis\\\", \\\"attr_id\\\": \\\"version\\\", \\\"attr_name\\\": \\\"版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}]",
-        "model_id": "iis",
-        "model_name": "IIS",
-        "classification_id": "middleware"
-    },
-    {
-        "icn": "cc-module_模块",
-        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"模块名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"module\\\", \\\"attr_id\\\": \\\"module_type\\\", \\\"attr_name\\\": \\\"模块类型\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"module\\\", \\\"attr_id\\\": \\\"operator\\\", \\\"attr_name\\\": \\\"主要维护人\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"module\\\", \\\"attr_id\\\": \\\"bak_operator\\\", \\\"attr_name\\\": \\\"备份维护人\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
-        "model_id": "module",
-        "model_name": "模块",
-        "classification_id": "biz_manage"
-    },
-    {
-        "icn": "cc-host_主机",
-        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"实例名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"host_innerip\\\", \\\"attr_name\\\": \\\"内网IP\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"host_outerip\\\", \\\"attr_name\\\": \\\"外网IP\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"host_name\\\", \\\"attr_name\\\": \\\"主机名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"os_version\\\", \\\"attr_name\\\": \\\"操作系统版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"os_bit\\\", \\\"attr_name\\\": \\\"操作系统位数\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"cpu\\\", \\\"attr_name\\\": \\\"CPU逻辑核心数\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"cpu_module\\\", \\\"attr_name\\\": \\\"CPU型号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"cpu_architecture\\\", \\\"attr_name\\\": \\\"CPU架构\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"mem\\\", \\\"attr_name\\\": \\\"内存容量\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"disk\\\", \\\"attr_name\\\": \\\"磁盘容量\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"mac\\\", \\\"attr_name\\\": \\\"内网MAC地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"outer_mac\\\", \\\"attr_name\\\": \\\"外网MAC\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"comment\\\", \\\"attr_name\\\": \\\"备注\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"os_type\\\", \\\"attr_name\\\": \\\"操作系统类型\\\", \\\"attr_type\\\": \\\"enum\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": [{\\\"id\\\": \\\"1\\\", \\\"is_default\\\": true, \\\"name\\\": \\\"Windows\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"2\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"Linux\\\", \\\"type\\\": \\\"text\\\"}, {\\\"id\\\": \\\"3\\\", \\\"is_default\\\": false, \\\"name\\\": \\\"Mac\\\", \\\"type\\\": \\\"text\\\"}]}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"backups_operator\\\", \\\"attr_name\\\": \\\"备份维护人\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}, {\\\"id\\\": \\\"host\\\", \\\"attr_id\\\": \\\"operator\\\", \\\"attr_name\\\": \\\"维护人\\\", \\\"attr_type\\\": \\\"user\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
-        "model_id": "host",
-        "model_name": "主机",
-        "classification_id": "host_manage"
+        "icn": "cc-redis_redis",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"实例名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"version\\\", \\\"attr_name\\\": \\\"版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"max_conn\\\", \\\"attr_name\\\": \\\"最大连接数\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"max_mem\\\", \\\"attr_name\\\": \\\"最大内存\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"database_role\\\", \\\"attr_name\\\": \\\"数据库角色\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}]",
+        "model_id": "redis",
+        "model_name": "REDIS",
+        "classification_id": "database"
     },
     {
         "icn": "cc-db-cluster_数据库集群",
@@ -290,6 +298,13 @@ MODELS = [
         "model_id": "elasticsearch",
         "model_name": "ElasticSearch",
         "classification_id": "database"
+    },
+    {
+        "icn": "cc-iis_IIS",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"实例名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"iis\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"iis\\\", \\\"attr_id\\\": \\\"version\\\", \\\"attr_name\\\": \\\"版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}]",
+        "model_id": "iis",
+        "model_name": "IIS",
+        "classification_id": "middleware"
     },
     {
         "icn": "cc-default_默认",
@@ -334,13 +349,6 @@ MODELS = [
         "classification_id": "middleware"
     },
     {
-        "icn": "cc-redis_redis",
-        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"实例名\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"version\\\", \\\"attr_name\\\": \\\"版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"max_conn\\\", \\\"attr_name\\\": \\\"最大连接数\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"max_mem\\\", \\\"attr_name\\\": \\\"最大内存\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis\\\", \\\"attr_id\\\": \\\"database_role\\\", \\\"attr_name\\\": \\\"数据库角色\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}]",
-        "model_id": "redis",
-        "model_name": "REDIS",
-        "classification_id": "database"
-    },
-    {
         "icn": "cc-node_Node",
         "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"容器名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"dockercontainer\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"dockercontainer\\\", \\\"attr_id\\\": \\\"Image\\\", \\\"attr_name\\\": \\\"容器镜像\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"dockercontainer\\\", \\\"attr_id\\\": \\\"version\\\", \\\"attr_name\\\": \\\"容器版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"dockercontainer\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"dockercontainer\\\", \\\"attr_id\\\": \\\"cpu_limit\\\", \\\"attr_name\\\": \\\"CPU限制\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}, {\\\"id\\\": \\\"dockercontainer\\\", \\\"attr_id\\\": \\\"memory_limit\\\", \\\"attr_name\\\": \\\"内存限制\\\", \\\"attr_type\\\": \\\"int\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": {\\\"min\\\": 0, \\\"max\\\": 0}}]",
         "model_id": "dockercontainer",
@@ -349,215 +357,480 @@ MODELS = [
     },
     {
         "icn": "cc-default_默认",
-        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"引擎名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"dockerengine\\\", \\\"attr_id\\\": \\\"version\\\", \\\"attr_name\\\": \\\"引擎版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"dockerengine\\\", \\\"attr_id\\\": \\\"description\\\", \\\"attr_name\\\": \\\"引擎说明\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}]",
-        "model_id": "dockerengine",
-        "model_name": "Docker容器引擎",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"凭据名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"mysql_credential\\\", \\\"attr_id\\\": \\\"account\\\", \\\"attr_name\\\": \\\"账号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"mysql_credential\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"mysql_credential\\\", \\\"attr_id\\\": \\\"password\\\", \\\"attr_name\\\": \\\"密码\\\", \\\"attr_type\\\": \\\"pwd\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
+        "model_id": "mysql_credential",
+        "model_name": "MySQL凭据",
+        "model_type": "credential",
+        "classification_id": "credential_manage"
+    },
+    {
+        "icn": "cc-default_默认",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"凭据名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"oracle_credential\\\", \\\"attr_id\\\": \\\"server_name\\\", \\\"attr_name\\\": \\\"服务名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"oracle_credential\\\", \\\"attr_id\\\": \\\"account\\\", \\\"attr_name\\\": \\\"账号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"oracle_credential\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"oracle_credential\\\", \\\"attr_id\\\": \\\"password\\\", \\\"attr_name\\\": \\\"密码\\\", \\\"attr_type\\\": \\\"pwd\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
+        "model_id": "oracle_credential",
+        "model_name": "Oracle凭据",
+        "model_type": "credential",
+        "classification_id": "credential_manage"
+    },
+    {
+        "icn": "cc-default_默认",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"凭据名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"mssql_credential\\\", \\\"attr_id\\\": \\\"server_name\\\", \\\"attr_name\\\": \\\"服务名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"mssql_credential\\\", \\\"attr_id\\\": \\\"account\\\", \\\"attr_name\\\": \\\"账号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"mssql_credential\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"mssql_credential\\\", \\\"attr_id\\\": \\\"password\\\", \\\"attr_name\\\": \\\"密码\\\", \\\"attr_type\\\": \\\"pwd\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
+        "model_id": "mssql_credential",
+        "model_name": "MSSQL凭据",
+        "model_type": "credential",
+        "classification_id": "credential_manage"
+    },
+    {
+        "icn": "cc-default_默认",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"凭据名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"redis_credential\\\", \\\"attr_id\\\": \\\"account\\\", \\\"attr_name\\\": \\\"账号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis_credential\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"redis_credential\\\", \\\"attr_id\\\": \\\"password\\\", \\\"attr_name\\\": \\\"密码\\\", \\\"attr_type\\\": \\\"pwd\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
+        "model_id": "redis_credential",
+        "model_name": "Redis凭据",
+        "model_type": "credential",
+        "classification_id": "credential_manage"
+    },
+    {
+        "icn": "cc-default_默认",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"凭据名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"host_credential\\\", \\\"attr_id\\\": \\\"account\\\", \\\"attr_name\\\": \\\"账号\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host_credential\\\", \\\"attr_id\\\": \\\"protocol\\\", \\\"attr_name\\\": \\\"协议\\\", \\\"attr_type\\\": \\\"enum\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": [{\\\"id\\\": \\\"1\\\", \\\"is_default\\\": true, \\\"name\\\": \\\"SSH\\\", \\\"type\\\": \\\"text\\\"}]}, {\\\"id\\\": \\\"host_credential\\\", \\\"attr_id\\\": \\\"port\\\", \\\"attr_name\\\": \\\"端口\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"host_credential\\\", \\\"attr_id\\\": \\\"password\\\", \\\"attr_name\\\": \\\"密码\\\", \\\"attr_type\\\": \\\"pwd\\\", \\\"is_required\\\": true, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true}]",
+        "model_id": "host_credential",
+        "model_name": "主机凭据",
+        "model_type": "credential",
+        "classification_id": "credential_manage"
+    },
+    {
+        "icn": "cc-node_Node",
+        "attrs": "[{\\\"attr_id\\\": \\\"inst_name\\\", \\\"attr_name\\\": \\\"Docker名称\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_only\\\": true, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": {}, \\\"attr_group\\\": \\\"\\\", \\\"is_pre\\\": true}, {\\\"attr_id\\\": \\\"organization\\\", \\\"attr_name\\\": \\\"所属组织\\\", \\\"attr_type\\\": \\\"organization\\\", \\\"is_only\\\": false, \\\"is_required\\\": true, \\\"editable\\\": true, \\\"option\\\": [], \\\"attr_group\\\": \\\"default\\\", \\\"is_pre\\\": true}, {\\\"id\\\": \\\"docker\\\", \\\"attr_id\\\": \\\"ip_addr\\\", \\\"attr_name\\\": \\\"IP地址\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"docker\\\", \\\"attr_id\\\": \\\"version\\\", \\\"attr_name\\\": \\\"版本\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"docker\\\", \\\"attr_id\\\": \\\"memory\\\", \\\"attr_name\\\": \\\"内存\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}, {\\\"id\\\": \\\"docker\\\", \\\"attr_id\\\": \\\"cpu\\\", \\\"attr_name\\\": \\\"CPU核数\\\", \\\"attr_type\\\": \\\"str\\\", \\\"is_required\\\": false, \\\"attr_group\\\": \\\"\\\", \\\"is_only\\\": false, \\\"editable\\\": true, \\\"option\\\": \\\"\\\"}]",
+        "model_id": "docker",
+        "model_name": "Docker",
+        "model_type": "base",
         "classification_id": "docker"
     }
 ]
 
 ASSOCIATIONS = [
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "host",
-        "model_asst_id": "host_belong_biz"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'mongodb',
+        'model_asst_id': 'mongodb_belong_db_cluster'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "loadbalance",
-        "model_asst_id": "loadbalance_belong_biz"
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'mongodb',
+        'model_asst_id': 'mongodb_install_on_host'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "router",
-        "model_asst_id": "router_belong_biz"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'module',
+        'src_model_id': 'router',
+        'model_asst_id': 'router_belong_module'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "firewall",
-        "model_asst_id": "firewall_belong_biz"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'router',
+        'model_asst_id': 'router_belong_biz'
     },
     {
-        "asst_id": "install_on",
-        "mapping": "n:n",
-        "dst_model_id": "host",
-        "src_model_id": "oracle",
-        "model_asst_id": "oracle_install_on_host"
+        'asst_id': 'group',
+        'mapping': 'n:n',
+        'dst_model_id': 'namespace',
+        'src_model_id': 'workload',
+        'model_asst_id': 'workload_group_namespace'
     },
     {
-        "asst_id": "install_on",
-        "mapping": "n:n",
-        "dst_model_id": "host",
-        "src_model_id": "mysql",
-        "model_asst_id": "mysql_install_on_host"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'namespace',
+        'src_model_id': 'workload',
+        'model_asst_id': 'workload_belong_namespace'
     },
     {
-        "asst_id": "install_on",
-        "mapping": "n:n",
-        "dst_model_id": "host",
-        "src_model_id": "mssql",
-        "model_asst_id": "mssql_install_on_host"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'mysql',
+        'model_asst_id': 'mysql_belong_db_cluster'
     },
     {
-        "asst_id": "install_on",
-        "mapping": "n:n",
-        "dst_model_id": "host",
-        "src_model_id": "tomcat",
-        "model_asst_id": "tomcat_install_on_host"
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'mysql',
+        'model_asst_id': 'mysql_install_on_host'
     },
     {
-        "asst_id": "install_on",
-        "mapping": "n:n",
-        "dst_model_id": "host",
-        "src_model_id": "apache",
-        "model_asst_id": "apache_install_on_host"
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'nginx',
+        'model_asst_id': 'nginx_install_on_host'
     },
     {
-        "asst_id": "install_on",
-        "mapping": "n:n",
-        "dst_model_id": "host",
-        "src_model_id": "nginx",
-        "model_asst_id": "nginx_install_on_host"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'module',
+        'src_model_id': 'loadbalance',
+        'model_asst_id': 'loadbalance_belong_module'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "switch",
-        "model_asst_id": "switch_belong_biz"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'loadbalance',
+        'model_asst_id': 'loadbalance_belong_biz'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "namespace",
-        "model_asst_id": "namespace_belong_biz"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'k8s_cluster',
+        'src_model_id': 'namespace',
+        'model_asst_id': 'namespace_belong_k8s_cluster'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "k8s_cluster",
-        "model_asst_id": "k8s_cluster_belong_biz"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'namespace',
+        'model_asst_id': 'namespace_belong_biz'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "k8s_cluster",
-        "src_model_id": "namespace",
-        "model_asst_id": "namespace_belong_k8s_cluster"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'k8s_cluster',
+        'model_asst_id': 'k8s_cluster_belong_biz'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "namespace",
-        "src_model_id": "workload",
-        "model_asst_id": "workload_belong_namespace"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'module',
+        'src_model_id': 'switch',
+        'model_asst_id': 'switch_belong_module'
     },
     {
-        "asst_id": "group",
-        "mapping": "n:n",
-        "dst_model_id": "namespace",
-        "src_model_id": "workload",
-        "model_asst_id": "workload_group_namespace"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'switch',
+        'model_asst_id': 'switch_belong_biz'
     },
     {
-        "asst_id": "group",
-        "mapping": "n:n",
-        "dst_model_id": "k8s_cluster",
-        "src_model_id": "node",
-        "model_asst_id": "node_group_k8s_cluster"
+        'asst_id': 'group',
+        'mapping': 'n:n',
+        'dst_model_id': 'k8s_cluster',
+        'src_model_id': 'node',
+        'model_asst_id': 'node_group_k8s_cluster'
     },
     {
-        "asst_id": "run",
-        "mapping": "n:n",
-        "dst_model_id": "node",
-        "src_model_id": "pod",
-        "model_asst_id": "pod_run_node"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'oracle',
+        'model_asst_id': 'oracle_belong_db_cluster'
     },
     {
-        "asst_id": "group",
-        "mapping": "n:n",
-        "dst_model_id": "namespace",
-        "src_model_id": "pod",
-        "model_asst_id": "pod_group_namespace"
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'oracle',
+        'model_asst_id': 'oracle_install_on_host'
     },
     {
-        "asst_id": "group",
-        "mapping": "n:n",
-        "dst_model_id": "workload",
-        "src_model_id": "pod",
-        "model_asst_id": "pod_group_workload"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'qcloud_account',
+        'src_model_id': 'qcloud_cvm',
+        'model_asst_id': 'qcloud_cvm_belong_qcloud_account'
     },
     {
-        "asst_id": "group",
-        "mapping": "n:n",
-        "dst_model_id": "vmware_vc",
-        "src_model_id": "vmware_esxi",
-        "model_asst_id": "vmware_esxi_group_vmware_vc"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'aliyun_account',
+        'src_model_id': 'aliyun_ecs',
+        'model_asst_id': 'aliyun_ecs_belong_aliyun_account'
     },
     {
-        "asst_id": "default",
-        "mapping": "n:n",
-        "dst_model_id": "vmware_esxi",
-        "src_model_id": "vmware_ds",
-        "model_asst_id": "vmware_ds_default_vmware_esxi"
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'vmware_ds',
+        'src_model_id': 'vmware_vm',
+        'model_asst_id': 'vmware_vm_default_vmware_ds'
     },
     {
-        "asst_id": "run",
-        "mapping": "n:n",
-        "dst_model_id": "vmware_esxi",
-        "src_model_id": "vmware_vm",
-        "model_asst_id": "vmware_vm_run_vmware_esxi"
+        'asst_id': 'run',
+        'mapping': 'n:n',
+        'dst_model_id': 'vmware_esxi',
+        'src_model_id': 'vmware_vm',
+        'model_asst_id': 'vmware_vm_run_vmware_esxi'
     },
     {
-        "asst_id": "default",
-        "mapping": "n:n",
-        "dst_model_id": "vmware_ds",
-        "src_model_id": "vmware_vm",
-        "model_asst_id": "vmware_vm_default_vmware_ds"
+        'asst_id': 'group',
+        'mapping': 'n:n',
+        'dst_model_id': 'vmware_vc',
+        'src_model_id': 'vmware_esxi',
+        'model_asst_id': 'vmware_esxi_group_vmware_vc'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "aliyun_account",
-        "src_model_id": "aliyun_ecs",
-        "model_asst_id": "aliyun_ecs_belong_aliyun_account"
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'vmware_esxi',
+        'src_model_id': 'vmware_ds',
+        'model_asst_id': 'vmware_ds_default_vmware_esxi'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "huaweicloud_account",
-        "src_model_id": "huaweicloud_ecs",
-        "model_asst_id": "huaweicloud_ecs_belong_huaweicloud_account"
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'mssql',
+        'model_asst_id': 'mssql_belong_db_cluster'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "qcloud_account",
-        "src_model_id": "qcloud_cvm",
-        "model_asst_id": "qcloud_cvm_belong_qcloud_account"
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'mssql',
+        'model_asst_id': 'mssql_install_on_host'
     },
     {
-        "asst_id": "default",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "domain",
-        "model_asst_id": "domain_default_biz"
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'tomcat',
+        'model_asst_id': 'tomcat_install_on_host'
     },
     {
-        "asst_id": "belong",
-        "mapping": "n:n",
-        "dst_model_id": "biz",
-        "src_model_id": "module",
-        "model_asst_id": "module_belong_biz"
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'apache',
+        'model_asst_id': 'apache_install_on_host'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'huaweicloud_account',
+        'src_model_id': 'huaweicloud_ecs',
+        'model_asst_id': 'huaweicloud_ecs_belong_huaweicloud_account'
+    },
+    {
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'domain',
+        'model_asst_id': 'domain_default_biz'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'module',
+        'src_model_id': 'firewall',
+        'model_asst_id': 'firewall_belong_module'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'firewall',
+        'model_asst_id': 'firewall_belong_biz'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'iis',
+        'model_asst_id': 'iis_install_on_host'
+    },
+    {
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'redis',
+        'src_model_id': 'redis_credential',
+        'model_asst_id': 'redis_credential_default_redis'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'module',
+        'model_asst_id': 'module_belong_biz'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'db2',
+        'model_asst_id': 'db2_install_on_host'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'db2',
+        'model_asst_id': 'db2_belong_db_cluster'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'postgresql',
+        'model_asst_id': 'postgresql_belong_db_cluster'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'postgresql',
+        'model_asst_id': 'postgresql_install_on_host'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'elasticsearch',
+        'model_asst_id': 'elasticsearch_belong_db_cluster'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'elasticsearch',
+        'model_asst_id': 'elasticsearch_install_on_host'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'rabbitmq',
+        'model_asst_id': 'rabbitmq_install_on_host'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'ibmmq',
+        'model_asst_id': 'ibmmq_install_on_host'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'zookeeper',
+        'model_asst_id': 'zookeeper_install_on_host'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'nacos',
+        'model_asst_id': 'nacos_install_on_host'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'minio',
+        'model_asst_id': 'minio_install_on_host'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'db_cluster',
+        'src_model_id': 'redis',
+        'model_asst_id': 'redis_belong_db_cluster'
+    },
+    {
+        'asst_id': 'install_on',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'redis',
+        'model_asst_id': 'redis_install_on_host'
+    },
+    {
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'mysql',
+        'src_model_id': 'mysql_credential',
+        'model_asst_id': 'mysql_credential_default_mysql'
+    },
+    {
+        'asst_id': 'run',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'dockercontainer',
+        'model_asst_id': 'dockercontainer_run_host'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'dockercontainer',
+        'model_asst_id': 'dockercontainer_belong_biz'
+    },
+    {
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'mssql',
+        'src_model_id': 'mssql_credential',
+        'model_asst_id': 'mssql_credential_default_mssql'
+    },
+    {
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'oracle',
+        'src_model_id': 'oracle_credential',
+        'model_asst_id': 'oracle_credential_default_oracle'
+    },
+    {
+        'asst_id': 'contains',
+        'mapping': 'n:n',
+        'dst_model_id': 'dockercontainer',
+        'src_model_id': 'docker',
+        'model_asst_id': 'docker_contains_dockercontainer'
+    },
+    {
+        'asst_id': 'default',
+        'mapping': 'n:n',
+        'dst_model_id': 'host',
+        'src_model_id': 'host_credential',
+        'model_asst_id': 'host_credential_default_host'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'module',
+        'src_model_id': 'host',
+        'model_asst_id': 'host_belong_module'
+    },
+    {
+        'asst_id': 'belong',
+        'mapping': 'n:n',
+        'dst_model_id': 'biz',
+        'src_model_id': 'host',
+        'model_asst_id': 'host_belong_biz'
+    },
+    {
+        'asst_id': 'group',
+        'mapping': 'n:n',
+        'dst_model_id': 'workload',
+        'src_model_id': 'pod',
+        'model_asst_id': 'pod_group_workload'
+    },
+    {
+        'asst_id': 'group',
+        'mapping': 'n:n',
+        'dst_model_id': 'namespace',
+        'src_model_id': 'pod',
+        'model_asst_id': 'pod_group_namespace'
+    },
+    {
+        'asst_id': 'run',
+        'mapping': 'n:n',
+        'dst_model_id': 'node',
+        'src_model_id': 'pod',
+        'model_asst_id': 'pod_run_node'
     }
 ]
