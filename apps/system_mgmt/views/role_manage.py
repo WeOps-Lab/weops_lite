@@ -15,12 +15,20 @@ from apps.system_mgmt.services.role_manage import RoleManage
 class KeycloakRoleViewSet(viewsets.ViewSet):
     @swagger_auto_schema(
         operation_id="role_list",
-        operation_description="获取所有角色",
+        operation_description="获取所有角色/或用户角色和子角色",
+        manual_parameters=[
+            openapi.Parameter("search_type", openapi.IN_QUERY, description="查询类型", type=openapi.TYPE_STRING),
+            openapi.Parameter("sub", openapi.IN_QUERY, description="用户ID", type=openapi.TYPE_STRING),
+        ],
         responses=role_list_responses,
     )
     @uma_permission("role_list")
     def list(self, request):
-        data = RoleManage().role_list()
+        if request.GET.get("search_type") == "subordinate_role":
+            user_id = request.GET.get("sub")
+            data = RoleManage().get_user_child_role(user_id)
+        else:
+            data = RoleManage().role_list()
         return WebUtils.response_success(data)
 
     @swagger_auto_schema(

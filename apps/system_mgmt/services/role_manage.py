@@ -1,17 +1,19 @@
+from collections import defaultdict
+
 from apps.core.exceptions.base_app_exception import BaseAppException
 from apps.core.utils.keycloak_client import KeyCloakClient
 from apps.system_mgmt.constants import APP_MODULE, ROLE, ADMIN, NORMAL, GRADE_ADMIN
 from apps.system_mgmt.models import OperationLog
 from apps.system_mgmt.models.graded_role import GradedRole
 from apps.system_mgmt.utils.graded_role import get_role_all_child_role
-from apps.system_mgmt.utils.keycloak import SupplementApi, get_realm_roles
+from apps.system_mgmt.utils.keycloak import SupplementApi, get_realm_roles, get_realm_roles_of_user
 
 
 class RoleManage(object):
     def __init__(self):
         self.keycloak_client = KeyCloakClient()
 
-    def role_list(self):
+    def role_list(self, role_list=None):
         """角色列表"""
         result = get_realm_roles(self.keycloak_client.realm_client)
         role_objs = GradedRole.objects.all()
@@ -19,7 +21,45 @@ class RoleManage(object):
         for role_info in result:
             if role_info["name"] in role_dict:
                 role_info.update(superior_role=role_dict[role_info["name"]])
+        if role_list:
+            result = [i for i in result if i["name"] in role_list]
         return result
+
+    def get_subordinate_roles(self, role_name, hierarchy):
+        # 递归函数来获取某个角色的所有下级角色
+        sub_roles = []
+
+        def _get_subordinate_roles(role_name):
+            for sub_role in hierarchy.get(role_name, []):
+                sub_roles.append(sub_role)
+                _get_subordinate_roles(sub_role)
+
+        _get_subordinate_roles(role_name)
+        return sub_roles
+
+    def get_user_child_role(self, user_id):
+
+        # 查询所有角色及其上级角色
+        roles = GradedRole.objects.all().values('role', 'superior_role')
+
+        # 构建一个字典，键是上级角色，值是下级角色的列表
+        role_hierarchy = defaultdict(list)
+        for role in roles:
+            role_hierarchy[role['superior_role']].append(role['role'])
+
+        # 获取用户角色
+        roles_to_query = get_realm_roles_of_user(self.keycloak_client.realm_client, user_id)
+        all_subordinate_roles = set()
+
+        for role_info in roles_to_query:
+            role = role_info["name"]
+            all_subordinate_roles.add(role)
+
+            child_roles = self.get_subordinate_roles(role, role_hierarchy)
+            for child_role in child_roles:
+                all_subordinate_roles.add(child_role)
+
+        return self.role_list(all_subordinate_roles)
 
     def role_permissions(self, role_name):
         """获取角色权限"""
