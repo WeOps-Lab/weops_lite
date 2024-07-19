@@ -127,6 +127,7 @@
             :current-node="currentNode"
             :connect-type-list="connectTypeList"
             :model-info-list="modelInfoList"
+            :show-group="false"
             @on-success="updateInstanceList" />
         <relation ref="relation"
             :group-list="groupList"
@@ -156,6 +157,7 @@
                     :current-model-cfg="currentModelCfg"
                     display-percent="50%"
                     :allow-edit="false"
+                    :show-group="false"
                 >
                 </base-info>
             </div>
@@ -453,7 +455,7 @@ export default class AssetData extends Vue {
         if (!result) {
             return this.$error(message)
         }
-        this.propertyList = data
+        this.propertyList = data.filter(item => item.attr_type !== 'organization')
         const propertyList = this.$copy(this.propertyList)
         propertyList.forEach(item => {
             item.key = item.attr_id

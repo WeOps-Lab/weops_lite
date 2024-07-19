@@ -41,6 +41,11 @@ export default class AddResource extends Vue {
         default: () => []
     })
     modelInfoList: Array<any>
+    @Prop({
+        type: Boolean,
+        default: () => true
+    })
+    showGroup: boolean
 
     disablePassword: Boolean = true
     instInfo: any = {
@@ -147,11 +152,16 @@ export default class AddResource extends Vue {
             this.$set(this.formData, item.attr_id, this.configInfo.row?.[item.attr_id] || defaultVal)
         })
         const baseInfo = this.resourcList.find(item => item.id === 'base')
-        const groupInfo = this.resourcList.find(item => item.id === 'group')
         baseInfo.list = this.configInfo.propertyList.filter(item => item.attr_id !== 'organization').map(tex => ({
             ...tex,
             checked: false
         }))
+        if (!this.showGroup) {
+            const targetIndex = this.resourcList.findIndex(item => item.id === 'group')
+            targetIndex !== -1 && (this.resourcList.splice(targetIndex, 1))
+            return
+        }
+        const groupInfo = this.resourcList.find(item => item.id === 'group')
         groupInfo.list = this.configInfo.propertyList.filter(item => item.attr_id === 'organization').map(tex => ({
             ...tex,
             checked: false

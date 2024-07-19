@@ -38,6 +38,11 @@ export default class AddResource extends Vue {
         default: () => true
     })
     allowEdit: boolean
+    @Prop({
+        type: Boolean,
+        default: () => true
+    })
+    showGroup: boolean
 
     resourcList: Array<any> = [
         {
@@ -164,10 +169,15 @@ export default class AddResource extends Vue {
             this.$set(this.formData, item.attr_id, data[item.attr_id] || defaultVal)
         })
         const baseInfo = this.resourcList.find(item => item.id === 'base')
-        const groupInfo = this.resourcList.find(item => item.id === 'group')
         baseInfo.list = propertyList.filter(item => item.attr_id !== 'organization')
-        groupInfo.list = propertyList.filter(item => item.attr_id === 'organization')
         this.formDataV2 = this.$copy(this.formData)
+        if (!this.showGroup) {
+            const targetIndex = this.resourcList.findIndex(item => item.id === 'group')
+            targetIndex !== -1 && (this.resourcList.splice(targetIndex, 1))
+            return
+        }
+        const groupInfo = this.resourcList.find(item => item.id === 'group')
+        groupInfo.list = propertyList.filter(item => item.attr_id === 'organization')
     }
     confirmEdit(tex) {
         if (!this.$BtnPermission(this.operatePower)) {
