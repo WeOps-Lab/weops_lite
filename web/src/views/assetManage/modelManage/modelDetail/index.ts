@@ -223,6 +223,7 @@ export default class ModelManage extends Vue {
             return this.$error(res.message)
         }
         this.$success('删除成功')
+        await this.$store.dispatch('getOtherMenus')
         this.$router.go(-1)
     }
     // 删除关联

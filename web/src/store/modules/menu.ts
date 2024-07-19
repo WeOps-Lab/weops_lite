@@ -3,7 +3,7 @@ import { menuList } from '@/router/frameRouter'
 import api from '@/api/index'
 import router from '@/router'
 import permission from '@/store/modules/permisson'
-import { underscoreToCamelCase } from '@/common/dealMenu'
+import { underscoreToCamelCase, removeItemsWithId } from '@/common/dealMenu'
 const state = {
     dynamicMenus: '',
     dynamicRoutes: [],
@@ -18,12 +18,15 @@ function handleOtherMenus(data, commit, state) {
     } catch (e) {
         console.error(`Failed to load Component: ${e.message}`)
     }
+    const removeIds = data.filter(item => !item.exist_base_model).map(item => underscoreToCamelCase(item.classification_id))
+    removeItemsWithId(menuList, removeIds)
     menuList.forEach(item => {
         // 寻找菜单目录下: 资产数据
         if (item.id === 'Asset') {
             item.children.forEach(tex => {
                 // 资产下的资产数据
                 if (tex.id === 'AssetData') {
+                    tex.children = []
                     data.forEach(i => {
                         const obj = {
                             id: underscoreToCamelCase(i.classification_id),
@@ -59,6 +62,10 @@ function handleOtherMenus(data, commit, state) {
                             }
                         }
                         dynamicRoutes.push(route)
+                        const routers = router.getRoutes()
+                        if (routers.find(item => item.name === underscoreToCamelCase(i.classification_id))) {
+                            return
+                        }
                         router.addRoute(route)
                         commit('setKeepAliveList', route.name)
                     })
