@@ -113,10 +113,32 @@ export const routeConfig = [
         ],
         children: [
             {
+                name: '节点管理',
+                icon: 'cw-icon weops-node-manage',
+                id: 'NodeManage',
+                sortIndex: 12,
+                auth: [
+                    {
+                        key: 'NodeManage_view',
+                        value: false,
+                        label: '查看',
+                        type: 'check',
+                        apiKey: ['node_list', 'node_enum']
+                    },
+                    {
+                        key: 'NodeManage_manage',
+                        value: false,
+                        label: '管理',
+                        type: 'operate',
+                        apiKey: ['node_batch_create', 'node_del']
+                    }
+                ]
+            },
+            {
                 name: '资产管理',
                 icon: 'cw-icon weops-template',
                 id: 'AssetManage',
-                sortIndex: 12,
+                sortIndex: 13,
                 auth: [
                     {
                         key: 'checkAuth',
@@ -174,7 +196,7 @@ export const routeConfig = [
                 name: '系统管理',
                 icon: 'cw-icon weops-system',
                 id: 'sysManage',
-                sortIndex: 13,
+                sortIndex: 14,
                 auth: [
                     {
                         key: 'checkAuth',

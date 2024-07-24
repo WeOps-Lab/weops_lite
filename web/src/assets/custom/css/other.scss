@@ -732,3 +732,18 @@
 .el-table th.el-table__cell.is-leaf {
     background-color: #f4f5f8;
 }
+
+.el-table-filter__list-item.is-active {
+    background-color: #ecf5ff !important;
+    color: #409EFF !important;
+}
+
+.el-table-filter__list-item {
+    font-size: 12px !important;
+}
+
+.el-tag {
+    padding: 0 4px;
+    height: 18px;
+    line-height: 16px;
+}

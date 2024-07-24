@@ -23,6 +23,8 @@ const AssetSearch = () => import('@/views/asset/assetSearch/index/index.vue')
 const AssetsOverview = () => import('@/views/asset/assetsOverview/index/index.vue')
 // 资产凭据
 const AssetCredential = () => import('@/views/asset/assetCredential/index/index.vue')
+// 节点管理
+const NodeManage = () => import('@/views/nodeManage/index/index.vue')
 
 const mainRouter = [
     {
@@ -180,6 +182,14 @@ const mainRouter = [
         meta: {
             title: '资产凭据',
             cacheName: 'asset-credential'
+        }
+    },
+    {
+        path: '/nodeManage',
+        name: 'NodeManage',
+        component: NodeManage,
+        meta: {
+            title: '节点管理'
         }
     }
 ]
