@@ -56,6 +56,25 @@ class Command(BaseCommand):
             traceback.print_exception(e)
             return False
 
+    def init_default_set_superior_role(self):
+        try:
+            from apps.system_mgmt.models.graded_role import GradedRole
+            from apps.system_mgmt.utils.keycloak import get_realm_roles
+            from apps.system_mgmt.constants import ADMIN
+            result = get_realm_roles(KeyCloakClient().realm_client)
+            graded_roles = [
+                GradedRole(
+                    role=role_info["name"],
+                    superior_role=ADMIN,
+                )
+                for role_info in result
+            ]
+            GradedRole.objects.bulk_create(graded_roles, batch_size=100)
+            return True
+        except Exception as e:
+            traceback.print_exception(e)
+            return False
+
     def handle(self, *args, **options):
         load_dotenv()
         logger = logging.getLogger(__name__)
@@ -89,3 +108,13 @@ class Command(BaseCommand):
             logger.info(f'分级管理员默认权限初始化 完成')
         else:
             logger.error(f'分级管理员默认权限初始化 失败')
+
+        # 初始化角色的上级角色
+        logger.info(f'初始化角色的上级角色！')
+
+        result = self.init_default_set_superior_role()
+
+        if result is True:
+            logger.info(f'初始化角色的上级角色 完成')
+        else:
+            logger.error(f'初始化角色的上级角色 失败')
