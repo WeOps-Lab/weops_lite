@@ -29,20 +29,24 @@ pipeline {
 
         stage('拷贝Web资源'){
             steps {
-                sh '''
-                    mkdir -p ./assets/static
-                    cp -Rf ./web/static/dist ./assets/static
-                    cp -Rf ./web/static/dist ./static/
-                    cp -Rf ./web/static/dist/index.prod.html ./templates/
-                '''
+                dir('.'){
+                    sh '''
+                        mkdir -p ./assets/static
+                        cp -Rf ./web/static/dist ./assets/static
+                        cp -Rf ./web/static/dist ./static/
+                        cp -Rf ./web/static/dist/index.prod.html ./templates/
+                    '''
+                }
             }
         }
 
         stage('构建镜像') {
             steps {
-                sh '''
-                    sudo docker build -f ./support-files/docker/Dockerfile -t ccr.ccs.tencentyun.com/megalab/weops-lite .
-                '''
+                dir('.'){
+                    sh '''
+                        sudo docker build -f ./support-files/docker/Dockerfile -t ccr.ccs.tencentyun.com/megalab/weops-lite .
+                    '''
+                }
             }
         }
     }
