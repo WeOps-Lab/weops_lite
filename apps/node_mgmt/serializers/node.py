@@ -9,4 +9,4 @@ class NodeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Node
-        fields = ['id', 'model_id', 'node_id', 'node_name', 'node_ip', 'sidecar_status']
+        fields = ['id', 'model_id', 'node_id', 'node_name', 'node_ip', 'os_type', 'sidecar_status']

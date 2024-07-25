@@ -13,6 +13,7 @@ class Node(TimeInfo, MaintainerInfo):
     node_id = models.BigIntegerField(unique=True, verbose_name="节点ID")
     node_name = models.CharField(max_length=100, verbose_name="节点名称")
     node_ip = models.CharField(max_length=100, verbose_name="IP地址")
+    os_type = models.CharField(max_length=100, default="", verbose_name="操作系统类型")
 
     # sidecar同步信息
     sidecar_status = models.CharField(default=NOT_INSTALLED, max_length=100, verbose_name="sidecar状态")

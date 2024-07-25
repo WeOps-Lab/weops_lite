@@ -122,3 +122,8 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+CURRENT_FILE_PATH = "USERRES"  # 存放文件路径
+
+if not os.path.exists(CURRENT_FILE_PATH):
+    os.makedirs(CURRENT_FILE_PATH)
