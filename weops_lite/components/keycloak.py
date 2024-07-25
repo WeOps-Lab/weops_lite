@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 KEYCLOAK_URL = os.getenv('KEYCLOAK_URL')
+KEYCLOAK_URL_API = os.getenv('KEYCLOAK_URL_API')
 KEYCLOAK_ADMIN_USERNAME = os.getenv('KEYCLOAK_ADMIN_USERNAME')
 KEYCLOAK_ADMIN_PASSWORD = os.getenv('KEYCLOAK_ADMIN_PASSWORD')
 KEYCLOAK_REALM = os.getenv('KEYCLOAK_REALM')
