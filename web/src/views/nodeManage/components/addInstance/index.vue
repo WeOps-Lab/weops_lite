@@ -244,7 +244,8 @@
             this.instanceColumns = [
                 {
                     type: 'selection',
-                    fixed: true
+                    fixed: true,
+                    selectable: (row) => ['windows', 'linux'].includes(row.os_type)
                 },
                 ...propertyList
             ]
@@ -264,7 +265,8 @@
                 model_id: item.model_id,
                 node_id: item._id,
                 node_name: item.inst_name || '',
-                node_ip: item.ip_addr || ''
+                node_ip: item.ip_addr || '',
+                os_type: item.os_type || ''
             }))
             this.$emit('createNode', selectList)
             this.beforeCloseDialog()

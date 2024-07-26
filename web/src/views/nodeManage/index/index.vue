@@ -73,6 +73,9 @@
                     <template slot="model_id" slot-scope="{ row }">
                         {{ showModelName(row.model_id) }}
                     </template>
+                    <template slot="os_type" slot-scope="{ row }">
+                        {{ showType(row.os_type) }}
+                    </template>
                     <template slot="sidecar_status" slot-scope="{ row }">
                         <el-tag
                             :type="getStatusStyle(row.sidecar_status)">
@@ -84,8 +87,7 @@
                             class="mr10"
                             type="text"
                             size="small"
-                            disabled
-                            @click="handleInstall">
+                            @click="handleInstall(row)">
                             安装控制器
                         </el-button>
                         <el-button
