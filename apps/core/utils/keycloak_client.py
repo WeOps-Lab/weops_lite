@@ -6,7 +6,7 @@ from keycloak import KeycloakAdmin, KeycloakOpenID
 from singleton_decorator import singleton
 from apps.core.entities.user_token_entit import UserTokenEntity
 from weops_lite.components.keycloak import (
-    KEYCLOAK_URL,
+    KEYCLOAK_URL_API,
     KEYCLOAK_ADMIN_PASSWORD,
     KEYCLOAK_ADMIN_USERNAME,
     KEYCLOAK_REALM,
@@ -18,12 +18,12 @@ from weops_lite.components.keycloak import (
 class KeyCloakClient:
     def __init__(self):
         self.admin_client = KeycloakAdmin(
-            server_url=KEYCLOAK_URL,
+            server_url=KEYCLOAK_URL_API,
             username=KEYCLOAK_ADMIN_USERNAME,
             password=KEYCLOAK_ADMIN_PASSWORD,
         )
         self.realm_client = KeycloakAdmin(
-            server_url=KEYCLOAK_URL,
+            server_url=KEYCLOAK_URL_API,
             username=KEYCLOAK_ADMIN_USERNAME,
             password=KEYCLOAK_ADMIN_PASSWORD,
             realm_name=KEYCLOAK_REALM,
@@ -37,7 +37,7 @@ class KeyCloakClient:
     def get_openid_client(self):
         if self.openid_client is None:
             self.openid_client = KeycloakOpenID(
-                server_url=KEYCLOAK_URL,
+                server_url=KEYCLOAK_URL_API,
                 client_id=KEYCLOAK_CLIENT_ID,
                 realm_name=KEYCLOAK_REALM,
                 client_secret_key=self.get_client_secret_key(),

@@ -1,8 +1,8 @@
-from django.urls import path, include
 from rest_framework import routers
 
-api_router = routers.DefaultRouter()
+from apps.node_mgmt.views.node import NodeViewSet
 
-urlpatterns = [
-    path(r"api/", include(api_router.urls)),
-]
+router = routers.DefaultRouter()
+router.register(r"api/node", NodeViewSet, basename="node")
+
+urlpatterns = router.urls

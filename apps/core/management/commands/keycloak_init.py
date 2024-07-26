@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from apps.core.constants import DEFAULT_GROUP_ID
 from apps.core.utils.keycloak_client import KeyCloakClient
-from weops_lite.components.keycloak import KEYCLOAK_URL
+from weops_lite.components.keycloak import KEYCLOAK_URL_API
 
 
 class Command(BaseCommand):
@@ -80,7 +80,7 @@ class Command(BaseCommand):
         logger = logging.getLogger(__name__)
 
         # 域配置初始化
-        logger.info(f'初始化KeyCloak Realm,KeyCloak URL:[{KEYCLOAK_URL}]')
+        logger.info(f'初始化KeyCloak Realm,KeyCloak URL:[{KEYCLOAK_URL_API}]')
 
         result = self.init_realm()
 
