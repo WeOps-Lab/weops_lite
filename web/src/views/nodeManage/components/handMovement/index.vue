@@ -1,87 +1,49 @@
 <template>
     <drawer-component
-        :title="`手动${detail.inner_ip}`"
+        :title="title"
         :size="650"
         :visible="isShow"
         destroy-on-close
         :before-close="beforeCloseDialog">
         <div
-            class="common-dialog-wrapper-main"
+            class="common-dialog-wrapper-main hand-movement-content"
             slot="content"
             v-loading="loading">
-            <div class="mb10" style="font-size: 14px;color: #63656e;font-weight: 700;">
-                安装方式:
-            </div>
-            <el-radio-group
-                v-model="system"
-                size="small"
-                class="mb10"
-                @input="handlerChange">
-                <el-radio-button
-                    v-for="(item, index) in systemList"
-                    :key="index"
-                    :label="item">
-                    {{ item }}
-                </el-radio-button>
-            </el-radio-group>
-            <el-radio-group
-                v-model="installWay"
-                size="small"
-                class="mb10"
-                @input="handlerChange">
-                <el-radio-button
-                    v-for="(item, index) in commandList"
-                    :key="index"
-                    :label="item.type">
-                    {{ item.type_name }}
-                </el-radio-button>
-            </el-radio-group>
-            <el-alert
-                class="mb10"
-                type="info"
-                :title="installDescription">
-            </el-alert>
+            <template v-if="detail.operationType !== 'controller'">
+                <div class="mb10" style="font-size: 14px;color: #63656e;font-weight: 700;">安装方式:</div>
+                <el-radio-group class="mb10" v-model="installWay" size="small" fill="#ffffff" text-color="#63656e">
+                    <el-radio-button :label="detail.os_type === 'linux' ? 'Linux' : 'Windows'">
+                        {{ detail.os_type === 'linux' ? 'Linux' : 'Windows' }}
+                    </el-radio-button>
+                </el-radio-group>
+            </template>
             <div class="show-result">
-                <div v-if="commands.length" class="text-box">
-                    <div
-                        v-for="(item, index) in commands"
-                        :class="['custom-step', index !== commands.length - 1 && 'custom-step-space']"
+                <el-alert
+                    v-if="controllerType === 'unload'"
+                    class="mb25"
+                    type="warning"
+                    title="请确定已经手动卸载控制器，系统将自动获取控制器卸载情况，已卸载的主机将从列表中移除，未卸载的主机仍展示在列表中，并可以进行正常操作">
+                </el-alert>
+                <div class="text-box" v-if="commandList.length">
+                    <div :class="['custom-step', index !== commandList.length - 1 && 'custom-step-space']"
+                        v-for="(item, index) in commandList"
                         :key="index">
                         <div class="step-number">{{index + 1}}</div>
                         <div class="step-content">
-                            <div class="step-content-title">{{item.description}}</div>
-                            <div v-if="item.type === 'commands'" class="step-result">
-                                <div
-                                    v-for="(tex, i) in item.contents"
-                                    style="position: relative;"
-                                    :key="i">
-                                    <i
-                                        v-copy="tex.text"
-                                        class="operate-icon-copy el-icon-document-copy">
-                                    </i>
-                                    <span>{{tex.text}}</span>
-                                </div>
+                            <div class="step-content-title">{{item.title}}</div>
+                            <div class="step-result" v-if="!item.download_url">
+                                <i
+                                    v-copy="item.content"
+                                    class="operate-icon-copy el-icon-document-copy">
+                                </i>
+                                <span>{{item.content}}</span>
                             </div>
-                            <div v-else>
-                                <div class="mt10">
-                                    <span style="font-size: 12px;color: #63656e;">
-                                        文件列表：
-                                    </span>
-                                    <span class="download-text" @click="downloadAllFile(item.contents)">
-                                        下载全部
-                                        <i class="el-icon-download"></i>
-                                    </span>
-                                </div>
-                                <com-table
-                                    ref="ComTable"
-                                    class="mt5"
-                                    :data="item.contents"
-                                    :columns="columns"
-                                    :max-height="400">
-                                    <template slot="downLoad" slot-scope="{ row }">
-                                        <span style="color: var(--primary-6);cursor: pointer;" @click="downloadFile(row.text)">{{row.name}}</span>
-                                    </template>
-                                </com-table>
+                            <div
+                                v-else
+                                class="download-text"
+                                @click="downloadFile(item.download_url)">
+                                <i class="el-icon-download"></i>
+                                {{item.content}}
                             </div>
                         </div>
                     </div>
@@ -89,112 +51,98 @@
                 <el-empty v-else description="暂无数据" :image-size="80"></el-empty>
             </div>
         </div>
-        <template slot="footer">
+        <div slot="footer">
             <el-button
                 type="default"
                 size="small"
                 @click="beforeCloseDialog">
                 关闭
             </el-button>
-        </template>
+            <el-button
+                v-if="controllerType === 'unload'"
+                style="margin-left: 15px;"
+                type="default"
+                size="small"
+                @click="handleUnloadController">
+                已完成
+            </el-button>
+        </div>
     </drawer-component>
 </template>
 
 <script lang="ts">
-    import { Vue, Component, Prop } from 'vue-property-decorator'
-    import ComTable from '@/components/comTable/index.vue'
+    import { Vue, Component } from 'vue-property-decorator'
     import DrawerComponent from '@/components/comDrawer/index.vue'
     @Component({
         name: 'hand-movement',
         components: {
-            ComTable,
             DrawerComponent
         }
     })
     export default class handMovement extends Vue {
-        @Prop({
-            type: [Number, String],
-            default: () => ''
-        })
-        jobId: number | string
         isShow: boolean = false
         detail: any = {}
-        commands: string = ''
         loading: boolean = false
-        installWay: string = ''
-        installDescription: string = ''
+        installWay: string = 'linux'
         commandList: any[] = []
-        systemList: any[] = ['Linux', 'Windows']
-        system: string = 'Linux'
-        columns = [
-            {
-                label: '文件名称',
-                key: 'description',
-                align: 'left',
-                minWidth: '100'
-            },
-            {
-                label: '文件下载',
-                key: 'downLoad',
-                align: 'left',
-                minWidth: '100',
-                scopedSlots: 'downLoad'
-            }
-        ]
-        beforeCloseDialog() {
-            this.isShow = false
-        }
-        show(row) {
+        title: string = '手动安装'
+        controllerType: string = ''
+        show(row?) {
             this.isShow = true
             this.detail = row
-            this.getManagementCommands()
+            // if (row.operationType === 'controller') {
+            //     const { title, commandList, controllerType } = row
+            //     this.title = title
+            //     this.commandList = commandList.map(r => ({
+            //         ...r,
+            //         content: r.content.replace(/\${host}/g, window.HOST + window.APP_CODE)
+            //     }))
+            //     this.controllerType = controllerType
+            //     return false
+            // }
+            this.installWay = this.detail.os_type === 'linux' ? 'Linux' : 'Windows'
+            this.getManagementCommands(row)
         }
-        async downloadAllFile(fileList) {
-            for (const item of fileList) {
-                await new Promise(resolve => {
-                    const element = document.createElement('a')
-                    element.setAttribute('href', item.text)
-                    element.setAttribute('download', item.name)
-                    element.style.display = 'none'
-                    document.body.appendChild(element)
-                    element.click()
-                    document.body.removeChild(element)
-                    setTimeout(resolve, 100) // 延迟100毫秒
-                })
-            }
+        beforeCloseDialog() {
+            this.isShow = false
         }
         downloadFile(url) {
             window.open(url)
         }
-        handlerChange() {
-            const target = this.commandList.find(item => item.type === this.installWay)
-            this.commands = target.steps
-            this.installDescription = target.description
-        }
-        getManagementCommands() {
-            // this.loading = true
-            this.$api.agentManage.getManagementCommands({
-                job_id: this.jobId,
-                bk_host_id: this.detail.bk_host_id
-            }).then(res => {
+        getManagementCommands(row) {
+            this.loading = true
+            const params = {
+                id: this.detail.id
+            }
+            this.$api.NodeManage.getInstallSteps(params).then(res => {
                 const { result, data } = res
                 if (!result) {
                     return false
                 }
-                this.commandList = data.solutions
-                if (this.commandList[0]) {
-                    this.installWay = this.commandList[0].type
-                    this.installDescription = this.commandList[0].description
-                    this.commands = this.commandList[0].steps
-                }
+                this.commandList = data
             }).finally(() => {
                 this.loading = false
             })
+        }
+        handleUnloadController() {
+            this.isShow = false
+            this.$emit('unloadController', { type: 'unload', name: '卸载', is_manual: true })
         }
     }
 </script>
 
 <style lang="scss" scoped>
+    .hand-movement-content {
+        /* stylelint-disable selector-class-pattern */
+        display: flex;
+        flex-direction: column;
+        /deep/ .el-radio-button {
+            border: 4px solid #f4f5f8;
+        }
+        /deep/ .el-radio-button__inner {
+            height: 30px;
+        }
+    }
     .custom-step {
         display: flex;
         position: relative;
@@ -204,11 +152,11 @@
             text-align: center;
             line-height: 24px;
             border-radius: 50%;
-            color: #fff;
+            color: #ffffff;
             z-index: 1;
             vertical-align: top;
-            background-color: #1272ff;
-            border-color: #1272ff;
+            background-color: #ffffff;
+            border-color: #ffffff;
             margin-right: 8px;
         }
         .step-content {
@@ -223,22 +171,21 @@
             }
             .step-result {
                 margin-top: 12px;
-                position: relative;
-                padding: 12px 12px 12px 40px;
+                padding: 12px;
                 border-radius: 2px;
                 background: #F4F5F8;
-                .bk-icon {
-                    position: absolute;
-                    top: 4px;
-                    left: -24px;
-                    font-size: 13px !important;
+                display: flex;
+                .operate-icon-copy {
+                    margin-right: 8px;
                     cursor: pointer;
+                    display: inline-block;
                 }
             }
             .download-text {
                 font-size: 14px;
                 cursor: pointer;
                 color: #1272ff;
+                margin: 15px 0 10px 0;
             }
         }
     }

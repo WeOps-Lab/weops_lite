@@ -30,5 +30,13 @@ export default {
      */
     getNodeEnum(params = {}) {
         return get(`${reUrl}/node/enum/`, params)
+    },
+    /**
+     * 某个节点的sidecar安装步骤
+     *
+     * @param {Object} params 请求参数
+     */
+    getInstallSteps(params = {}) {
+        return get(`${reUrl}/sidecar/install_steps/${params.id}/`)
     }
 }
