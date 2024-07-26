@@ -27,6 +27,7 @@ export default class NodeManage extends Vue {
     fieldKey: string = 'node_name'
     fieldValue: string = ''
     sidecarStatus: string = ''
+    osType: string = ''
     statusList: Array<any> = []
     attrList: Array<any> = [
         {id: 'node_name', name: '实例名'},
@@ -51,6 +52,10 @@ export default class NodeManage extends Vue {
     showStatus(id) {
         return this.statusList.find(item => item.value === id)?.text || '--'
     }
+    showType(id) {
+        const target = this.columns.find(item => item.key === 'os_type') || {}
+        return (target.filters || []).find(item => item.value === id)?.text || '--'
+    }
     getStatusStyle(id) {
         const styleMaps = {
             'not_installed': 'info',
@@ -73,7 +78,8 @@ export default class NodeManage extends Vue {
         this.getNodeList()
     }
     filterChange(val) {
-        this.sidecarStatus = Object.values(val)[0]?.[0] || ''
+        this.sidecarStatus = val.sidecar_status?.[0] || ''
+        this.osType = val.os_type?.[0] || ''
         this.getNodeList()
     }
     initPage() {
@@ -129,13 +135,9 @@ export default class NodeManage extends Vue {
         }
         addInstance.show(nodeInfo)
     }
-    handleInstall() {
+    handleInstall(row) {
         const handMovement: any = this.$refs.handMovement
-        const nodeInfo = {
-            selection: [],
-            modelList: this.modelList
-        }
-        handMovement.show(nodeInfo)
+        handMovement.show(row)
     }
     handlerIconClick() {
         this.pagination.current = 1
@@ -174,7 +176,8 @@ export default class NodeManage extends Vue {
         const params = {
             page: this.pagination.current,
             page_size: this.pagination.limit,
-            sidecar_status: this.sidecarStatus
+            sidecar_status: this.sidecarStatus,
+            os_type: this.osType
         }
         params[this.fieldKey] = this.fieldValue
         return params

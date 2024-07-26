@@ -12,6 +12,25 @@ export const NODE_MANAGE_COLUMNS = [
         minWidth: '100px'
     },
     {
+        label: '操作系统类型',
+        key: 'os_type',
+        align: 'left',
+        scopedSlots: 'os_type',
+        filters: [
+            {
+                text: 'Linux',
+                value: 'linux'
+            },
+            {
+                text: 'Windows',
+                value: 'windows'
+            }
+        ],
+        filterRemote: true,
+        filterMultiple: false,
+        minWidth: '100px'
+    },
+    {
         label: '资产模型',
         key: 'model_id',
         align: 'left',
